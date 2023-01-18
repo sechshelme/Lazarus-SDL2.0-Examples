@@ -9,22 +9,17 @@ const
   Screen_Widht = 640;
   Screen_Height = 480;
 
-const
-  KEY_PRESS_SURFACE_DEFAULT = 0;
-  KEY_PRESS_SURFACE_UP = 1;
-  KEY_PRESS_SURFACE_DOWN = 2;
-  KEY_PRESS_SURFACE_LEFT = 3;
-  KEY_PRESS_SURFACE_RIGHT = 4;
-  KEY_PRESS_SURFACE_TOTAL = 5;
+type
+  TKeyPressesSurface = (KEY_PRESS_SURFACE_DEFAULT, KEY_PRESS_SURFACE_UP, KEY_PRESS_SURFACE_DOWN, KEY_PRESS_SURFACE_LEFT, KEY_PRESS_SURFACE_RIGHT, KEY_PRESS_SURFACE_TOTAL);
+
 var
   gWindow: PSDL_Window;
   gscreenSurface: PSDL_Surface;
   gCurrentSurface: PSDL_Surface;
   quit: boolean = False;
   e: TSDL_Event;
-  //  KeyPressesSurface: set of (KEY_PRESS_SURFACE_DEFAULT, KEY_PRESS_SURFACE_UP, KEY_PRESS_SURFACE_DOWN, KEY_PRESS_SURFACE_LEFT, KEY_PRESS_SURFACE_RIGHT, KEY_PRESS_SURFACE_TOTAL);
 
-  gKeyPressSurfaces: array [0..KEY_PRESS_SURFACE_TOTAL - 1] of PSDL_Surface;
+  gKeyPressSurfaces: array [TKeyPressesSurface] of PSDL_Surface;
 
   function init: boolean;
   var
@@ -46,16 +41,16 @@ var
     Result := sucess;
   end;
 
-function loadSurface(path: string): PSDL_Surface;
-var
-  loadedSurface: PSDL_Surface;
-begin
-  loadedSurface := SDL_LoadBMP(PChar(path));
-  if loadedSurface = nil then  begin
-    WriteLn('Unable to load image ' + path + '! SDL Error: ', SDL_GetError());
+  function loadSurface(path: string): PSDL_Surface;
+  var
+    loadedSurface: PSDL_Surface;
+  begin
+    loadedSurface := SDL_LoadBMP(PChar(path));
+    if loadedSurface = nil then  begin
+      WriteLn('Unable to load image ' + path + '! SDL Error: ', SDL_GetError());
+    end;
+    Result := loadedSurface;
   end;
-  Result := loadedSurface;
-end;
 
   function loadMedia: boolean;
   var
@@ -98,12 +93,12 @@ end;
   var
     i: integer;
   begin
-    for i := 1 to KEY_PRESS_SURFACE_TOTAL - 1 do begin
-      SDL_FreeSurface(gKeyPressSurfaces[i]);
-      gKeyPressSurfaces[i] := nil;
+    for i := 0 to Length(gKeyPressSurfaces) - 1 do begin
+      SDL_FreeSurface(gKeyPressSurfaces[TKeyPressesSurface(i)]);
+      gKeyPressSurfaces[TKeyPressesSurface(i)] := nil;
     end;
     SDL_DestroyWindow(gWindow);
-    gWindow:=nil;
+    gWindow := nil;
     SDL_Quit();
   end;
 
