@@ -10,10 +10,28 @@ const
   Screen_Height = 480;
 var
   gWindow: PSDL_Window;
-  gscreenSurface: PSDL_Surface;
-  gHelloWorld: PSDL_Surface;
+  gscreenSurface, gStretchedSurface: PSDL_Surface;
   quit: boolean = False;
   e: TSDL_Event;
+
+  stretchRect:TSDL_Rect;
+
+  function loadSurface(path: string): PSDL_Surface;
+  var
+    loadedSurface, optimizeSurface: PSDL_Surface;
+  begin
+    loadedSurface := SDL_LoadBMP(PChar(path));
+    if loadedSurface = nil then  begin
+      WriteLn('Unable to load image ' + path + '! SDL Error: ', SDL_GetError());
+    end else begin
+      optimizeSurface := SDL_ConvertSurface(loadedSurface, gscreenSurface^.format, 0);
+      if optimizeSurface = nil then begin
+        WriteLn('Unable to optimize image ', path, ' SDL Error: ', SDL_GetError);
+      end;
+      SDL_FreeSurface(loadedSurface);
+    end;
+    Result := optimizeSurface;
+  end;
 
   function init: boolean;
   var
@@ -39,8 +57,8 @@ var
   var
     sucess: boolean = True;
   begin
-    gHelloWorld := SDL_LoadBMP('hello_world.bmp');
-    if gHelloWorld = nil then begin
+    gStretchedSurface := loadSurface('stretch.bmp');
+    if gStretchedSurface = nil then begin
       WriteLn('Unable to load image hello_world.bmp SDL Error: ', SDL_GetError);
       sucess := False;
     end;
@@ -49,8 +67,8 @@ var
 
   procedure Close;
   begin
-    SDL_FreeSurface(gHelloWorld);
-    gHelloWorld := nil;
+    SDL_FreeSurface(gStretchedSurface);
+    gStretchedSurface := nil;
     SDL_DestroyWindow(gWindow);
     gWindow := nil;
     SDL_Quit();
@@ -63,8 +81,6 @@ begin
     if not loadMedia then begin
       WriteLn('Failed to load media');
     end else begin
-      SDL_BlitSurface(gHelloWorld, nil, gscreenSurface, nil);
-      SDL_UpdateWindowSurface(gWindow);
       while not quit do begin
         while SDL_PollEvent(@e) <> 0 do begin
           case e.type_ of
@@ -80,6 +96,14 @@ begin
             end;
           end;
         end;
+
+        stretchRect.x:=0;
+        stretchRect.y:=0;
+        stretchRect.w:=Screen_Widht;
+        stretchRect.h:=Screen_Height;
+
+        SDL_BlitSurfaceScaled(gStretchedSurface,nil,gscreenSurface,@stretchRect);
+        SDL_UpdateWindowSurface(gWindow);
       end;
     end;
   end;

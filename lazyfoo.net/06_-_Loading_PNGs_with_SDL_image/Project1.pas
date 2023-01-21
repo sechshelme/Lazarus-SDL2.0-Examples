@@ -3,21 +3,42 @@ program Project1;
 // https://github.com/PascalGameDevelopment/SDL2-for-Pascal
 
 uses
-  SDL2;
+  sdl2,
+  sdl2_image,
+  ctypes;
 
 const
   Screen_Widht = 640;
   Screen_Height = 480;
 var
   gWindow: PSDL_Window;
-  gscreenSurface: PSDL_Surface;
-  gHelloWorld: PSDL_Surface;
+  gscreenSurface, gPNGSurface: PSDL_Surface;
   quit: boolean = False;
   e: TSDL_Event;
+
+  stretchRect: TSDL_Rect;
+
+  function loadSurface(path: string): PSDL_Surface;
+  var
+    loadedSurface, optimizeSurface: PSDL_Surface;
+  begin
+    loadedSurface := IMG_Load(PChar(path));
+    if loadedSurface = nil then  begin
+      WriteLn('Unable to load image ' + path + '! SDL_image Error: ', IMG_GetError);
+    end else begin
+      optimizeSurface := SDL_ConvertSurface(loadedSurface, gscreenSurface^.format, 0);
+      if optimizeSurface = nil then begin
+        WriteLn('Unable to optimize image ', path, ' SDL Error: ', SDL_GetError);
+      end;
+      SDL_FreeSurface(loadedSurface);
+    end;
+    Result := optimizeSurface;
+  end;
 
   function init: boolean;
   var
     sucess: boolean = True;
+    imgFlags: cint32 = 0;
   begin
     sucess := True;
     if SDL_Init(SDL_INIT_VIDEO) < 0 then begin
@@ -29,7 +50,12 @@ var
         WriteLn('Window could not be created! SDL_Error: ', SDL_GetError);
         sucess := False;
       end else begin
-        gscreenSurface := SDL_GetWindowSurface(gWindow);
+        if (IMG_Init(imgFlags) and imgFlags) <> 0 then begin
+          WriteLn('SDL_image could not initialize! SDL_image Error: ', IMG_GetError);
+          sucess := False;
+        end else begin
+          gscreenSurface := SDL_GetWindowSurface(gWindow);
+        end;
       end;
     end;
     Result := sucess;
@@ -39,9 +65,9 @@ var
   var
     sucess: boolean = True;
   begin
-    gHelloWorld := SDL_LoadBMP('hello_world.bmp');
-    if gHelloWorld = nil then begin
-      WriteLn('Unable to load image hello_world.bmp SDL Error: ', SDL_GetError);
+    gPNGSurface := loadSurface('loaded.png');
+    if gPNGSurface = nil then begin
+      WriteLn('Failed to load PNG image !');
       sucess := False;
     end;
     Result := sucess;
@@ -49,11 +75,12 @@ var
 
   procedure Close;
   begin
-    SDL_FreeSurface(gHelloWorld);
-    gHelloWorld := nil;
+    SDL_FreeSurface(gPNGSurface);
+    gPNGSurface := nil;
     SDL_DestroyWindow(gWindow);
     gWindow := nil;
-    SDL_Quit();
+    IMG_Quit;
+    SDL_Quit;
   end;
 
 begin
@@ -63,8 +90,6 @@ begin
     if not loadMedia then begin
       WriteLn('Failed to load media');
     end else begin
-      SDL_BlitSurface(gHelloWorld, nil, gscreenSurface, nil);
-      SDL_UpdateWindowSurface(gWindow);
       while not quit do begin
         while SDL_PollEvent(@e) <> 0 do begin
           case e.type_ of
@@ -80,6 +105,14 @@ begin
             end;
           end;
         end;
+
+        stretchRect.x := 0;
+        stretchRect.y := 0;
+        stretchRect.w := Screen_Widht;
+        stretchRect.h := Screen_Height;
+
+        SDL_BlitSurface(gPNGSurface, nil, gscreenSurface, nil);
+        SDL_UpdateWindowSurface(gWindow);
       end;
     end;
   end;
