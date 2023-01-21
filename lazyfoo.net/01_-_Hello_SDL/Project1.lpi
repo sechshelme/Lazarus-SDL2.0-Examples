@@ -23,6 +23,11 @@
     <RunParams>
       <FormatVersion Value="2"/>
     </RunParams>
+    <RequiredPackages>
+      <Item>
+        <PackageName Value="SDL2_Package"/>
+      </Item>
+    </RequiredPackages>
     <Units>
       <Unit>
         <Filename Value="Project1.pas"/>

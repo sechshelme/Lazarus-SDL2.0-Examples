@@ -92,11 +92,16 @@ var
   procedure Close;
   var
     i: integer;
+    surface: PSDL_Surface;
   begin
-    for i := 0 to Length(gKeyPressSurfaces) - 1 do begin
-      SDL_FreeSurface(gKeyPressSurfaces[TKeyPressesSurface(i)]);
-      gKeyPressSurfaces[TKeyPressesSurface(i)] := nil;
+    for surface in gKeyPressSurfaces do begin
+      SDL_FreeSurface(surface);
+//      surface := nil;
     end;
+    //    for i := 0 to Length(gKeyPressSurfaces) - 1 do begin
+    //      SDL_FreeSurface(gKeyPressSurfaces[TKeyPressesSurface(i)]);
+    //      gKeyPressSurfaces[TKeyPressesSurface(i)] := nil;
+    //    end;
     SDL_DestroyWindow(gWindow);
     gWindow := nil;
     SDL_Quit();

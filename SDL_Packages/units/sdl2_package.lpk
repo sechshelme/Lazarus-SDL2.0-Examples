@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="5">
+    <Name Value="SDL2_Package"/>
+    <Type Value="RunAndDesignTime"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <SearchPaths>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Files>
+      <Item>
+        <Filename Value="ctypes.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="jedi.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdl.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdl2.pas"/>
+        <UnitName Value="sdl2"/>
+      </Item>
+      <Item>
+        <Filename Value="sdl2_gfx.pas"/>
+        <UnitName Value="sdl2_gfx"/>
+      </Item>
+      <Item>
+        <Filename Value="sdl2_image.pas"/>
+        <UnitName Value="sdl2_image"/>
+      </Item>
+      <Item>
+        <Filename Value="sdl2_mixer.pas"/>
+        <UnitName Value="sdl2_mixer"/>
+      </Item>
+      <Item>
+        <Filename Value="sdl2_net.pas"/>
+        <UnitName Value="sdl2_net"/>
+      </Item>
+      <Item>
+        <Filename Value="sdl2_package.lpk"/>
+        <Type Value="Text"/>
+      </Item>
+      <Item>
+        <Filename Value="sdl2_ttf.pas"/>
+        <UnitName Value="sdl2_ttf"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlatomic.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlaudio.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlblendmode.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlclipboard.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlcpuinfo.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlerror.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlerror_c.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlevents.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlfilesystem.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlgamecontroller.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlgesture.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlguid.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlhaptic.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlhidapi.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlhints.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdljoystick.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlkeyboard.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlloadso.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdllocale.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdllog.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlmessagebox.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlmisc.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlmouse.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlmutex.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlpixels.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlplatform.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlpower.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlrect.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlrenderer.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlrwops.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlscancode.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlsensor.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlshape.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlstdinc.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlsurface.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlsystem.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlsyswm.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlthread.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdltimer.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdltouch.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdltypes.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlversion.inc"/>
+        <Type Value="Include"/>
+      </Item>
+      <Item>
+        <Filename Value="sdlvideo.inc"/>
+        <Type Value="Include"/>
+      </Item>
+    </Files>
+    <RequiredPkgs>
+      <Item>
+        <PackageName Value="FCL"/>
+      </Item>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+      <UseFileFilters Value="True"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>
