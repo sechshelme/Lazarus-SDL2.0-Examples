@@ -82,7 +82,7 @@ var
   var
     sucess: boolean = True;
   begin
-    gTexture := loadtexture('texture.png');
+    gTexture := loadtexture('viewport.png');
     if gTexture = nil then begin
       WriteLn('Failed to load texture image !');
       sucess := False;
@@ -103,6 +103,11 @@ var
     IMG_Quit;
     SDL_Quit;
   end;
+
+const
+  topLeftViewport: TSDL_Rect = (x: 0; y: 0; w: Screen_Widht div 2; h: Screen_Height div 2);
+  topRightViewport: TSDL_Rect = (x: Screen_Widht div 2; y: 0; w: Screen_Widht div 2; h: Screen_Height div 2);
+  bottomViewport: TSDL_Rect = (x: 0; y: Screen_Height div 2; w: Screen_Widht; h: Screen_Height div 2);
 
 begin
   if not init then begin
@@ -127,10 +132,24 @@ begin
           end;
         end;
 
-        //        SDL_SetRenderDrawColor(gRenderer, $FF, $8F, $00, 0);
+        SDL_SetRenderDrawColor(gRenderer, $FF, $FF, $FF, $FF);
         SDL_RenderClear(gRenderer);
 
+        SDL_SetRenderDrawColor(gRenderer, $FF, $00, $00, $FF);
+        SDL_RenderSetViewport(gRenderer, @topLeftViewport);
         SDL_RenderCopy(gRenderer, gTexture, nil, nil);
+        SDL_RenderDrawRect(gRenderer, nil);
+
+        SDL_SetRenderDrawColor(gRenderer, $00, $FF, $00, $FF);
+        SDL_RenderSetViewport(gRenderer, @topRightViewport);
+        SDL_RenderCopy(gRenderer, gTexture, nil, nil);
+        SDL_RenderDrawRect(gRenderer, nil);
+
+        SDL_SetRenderDrawColor(gRenderer, $00, $00, $FF, $FF);
+        SDL_RenderSetViewport(gRenderer, @bottomViewport);
+        SDL_RenderCopy(gRenderer, gTexture, nil, nil);
+        SDL_RenderDrawRect(gRenderer, nil);
+
         SDL_RenderPresent(gRenderer);
       end;
     end;

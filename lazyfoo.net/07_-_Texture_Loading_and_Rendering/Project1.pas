@@ -127,7 +127,6 @@ begin
           end;
         end;
 
-        //        SDL_SetRenderDrawColor(gRenderer, $FF, $8F, $00, 0);
         SDL_RenderClear(gRenderer);
 
         SDL_RenderCopy(gRenderer, gTexture, nil, nil);

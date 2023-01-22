@@ -51,13 +51,6 @@ var
     Result := sucess;
   end;
 
-  function loadMedia: boolean;
-  var
-    sucess: boolean = True;
-  begin
-    Result := sucess;
-  end;
-
   procedure Close;
   begin
     SDL_DestroyRenderer(gRenderer);
@@ -79,46 +72,43 @@ begin
   if not init then begin
     WriteLn('Failed to initialize');
   end else begin
-    if not loadMedia then begin
-      WriteLn('Failed to load media');
-    end else begin
-      while not quit do begin
-        while SDL_PollEvent(@e) <> 0 do begin
-          case e.type_ of
-            SDL_KEYDOWN: begin
-              case e.key.keysym.sym of
-                SDLK_ESCAPE: begin
-                  quit := True;
-                end;
+
+    while not quit do begin
+      while SDL_PollEvent(@e) <> 0 do begin
+        case e.type_ of
+          SDL_KEYDOWN: begin
+            case e.key.keysym.sym of
+              SDLK_ESCAPE: begin
+                quit := True;
               end;
             end;
-            SDL_QUITEV: begin
-              quit := True;
-            end;
+          end;
+          SDL_QUITEV: begin
+            quit := True;
           end;
         end;
-
-        SDL_SetRenderDrawColor(gRenderer, $FF, $FF, $FF, $FF);
-        SDL_RenderClear(gRenderer);
-
-        SDL_SetRenderDrawColor(gRenderer, $FF, $00, $00, $FF);
-        SDL_RenderFillRect(gRenderer, @fillRect);
-
-        SDL_SetRenderDrawColor(gRenderer, $00, $FF, $00, $FF);
-        SDL_RenderDrawRect(gRenderer, @outlineRect);
-
-        SDL_SetRenderDrawColor(gRenderer, $00, $00, $FF, $FF);
-        SDL_RenderDrawLine(gRenderer, 0, Screen_Height div 2, Screen_Widht, Screen_Height div 2);
-
-        SDL_SetRenderDrawColor(gRenderer, $FF, $FF, $00, $FF);
-        i := 0;
-        while i < Screen_Height do begin
-          SDL_RenderDrawPoint(gRenderer, Screen_Widht div 2, i);
-          Inc(i, 4);
-        end;
-
-        SDL_RenderPresent(gRenderer);
       end;
+
+      SDL_SetRenderDrawColor(gRenderer, $FF, $FF, $FF, $FF);
+      SDL_RenderClear(gRenderer);
+
+      SDL_SetRenderDrawColor(gRenderer, $FF, $00, $00, $FF);
+      SDL_RenderFillRect(gRenderer, @fillRect);
+
+      SDL_SetRenderDrawColor(gRenderer, $00, $FF, $00, $FF);
+      SDL_RenderDrawRect(gRenderer, @outlineRect);
+
+      SDL_SetRenderDrawColor(gRenderer, $00, $00, $FF, $FF);
+      SDL_RenderDrawLine(gRenderer, 0, Screen_Height div 2, Screen_Widht, Screen_Height div 2);
+
+      SDL_SetRenderDrawColor(gRenderer, $FF, $FF, $00, $FF);
+      i := 0;
+      while i < Screen_Height do begin
+        SDL_RenderDrawPoint(gRenderer, Screen_Widht div 2, i);
+        Inc(i, 4);
+      end;
+
+      SDL_RenderPresent(gRenderer);
     end;
   end;
   Close;
