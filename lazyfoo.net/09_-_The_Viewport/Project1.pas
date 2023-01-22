@@ -12,11 +12,38 @@ const
   Screen_Height = 480;
 var
   gWindow: PSDL_Window;
+  gscreenSurface: PSDL_Surface;
+  gTexture: PSDL_Texture;
   gRenderer: PSDL_Renderer;
 
   quit: boolean = False;
   e: TSDL_Event;
 
+  stretchRect: TSDL_Rect;
+
+  function loadtexture(path: string): PSDL_Texture;
+  var
+    loadedSurface: PSDL_Surface;
+    newTexture: PSDL_Texture;
+  begin
+    //loadedSurface := IMG_Load(PChar(path));
+    //if loadedSurface = nil then  begin
+    //  WriteLn('Unable to load image ' + path + '! SDL_image Error: ', IMG_GetError());
+    //end else begin
+    //  newTexture := SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
+    //  if newTexture = nil then begin
+    //    WriteLn('Unable to create texturefrom ', path, ' SDL Error: ', SDL_GetError);
+    //  end;
+    //  SDL_FreeSurface(loadedSurface);
+    //end;
+
+    newTexture := IMG_LoadTexture(gRenderer, PChar(path));
+    if newTexture = nil then begin
+      WriteLn('Unable to create texturefrom ', path, ' SDL Error: ', SDL_GetError);
+    end;
+
+    Result := newTexture;
+  end;
 
   function init: boolean;
   var
@@ -28,7 +55,7 @@ var
       WriteLn('SDL could not initialize! SDL_Error: ', SDL_GetError);
       sucess := False;
     end else begin
-      gWindow := SDL_CreateWindow('SDL Tutorial', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Screen_Widht, Screen_Height, SDL_WINDOW_SHOWN);
+      gWindow := SDL_CreateWindow('SDL Tuorial', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Screen_Widht, Screen_Height, SDL_WINDOW_SHOWN);
       if gWindow = nil then begin
         WriteLn('Window could not be created! SDL_Error: ', SDL_GetError);
         sucess := False;
@@ -55,11 +82,19 @@ var
   var
     sucess: boolean = True;
   begin
+    gTexture := loadtexture('texture.png');
+    if gTexture = nil then begin
+      WriteLn('Failed to load texture image !');
+      sucess := False;
+    end;
     Result := sucess;
   end;
 
   procedure Close;
   begin
+    SDL_DestroyTexture(gTexture);
+    gTexture := nil;
+
     SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);
     gWindow := nil;
@@ -68,12 +103,6 @@ var
     IMG_Quit;
     SDL_Quit;
   end;
-
-const
-  fillRect: TSDL_Rect = (x: Screen_Widht div 4; y: Screen_Height div 4; w: Screen_Widht div 2; h: Screen_Height div 2);
-  outlineRect: TSDL_Rect = (x: Screen_Widht div 6; y: Screen_Height div 6; w: Screen_Widht * 2 div 3; h: Screen_Height * 2 div 3);
-var
-  i: integer;
 
 begin
   if not init then begin
@@ -98,25 +127,10 @@ begin
           end;
         end;
 
-        SDL_SetRenderDrawColor(gRenderer, $FF, $FF, $FF, $FF);
+        //        SDL_SetRenderDrawColor(gRenderer, $FF, $8F, $00, 0);
         SDL_RenderClear(gRenderer);
 
-        SDL_SetRenderDrawColor(gRenderer, $FF, $00, $00, $FF);
-        SDL_RenderFillRect(gRenderer, @fillRect);
-
-        SDL_SetRenderDrawColor(gRenderer, $00, $FF, $00, $FF);
-        SDL_RenderDrawRect(gRenderer, @outlineRect);
-
-        SDL_SetRenderDrawColor(gRenderer, $00, $00, $FF, $FF);
-        SDL_RenderDrawLine(gRenderer, 0, Screen_Height div 2, Screen_Widht, Screen_Height div 2);
-
-        SDL_SetRenderDrawColor(gRenderer, $FF, $FF, $00, $FF);
-        i := 0;
-        while i < Screen_Height do begin
-          SDL_RenderDrawPoint(gRenderer, Screen_Widht div 2, i);
-          Inc(i, 4);
-        end;
-
+        SDL_RenderCopy(gRenderer, gTexture, nil, nil);
         SDL_RenderPresent(gRenderer);
       end;
     end;
