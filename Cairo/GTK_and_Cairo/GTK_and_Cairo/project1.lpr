@@ -1,10 +1,7 @@
 program project1;
 
 uses
-  Cairo,
-  glib2,
-  gdk2,
-  gtk2;
+  Cairo, glib2, gdk2, gtk2;
 
   function on_Exposs_Event(widget: PGtkWidget; event: PGdkEventExpose; Data: gpointer): gboolean;
   var
