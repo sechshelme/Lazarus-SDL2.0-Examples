@@ -1,7 +1,10 @@
 program project1;
 
 uses
-  Cairo, glib2, gdk2, gtk2;
+  Cairo,
+  glib2,
+  gdk2,
+  gtk2;
 
   function on_Exposs_Event(widget: PGtkWidget; event: PGdkEventExpose; Data: gpointer): gboolean;
   var
@@ -9,8 +12,10 @@ uses
   begin
     cr := gdk_cairo_create(widget^.window);
 
-    cairo_move_to(cr, 0, 100);
-    cairo_line_to(cr, 200, 100);
+    cairo_arc(cr, 100, 100, 50, 0, pi * 2);
+    cairo_stroke(cr);
+
+    cairo_arc(cr, 100, 100, 60, 0, pi);
     cairo_stroke(cr);
 
     cairo_destroy(cr);

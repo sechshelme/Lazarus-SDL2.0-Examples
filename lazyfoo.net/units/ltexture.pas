@@ -5,6 +5,7 @@ interface
 uses
   sdl2,
   sdl2_image,
+  sdl2_ttf,
   ctypes;
 
 type
@@ -23,10 +24,13 @@ type
     constructor Create(ARenderer: PSDL_Renderer);
     destructor Destroy; override;
     function LoadFromFile(path: string): boolean;
+    function LoadFromRenderedText(gFont: PTTF_Font; textureText: string; textColor: TSDL_Color): boolean;
+    procedure FreeTexture;
     procedure SetColor(red, green, blue: byte);
     procedure SetBlendMode(blending: TSDL_BlendMode);
     procedure SetAlpha(alpha: byte);
-    procedure Render(x, y: integer; clip: PSDL_Rect = nil);
+    //    procedure Render(x, y: integer; clip: PSDL_Rect = nil;angele:Double=0.0;center:PSDL_Point=nil;flip:SDL_RendererFlip=SDL_FLIP_NONE);
+    procedure Render(x, y: integer; clip: PSDL_Rect = nil; angle: double = 0.0; center: PSDL_Point = nil; flip: cint = SDL_FLIP_NONE);
   end;
 
 implementation
@@ -43,9 +47,7 @@ end;
 
 destructor TLTexture.Destroy;
 begin
-  if mTexture <> nil then begin
-    SDL_DestroyTexture(mTexture);
-  end;
+  FreeTexture;
   inherited Destroy;
 end;
 
@@ -74,6 +76,37 @@ begin
   Result := mTexture <> nil;
 end;
 
+function TLTexture.LoadFromRenderedText(gFont: PTTF_Font; textureText: string; textColor: TSDL_Color): boolean;
+var
+  textSurface: PSDL_Surface;
+begin
+  FreeTexture;
+  textSurface := TTF_RenderText_Solid(gFont, PChar(textureText), textColor);
+  if textSurface = nil then begin
+    WriteLn('Unable to create texture from rendered text! SDL Error: ', SDL_GetError);
+  end else begin
+    mTexture := SDL_CreateTextureFromSurface(FRenderer, textSurface);
+    if mTexture = nil then begin
+      WriteLn('Unable to create texture from rendered text! SDL Error: ', SDL_GetError);
+    end else begin
+      FWidht := textSurface^.w;
+      FHeight := textSurface^.h;
+    end;
+    SDL_FreeSurface(textSurface);
+  end;
+  Result := mTexture <> nil;
+end;
+
+procedure TLTexture.FreeTexture;
+begin
+  if mTexture <> nil then begin
+    SDL_DestroyTexture(mTexture);
+    mTexture := nil;
+    FWidht := 0;
+    FHeight := 0;
+  end;
+end;
+
 procedure TLTexture.SetColor(red, green, blue: byte);
 begin
   SDL_SetTextureColorMod(mTexture, red, green, blue);
@@ -89,7 +122,7 @@ begin
   SDL_SetTextureAlphaMod(mTexture, alpha);
 end;
 
-procedure TLTexture.Render(x, y: integer; clip: PSDL_Rect);
+procedure TLTexture.Render(x, y: integer; clip: PSDL_Rect; angle: double; center: PSDL_Point; flip: cint);
 var
   renderQuad: TSDL_Rect;
 begin
@@ -102,7 +135,7 @@ begin
     renderQuad.w := FWidht;
     renderQuad.h := FHeight;
   end;
-  SDL_RenderCopy(FRenderer, mTexture, clip, @renderQuad);
+  SDL_RenderCopyEx(FRenderer, mTexture, clip, @renderQuad, angle, center, flip);
 end;
 
 end.
