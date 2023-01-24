@@ -24,7 +24,9 @@ type
     destructor Destroy; override;
     function LoadFromFile(path: string): boolean;
     procedure SetColor(red, green, blue: byte);
-    procedure render(x, y: integer; clip: PSDL_Rect = nil);
+    procedure SetBlendMode(blending: TSDL_BlendMode);
+    procedure SetAlpha(alpha: byte);
+    procedure Render(x, y: integer; clip: PSDL_Rect = nil);
   end;
 
 implementation
@@ -77,7 +79,17 @@ begin
   SDL_SetTextureColorMod(mTexture, red, green, blue);
 end;
 
-procedure TLTexture.render(x, y: integer; clip: PSDL_Rect);
+procedure TLTexture.SetBlendMode(blending: TSDL_BlendMode);
+begin
+  SDL_SetTextureBlendMode(mTexture, blending);
+end;
+
+procedure TLTexture.SetAlpha(alpha: byte);
+begin
+  SDL_SetTextureAlphaMod(mTexture, alpha);
+end;
+
+procedure TLTexture.Render(x, y: integer; clip: PSDL_Rect);
 var
   renderQuad: TSDL_Rect;
 begin
