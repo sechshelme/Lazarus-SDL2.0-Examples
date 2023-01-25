@@ -10,47 +10,37 @@ uses
 const
   BUTTON_WIDTH = 300;
   BUTTON_HEIGHT = 200;
-  TOTAL_BUTTONS = 4;
 
-
-    BUTTON_SPRITE_MOUSE_OUT=0;
-    BUTTON_SPRITE_MOUSE_OVER_MOTION=1;
-    BUTTON_SPRITE_MOUSE_DOWN=2;
-    BUTTON_SPRITE_MOUSE_UP=3;
-    BUTTON_SPRITE_TOTAL=4;
 type
-//  TButtonSprite = (
-//    BUTTON_SPRITE_MOUSE_OUT,
-//    BUTTON_SPRITE_MOUSE_OVER_MOTION,
-//    BUTTON_SPRITE_MOUSE_DOWN,
-//    BUTTON_SPRITE_MOUSE_UP,
-//    BUTTON_SPRITE_TOTAL);
-
   TLButton = class(TObject)
   private
     mPosition: TSDL_Point;
-//    mCurrentSprite: TButtonSprite;
-      mCurrentSprite: Integer;
+    mCurrentSprite: (BUTTON_SPRITE_MOUSE_OUT, BUTTON_SPRITE_MOUSE_OVER_MOTION, BUTTON_SPRITE_MOUSE_DOWN, BUTTON_SPRITE_MOUSE_UP, BUTTON_SPRITE_TOTAL);
+    gSpritesChlips: array[0..3] of TSDL_Rect;
+    FButtonSpriteSheetTexture:TLTexture;
   public
-    constructor Create;
+    constructor Create(AButtonSpriteSheetTexture:TLTexture);
     procedure SetPosition(Ax, Ay: integer);
     procedure HandleEvent(e: PSDL_Event);
     procedure Renderer;
   end;
 
-var
-  gSpritesChlips: array[0..TOTAL_BUTTONS - 1] of TSDL_Rect;
-  gButtonSpriteSheetTexture: TLTexture;
-
 implementation
 
-{ TLButton }
-
-constructor TLButton.Create;
+constructor TLButton.Create(AButtonSpriteSheetTexture: TLTexture);
+var
+  i: integer;
 begin
+  FButtonSpriteSheetTexture:=AButtonSpriteSheetTexture;
   mPosition.x := 0;
   mPosition.y := 0;
   mCurrentSprite := BUTTON_SPRITE_MOUSE_OUT;
+  for i := 0 to Length(gSpritesChlips) - 1 do begin
+    gSpritesChlips[i].x := 0;
+    gSpritesChlips[i].y := i * 200;
+    gSpritesChlips[i].w := BUTTON_WIDTH;
+    gSpritesChlips[i].h := BUTTON_HEIGHT;
+  end;
 end;
 
 procedure TLButton.SetPosition(Ax, Ay: integer);
@@ -100,8 +90,7 @@ end;
 
 procedure TLButton.Renderer;
 begin
-//  gButtonSpriteSheetTexture.Render(mPosition.x, mPosition.y, @gSpritesChlips[shortint(mCurrentSprite)]);
-  gButtonSpriteSheetTexture.Render(mPosition.x, mPosition.y, @gSpritesChlips[mCurrentSprite]);
+ FButtonSpriteSheetTexture.Render(mPosition.x, mPosition.y, @gSpritesChlips[shortint(mCurrentSprite)]);
 end;
 
 end.

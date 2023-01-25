@@ -16,18 +16,18 @@ const
 var
   gWindow: PSDL_Window;
   gRenderer: PSDL_Renderer;
+  gButtonSpriteSheetTexture: TLTexture;
 
   quit: boolean = False;
   e: TSDL_Event;
 
-  gButton: array[0..TOTAL_BUTTONS - 1] of TLButton;
+  gButton: array[0..3] of TLButton;
   i: integer;
 
   function init: boolean;
   var
     sucess: boolean = True;
     imgFlags: cint32 = 0;
-    i: integer;
   begin
     sucess := True;
     if SDL_Init(SDL_INIT_VIDEO) < 0 then begin
@@ -55,11 +55,6 @@ var
       end;
     end;
     Result := sucess;
-
-    gButtonSpriteSheetTexture := TLTexture.Create(gRenderer);
-    for i := 0 to Length(gButton) - 1 do begin
-      gButton[i] := TLButton.Create;
-    end;
   end;
 
   function loadMedia: boolean;
@@ -67,14 +62,13 @@ var
     sucess: boolean = True;
     i: integer;
   begin
+    gButtonSpriteSheetTexture := TLTexture.Create(gRenderer);
+
     if not gButtonSpriteSheetTexture.LoadFromFile('button.png') then begin
       WriteLn('Failed to load button sprite texture! ');
     end else begin
-      for i := 0 to TOTAL_BUTTONS - 1 do begin
-        gSpritesChlips[i].x := 0;
-        gSpritesChlips[i].y := i * 200;
-        gSpritesChlips[i].w := BUTTON_WIDTH;
-        gSpritesChlips[i].h := BUTTON_HEIGHT;
+      for i := 0 to Length(gButton) - 1 do begin
+        gButton[i] := TLButton.Create(gButtonSpriteSheetTexture);
       end;
       gButton[0].SetPosition(0, 0);
       gButton[1].SetPosition(Screen_Widht - BUTTON_WIDTH, 0);
