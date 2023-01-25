@@ -156,9 +156,7 @@ begin
               end;
             end;
             SDL_JOYBUTTONDOWN: begin
-              SDL_JOYBUTTONDOWN: begin
                 WriteLn('button:', e.jbutton.button);
-              end;
               if gGameController <> nil then begin
                 if SDL_GameControllerRumble(gGameController, $FFFF * 3 div 4, $FFFF * 3 div 4, 500) <> 0 then begin
                   WriteLn('Warning: Unable to play game contoller rumble! %s\n", SDL_GetError');
