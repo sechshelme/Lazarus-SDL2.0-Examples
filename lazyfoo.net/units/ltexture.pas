@@ -74,6 +74,7 @@ begin
 
   mTexture := newTexture;
   Result := mTexture <> nil;
+
 end;
 
 function TLTexture.LoadFromRenderedText(gFont: PTTF_Font; textureText: string; textColor: TSDL_Color): boolean;
@@ -135,6 +136,7 @@ begin
     renderQuad.w := FWidht;
     renderQuad.h := FHeight;
   end;
+
   SDL_RenderCopyEx(FRenderer, mTexture, clip, @renderQuad, angle, center, flip);
 end;
 
