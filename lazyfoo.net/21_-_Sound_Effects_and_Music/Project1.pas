@@ -5,25 +5,25 @@ program Project1;
 uses
   sdl2,
   sdl2_image,
+  sdl2_mixer,
   ctypes,
   LTexture;
 
 const
   Screen_Widht = 640;
   Screen_Height = 480;
-  WALKING_ANIMATION_FRAMES = 4;
 
 var
   gWindow: PSDL_Window;
   gRenderer: PSDL_Renderer;
 
+  gMusik: PMix_Music;
+  gScratch, gHigh, GMedium, gLow: PMix_Chunk;
+
   quit: boolean = False;
   e: TSDL_Event;
 
-  gArrowTexture: TLTexture;
-
-  degrees: double = 0.0;
-  flipType: cint = SDL_FLIP_NONE;
+  gPromptTexture: TLTexture;
 
   function init: boolean;
   var
@@ -31,7 +31,7 @@ var
     imgFlags: cint32 = 0;
   begin
     sucess := True;
-    if SDL_Init(SDL_INIT_VIDEO) < 0 then begin
+    if SDL_Init(SDL_INIT_VIDEO or SDL_INIT_AUDIO) < 0 then begin
       WriteLn('SDL could not initialize! SDL_Error: ', SDL_GetError);
       sucess := False;
     end else begin
@@ -56,20 +56,55 @@ var
             sucess := False;
           end;
 
+          if Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0 then begin
+            WriteLn('SDL_mixer could not initialize! SDL_mixer Error: ', Mix_GetError);
+            sucess := False;
+          end;
         end;
       end;
     end;
     Result := sucess;
 
-    gArrowTexture := TLTexture.Create(gRenderer);
+    gPromptTexture := TLTexture.Create(gRenderer);
   end;
 
   function loadMedia: boolean;
   var
     sucess: boolean = True;
   begin
-    if not gArrowTexture.LoadFromFile('arrow.png') then begin
-      WriteLn('Failed to load fwalking animation texture !');
+    if not gPromptTexture.LoadFromFile('prompt.png') then begin
+      WriteLn('Failed to load prompt texture !');
+      sucess := False;
+    end;
+
+    //    gMusik:=Mix_LoadMUS('beat.wav');
+    gMusik := Mix_LoadMUS('doom.mid');
+    if gMusik = nil then begin
+      WriteLn('Failed to load beat music! SDL_mixer Error: ', Mix_GetError);
+      sucess := False;
+    end;
+
+    gScratch := Mix_LoadWAV('scratch.wav');
+    if gScratch = nil then begin
+      WriteLn('Failed to load scratch sound effect! SDL_mixer Error: ', Mix_GetError);
+      sucess := False;
+    end;
+
+    gHigh := Mix_LoadWAV('high.wav');
+    if gHigh = nil then begin
+      WriteLn('Failed to load high sound effect! SDL_mixer Error: ', Mix_GetError);
+      sucess := False;
+    end;
+
+    GMedium := Mix_LoadWAV('medium.wav');
+    if GMedium = nil then begin
+      WriteLn('Failed to load medium sound effect! SDL_mixer Error: ', Mix_GetError);
+      sucess := False;
+    end;
+
+    gLow := Mix_LoadWAV('low.wav');
+    if gLow = nil then begin
+      WriteLn('Failed to load low sound effect! SDL_mixer Error: ', Mix_GetError);
       sucess := False;
     end;
 
@@ -78,13 +113,21 @@ var
 
   procedure Close;
   begin
-    gArrowTexture.Free;
+    gPromptTexture.Free;
 
     SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);
     gWindow := nil;
     gRenderer := nil;
 
+    Mix_FreeChunk(gScratch);
+    Mix_FreeChunk(gHigh);
+    Mix_FreeChunk(GMedium);
+    Mix_FreeChunk(gLow);
+
+    Mix_FreeMusic(gMusik);
+    gMusik := nil;
+    Mix_Quit;
     IMG_Quit;
     SDL_Quit;
   end;
@@ -104,20 +147,31 @@ begin
                 SDLK_ESCAPE: begin
                   quit := True;
                 end;
-                SDLK_a: begin
-                  degrees -= 60;
+                SDLK_1: begin
+                  Mix_PlayChannel(-1, gHigh, 0);
                 end;
-                SDLK_d: begin
-                  degrees += 60;
+                SDLK_2: begin
+                  Mix_PlayChannel(-1, GMedium, 0);
                 end;
-                SDLK_q: begin
-                  flipType := SDL_FLIP_HORIZONTAL;
+                SDLK_3: begin
+                  Mix_PlayChannel(-1, gLow, 0);
                 end;
-                SDLK_w: begin
-                  flipType := SDL_FLIP_NONE;
+                SDLK_4: begin
+                  Mix_PlayChannel(-1, gScratch, 0);
                 end;
-                SDLK_e: begin
-                  flipType := SDL_FLIP_VERTICAL;
+                SDLK_9: begin
+                  if Mix_PlayingMusic = 0 then begin
+                    Mix_PlayMusic(gMusik, -1);
+                  end else begin
+                    if Mix_PausedMusic = 1 then begin
+                      Mix_ResumeMusic;
+                    end else begin
+                      Mix_PausedMusic;
+                    end;
+                  end;
+                end;
+                SDLK_0: begin
+                  Mix_HaltMusic;
                 end;
               end;
             end;
@@ -130,7 +184,7 @@ begin
         SDL_SetRenderDrawColor(gRenderer, $FF, $FF, $FF, $FF);
         SDL_RenderClear(gRenderer);
 
-        gArrowTexture.Render((Screen_Widht - gArrowTexture.Widht) div 2, (Screen_Height - gArrowTexture.Height) div 2, nil, degrees, nil, flipType);
+        gPromptTexture.Render(0,0);
 
         SDL_RenderPresent(gRenderer);
       end;

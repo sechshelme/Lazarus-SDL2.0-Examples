@@ -76,7 +76,7 @@ var
         WriteLn('Window could not be created! SDL_Error: ', SDL_GetError);
         sucess := False;
       end else begin
-        gRenderer := SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+        gRenderer := SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED or SDL_RENDERER_PRESENTVSYNC);
         if gRenderer = nil then begin
           WriteLn('Renderer could not be created! SDL Error: ', SDL_GetError);
           sucess := False;
