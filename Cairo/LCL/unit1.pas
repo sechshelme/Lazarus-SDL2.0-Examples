@@ -5,17 +5,18 @@ unit Unit1;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, CairoCanvas, CairoGraphics;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls,
+  CairoGraphics;
 
 type
 
   { TForm1 }
 
   TForm1 = class(TForm)
+    PaintBox1: TPaintBox;
     procedure FormCreate(Sender: TObject);
   private
-    MyCairo: TCairoControlCanvas;
-
+    CPB: TCairoPaintBox;
   public
 
   end;
@@ -26,13 +27,10 @@ var
 implementation
 
 {$R *.lfm}
-
-{ TForm1 }
-
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  ShowMessage('Hallo Horst');
+  CPB := TCairoPaintBox.Create(Self);
+  CPB.Parent := Self;
 end;
 
 end.
-
