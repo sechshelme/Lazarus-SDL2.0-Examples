@@ -90,7 +90,8 @@ end;
 
 procedure TLButton.Renderer;
 begin
- FButtonSpriteSheetTexture.Render(mPosition.x, mPosition.y, @gSpritesChlips[shortint(mCurrentSprite)]);
+  FButtonSpriteSheetTexture.Render(mPosition.x, mPosition.y, @gSpritesChlips[shortint(mCurrentSprite)]);
+//  FButtonSpriteSheetTexture.Render(mPosition.x, mPosition.y, @gSpritesChlips[mCurrentSprite]);
 end;
 
 end.

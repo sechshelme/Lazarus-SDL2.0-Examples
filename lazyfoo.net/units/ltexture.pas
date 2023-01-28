@@ -60,8 +60,8 @@ begin
   if loadedSurface = nil then  begin
     WriteLn('Unable to load image ' + path + '! SDL_image Error: ', IMG_GetError());
   end else begin
-    SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface^.format, $00, $FF, $FF));
-    //    SDL_SetColorKey(loadedSurface, 1, SDL_MapRGB(loadedSurface^.format, $00, $FF, $FF));
+  //  SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface^.format, $00, $FF, $FF));
+        SDL_SetColorKey(loadedSurface, 1, SDL_MapRGB(loadedSurface^.format, $00, $FF, $FF));
     newTexture := SDL_CreateTextureFromSurface(FRenderer, loadedSurface);
     if newTexture = nil then begin
       WriteLn('Unable to create texturefrom ', path, ' SDL Error: ', SDL_GetError);
