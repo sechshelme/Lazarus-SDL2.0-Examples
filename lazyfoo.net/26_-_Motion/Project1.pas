@@ -27,8 +27,6 @@ var
   capTimer, fpsTimer: TLTimer;
   myDot: Tdot;
 
-  timeText: string;
-  avgFPS: single;
   frameTicks: uint32;
 
   function init: boolean;
@@ -73,7 +71,7 @@ var
   var
     sucess: boolean = True;
   begin
-    gDotTexture.LoadFromFile('dot.bmp');
+    gDotTexture.LoadFromFile('dot.bmp', $FF, $FF, $FF);
     if gDotTexture = nil then begin
       WriteLn('Failed to load dot texture! SDL_ttf Error: ');
       sucess := False;
@@ -125,7 +123,7 @@ begin
 
         myDot.move;
 
-        SDL_SetRenderDrawColor(gRenderer, $FF, $FF, $FF, $FF);
+        SDL_SetRenderDrawColor(gRenderer, $00, $9F, $00, $FF);
         SDL_RenderClear(gRenderer);
 
         myDot.render(gDotTexture);

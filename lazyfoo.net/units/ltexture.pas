@@ -23,7 +23,7 @@ type
     property Height: integer read FHeight;
     constructor Create(ARenderer: PSDL_Renderer);
     destructor Destroy; override;
-    function LoadFromFile(path: string): boolean;
+    function LoadFromFile(path: string; ar: byte = $00; ag: byte = $FF; ab: byte = $FF): boolean;
     function LoadFromRenderedText(gFont: PTTF_Font; textureText: string; textColor: TSDL_Color): boolean;
     procedure FreeTexture;
     procedure SetColor(red, green, blue: byte);
@@ -51,7 +51,7 @@ begin
   inherited Destroy;
 end;
 
-function TLTexture.LoadFromFile(path: string): boolean;
+function TLTexture.LoadFromFile(path: string; ar: byte; ag: byte; ab: byte): boolean;
 var
   loadedSurface: PSDL_Surface;
   newTexture: PSDL_Texture;
@@ -60,8 +60,8 @@ begin
   if loadedSurface = nil then  begin
     WriteLn('Unable to load image ' + path + '! SDL_image Error: ', IMG_GetError());
   end else begin
-  //  SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface^.format, $00, $FF, $FF));
-        SDL_SetColorKey(loadedSurface, 1, SDL_MapRGB(loadedSurface^.format, $00, $FF, $FF));
+    //  SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface^.format, $00, $FF, $FF));
+    SDL_SetColorKey(loadedSurface, 1, SDL_MapRGB(loadedSurface^.format, ar, ag, ab));
     newTexture := SDL_CreateTextureFromSurface(FRenderer, loadedSurface);
     if newTexture = nil then begin
       WriteLn('Unable to create texturefrom ', path, ' SDL Error: ', SDL_GetError);

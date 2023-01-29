@@ -5,14 +5,16 @@ program Project1;
 uses
   sdl2,
   sdl2_image,
-  sdl2_ttf,
   ctypes,
   LTexture,
-  LTimer;
+  LTimer,
+  dot;
 
 const
   Screen_Widht = 640;
   Screen_Height = 480;
+  Screen_FPS = 60;
+  Screen_Tick_Per_Frame = 1000 div Screen_FPS;
 
 var
   gWindow: PSDL_Window;
@@ -21,14 +23,13 @@ var
   quit: boolean = False;
   e: TSDL_Event;
 
-  gFPSTextTexture: TLTexture;
-  fpsTimer: TLTimer;
-  textColor: TSDL_Color = (r: 0; g: 0; b: 0; a: 255);
+  gDotTexture: TLTexture;
+  capTimer, fpsTimer: TLTimer;
+  myDot: Tdot;
 
-  gFont: PTTF_Font;
-  timeText: string;
-  countedFrames: integer;
-  avgFPS: single;
+  frameTicks: uint32;
+  wall:array [0..2]of TSDL_Rect  = ((x: 300; y: 40; w: 40; h: 400),(x: 150; y: 40; w: 40; h: 400),(x: 450; y: 40; w: 40; h: 400));
+  i: Integer;
 
   function init: boolean;
   var
@@ -57,27 +58,24 @@ var
             sucess := False;
           end;
 
-          if TTF_Init() = -1 then begin
-            WriteLn('SDL_ttf could not initialize! SDL_ttf Error: ', TTF_GetError);
-            sucess := False;
-          end;
-
         end;
       end;
     end;
     Result := sucess;
 
-    gFPSTextTexture := TLTexture.Create(gRenderer);
+    gDotTexture := TLTexture.Create(gRenderer);
     fpsTimer := TLTimer.Create;
+    capTimer := TLTimer.Create;
+    myDot := Tdot.Create(Screen_Widht, Screen_Height);
   end;
 
   function loadMedia: boolean;
   var
     sucess: boolean = True;
   begin
-    gFont := TTF_OpenFont('lazy.ttf', 28);
-    if gFont = nil then begin
-      WriteLn('Failed to load lazy font! SDL_ttf Error: ', TTF_GetError);
+    gDotTexture.LoadFromFile('dot.bmp',$FF,$FF,$FF);
+    if gDotTexture = nil then begin
+      WriteLn('Failed to load dot texture! SDL_ttf Error: ');
       sucess := False;
     end;
 
@@ -86,19 +84,16 @@ var
 
   procedure Close;
   begin
-    gFPSTextTexture.Free;
+    gDotTexture.Free;
     fpsTimer.Free;
-
-    TTF_CloseFont(gFont);
-    gFont := nil;
-
+    capTimer.Free;
+    myDot.Free;
 
     SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);
     gWindow := nil;
     gRenderer := nil;
 
-    TTF_Quit;
     IMG_Quit;
     SDL_Quit;
   end;
@@ -110,7 +105,6 @@ begin
     if not loadMedia then begin
       WriteLn('Failed to load media');
     end else begin
-      countedFrames := 0;
       fpsTimer.start;
       while not quit do begin
         while SDL_PollEvent(@e) <> 0 do begin
@@ -126,26 +120,26 @@ begin
               quit := True;
             end;
           end;
+          myDot.HandleEvent(e);
         end;
 
-        avgFPS := countedFrames / (fpsTimer.getTicks / 1000);
-        if avgFPS > 2000000 then begin
-          avgFPS := 0;
-        end;
+        myDot.move(wall);
 
-        timeText := '';
-        WriteStr(timeText, 'Average Frames Per Second ', avgFPS: 10: 2);
-        if not gFPSTextTexture.LoadFromRenderedText(gFont, timeText, textColor) then begin
-          WriteLn('Unable to render FPS texture !');
-        end;
-
-        SDL_SetRenderDrawColor(gRenderer, $FF, $FF, $FF, $FF);
+        SDL_SetRenderDrawColor(gRenderer, $00, $80, $00, $FF);
         SDL_RenderClear(gRenderer);
 
-        gFPSTextTexture.Render((Screen_Widht - gFPSTextTexture.Widht) div 2, (Screen_Height - gFPSTextTexture.Height) div 2);
+        SDL_SetRenderDrawColor(gRenderer, $80, $40, $00, $FF);
+
+        for i:=0 to Length(wall)-1 do        SDL_RenderFillRect(gRenderer, @wall[i]);
+
+        myDot.render(gDotTexture);
 
         SDL_RenderPresent(gRenderer);
-        Inc(countedFrames);
+
+        frameTicks := capTimer.getTicks;
+        if frameTicks < Screen_Tick_Per_Frame then begin
+          SDL_Delay(Screen_Tick_Per_Frame - frameTicks);
+        end;
       end;
     end;
   end;

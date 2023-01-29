@@ -13,6 +13,7 @@ type
   Tdot = class(TObject)
   private
     widht, Height, mPosX, mPosY, mVelX, mVelY: integer;
+    mCollider: TSDL_Rect;
   public
   const
     DOT_WIDTH = 20;
@@ -20,11 +21,42 @@ type
     DOT_VEL = 10;
     constructor Create(Awidht, Aheigth: integer);
     procedure HandleEvent(var e: TSDL_Event);
-    procedure move;
+    procedure move(wall: TSDL_Rect);
     procedure render(tex: TLTexture);
   end;
 
+function checkCollision(var a, b: TSDL_Rect): boolean;
+
 implementation
+
+function checkCollision(var a, b: TSDL_Rect): boolean;
+var
+  leftA, leftB, rightA, rightB, topA, topB, bottomA, bottomB: integer;
+begin
+  leftA := A.x;
+  rightA := A.x + A.w;
+  topA := A.y;
+  bottomA := A.y + A.h;
+
+  leftB := B.x;
+  rightB := B.x + B.w;
+  topB := B.y;
+  bottomB := B.y + B.h;
+
+  Result := True;
+  if bottomA <= topB then begin
+    Result := False;
+  end;
+  if topA >= bottomB then begin
+    Result := False;
+  end;
+  if rightA <= leftB then begin
+    Result := False;
+  end;
+  if leftA >= rightB then begin
+    Result := False;
+  end;
+end;
 
 { Tdot }
 
@@ -36,6 +68,8 @@ begin
   mVelY := 0;
   widht := Awidht;
   Height := Aheigth;
+  mCollider.w := DOT_WIDTH;
+  mCollider.h := DOT_HEIGHT;
 end;
 
 procedure Tdot.HandleEvent(var e: TSDL_Event);
@@ -80,16 +114,26 @@ begin
   end;
 end;
 
-procedure Tdot.move;
+procedure Tdot.move(wall: TSDL_Rect);
+var
+  oldX, oldY: integer;
 begin
+  oldX := mPosX;
+  oldY := mPosY;
   Inc(mPosX, mVelX);
-  if (mPosX < 0) or (mPosX + DOT_WIDTH > widht) then begin
-    Dec(mPosX, mVelX);
+  mCollider.x := mPosX;
+  if (mPosX < 0) or (mPosX + DOT_WIDTH > widht) or checkCollision(mCollider, wall) then begin
+    mPosX := oldX;
+    //    Dec(mPosX, mVelX);
+    mCollider.x := mPosX;
   end;
 
   Inc(mPosY, mVelY);
-  if (mPosY < 0) or (mPosY + DOT_HEIGHT > Height) then begin
-    Dec(mPosY, mVelY);
+  mCollider.y := mPosY;
+  if (mPosY < 0) or (mPosY + DOT_HEIGHT > Height) or checkCollision(mCollider, wall) then begin
+    mPosY := oldY;
+    //    Dec(mPosY, mVelY);
+    mCollider.y := mPosY;
   end;
 end;
 
