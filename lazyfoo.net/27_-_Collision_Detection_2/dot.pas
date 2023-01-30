@@ -18,43 +18,37 @@ type
   const
     DOT_WIDTH = 20;
     DOT_HEIGHT = 20;
-    DOT_VEL = 10;
+    DOT_VEL = 1;
     constructor Create(Awidht, Aheigth: integer);
     procedure HandleEvent(var e: TSDL_Event);
     procedure move(wall: array of TSDL_Rect);
     procedure render(tex: TLTexture);
   end;
 
-function checkCollision(var a, b: TSDL_Rect): boolean;
+function checkCollision(var a: TSDL_Rect; b: array of TSDL_Rect): boolean;
 
 implementation
 
-function checkCollision(var a, b: TSDL_Rect): boolean;
+function checkCollision(var a: TSDL_Rect; b: array of TSDL_Rect): boolean;
 var
-  leftA, leftB, rightA, rightB, topA, topB, bottomA, bottomB: integer;
+  leftA, leftB, rightA, rightB, topA, topB, bottomA, bottomB, i: integer;
 begin
   leftA := A.x;
   rightA := A.x + A.w;
   topA := A.y;
   bottomA := A.y + A.h;
 
-  leftB := B.x;
-  rightB := B.x + B.w;
-  topB := B.y;
-  bottomB := B.y + B.h;
+  Result := False;
+  for i := 0 to Length(b) - 1 do begin
+    leftB := B[i].x;
+    rightB := B[i].x + B[i].w;
+    topB := B[i].y;
+    bottomB := B[i].y + B[i].h;
 
-  Result := True;
-  if bottomA <= topB then begin
-    Result := False;
-  end;
-  if topA >= bottomB then begin
-    Result := False;
-  end;
-  if rightA <= leftB then begin
-    Result := False;
-  end;
-  if leftA >= rightB then begin
-    Result := False;
+    if (bottomA > topB) and (topA < bottomB) and (rightA > leftB) and (leftA < rightB) then begin
+      Result := True;
+      Exit;
+    end;
   end;
 end;
 
@@ -116,30 +110,20 @@ end;
 
 procedure Tdot.move(wall: array of TSDL_Rect);
 var
-  oldX, oldY, i: integer;
+  oldX, oldY: integer;
 begin
   oldX := mPos.x;
   oldY := mPos.y;
 
   Inc(mPos.x, mVelX);
 
-  if (mPos.x < 0) or (mPos.x + DOT_WIDTH > widht) then begin
+  if (mPos.x < 0) or (mPos.x + DOT_WIDTH > widht) or checkCollision(mPos, wall) then begin
     mPos.x := oldX;
-  end;
-  for i := 0 to Length(wall) - 1 do begin
-    if checkCollision(mPos, wall[i]) then begin
-      mPos.x := oldX;
-    end;
   end;
 
   Inc(mPos.y, mVelY);
-  if (mPos.y < 0) or (mPos.y + DOT_HEIGHT > Height) then begin
+  if (mPos.y < 0) or (mPos.y + DOT_HEIGHT > Height) or checkCollision(mPos, wall) then begin
     mPos.y := oldY;
-  end;
-  for i := 0 to Length(wall) - 1 do begin
-    if checkCollision(mPos, wall[i]) then begin
-      mPos.y := oldY;
-    end;
   end;
 
 end;

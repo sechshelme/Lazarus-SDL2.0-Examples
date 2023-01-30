@@ -20,13 +20,15 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="`pkg-config gtk+-2.0 --cflags`" />
 			<Add option="-Wall" />
-			<Add option="`sdl2-config --cflags`" />
 		</Compiler>
 		<Linker>
-			<Add library="SDL2" />
+			<Add option="`pkg-config gtk+-2.0 --libs`" />
 		</Linker>
-		<Unit filename="main.cpp" />
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

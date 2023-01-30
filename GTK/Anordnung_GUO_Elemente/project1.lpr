@@ -25,8 +25,13 @@ uses
 
     gtk_main;
     Result := 0;
+    gtk_main_quit;
+
   end;
 
 begin
-  Halt(main(argc, @argv));
+  main(argc, @argv);
+  main(argc, @argv) ;
+
+//  Halt(main(argc, @argv));
 end.

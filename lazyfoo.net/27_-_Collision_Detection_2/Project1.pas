@@ -1,6 +1,7 @@
 program Project1;
 
 // https://github.com/PascalGameDevelopment/SDL2-for-Pascal
+{$modeswitch typehelpers}
 
 uses
   sdl2,
@@ -13,8 +14,33 @@ uses
 const
   Screen_Widht = 640;
   Screen_Height = 480;
-  Screen_FPS = 60;
+  Screen_FPS = 200;
   Screen_Tick_Per_Frame = 1000 div Screen_FPS;
+
+  //  {$MODESWITCH ADVANCEDRECORDS}
+type
+  TSDL_Rects = array of TSDL_Rect;
+
+  { TSDL_RectsHelper }
+
+  TSDL_RectsHelper = type Helper for  TSDL_Rects
+  public
+    procedure Add(x, y, w, h: integer);
+  end;
+
+  { TSDL_RectsHelper }
+
+  procedure TSDL_RectsHelper.Add(x, y, w, h: integer);
+  var
+    l: SizeInt;
+  begin
+    l := Length(self);
+    SetLength(Self, l + 1);
+    Self[l].x := x;
+    Self[l].y := y;
+    Self[l].w := w;
+    Self[l].h := h;
+  end;
 
 var
   gWindow: PSDL_Window;
@@ -28,8 +54,9 @@ var
   myDot: Tdot;
 
   frameTicks: uint32;
-  wall:array [0..2]of TSDL_Rect  = ((x: 300; y: 40; w: 40; h: 400),(x: 150; y: 40; w: 40; h: 400),(x: 450; y: 40; w: 40; h: 400));
-  i: Integer;
+  wall: TSDL_Rects;
+
+  i: integer;
 
   function init: boolean;
   var
@@ -67,13 +94,25 @@ var
     fpsTimer := TLTimer.Create;
     capTimer := TLTimer.Create;
     myDot := Tdot.Create(Screen_Widht, Screen_Height);
+
+    Randomize;
+    for i := 0 to 7 do begin
+      if i mod 2 = 1 then  begin
+        wall.Add(random(Screen_Widht - 100)+20, random(100), random(50), random(Screen_Height - 100)+20);
+      end else begin
+        wall.Add(random(100), random(Screen_Height - 100)+20, random(Screen_Widht - 100)+20, random(50));
+      end;
+    end;
+    //wall.Add(300, 40, 40, 400);
+    //wall.Add(150, 40, 40, 400);
+    //wall.Add(450, 40, 40, 400);
   end;
 
   function loadMedia: boolean;
   var
     sucess: boolean = True;
   begin
-    gDotTexture.LoadFromFile('dot.bmp',$FF,$FF,$FF);
+    gDotTexture.LoadFromFile('dot.bmp', $FF, $FF, $FF);
     if gDotTexture = nil then begin
       WriteLn('Failed to load dot texture! SDL_ttf Error: ');
       sucess := False;
@@ -130,7 +169,9 @@ begin
 
         SDL_SetRenderDrawColor(gRenderer, $80, $40, $00, $FF);
 
-        for i:=0 to Length(wall)-1 do        SDL_RenderFillRect(gRenderer, @wall[i]);
+        for i := 0 to Length(wall) - 1 do begin
+          SDL_RenderFillRect(gRenderer, @wall[i]);
+        end;
 
         myDot.render(gDotTexture);
 
