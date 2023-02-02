@@ -12,7 +12,6 @@ static void helloWorld (GtkWidget *wid, GtkWidget *win)
 }
 
 int main (int argc, char *argv[])
-
 {
   GtkWidget *button = NULL;
   GtkWidget *win = NULL;

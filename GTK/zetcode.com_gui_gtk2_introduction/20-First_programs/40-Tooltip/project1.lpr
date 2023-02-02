@@ -5,7 +5,8 @@ uses
   gdk2,
   gtk2;
 
-  procedure gtk_widget_set_tooltip_text(window: PGtkWidget; title: Pgchar); cdecl; external gtklib;
+ procedure gtk_widget_set_tooltip_text(window: PGtkWidget; title: Pgchar); cdecl; external gtklib;
+//  procedure gtk_widget_set_tooltip_text(window: PGtkWidget; title: Pgchar); cdecl; external 'gtk-3';
 
   function main(argc: integer; argv: PChar): integer;
   var
