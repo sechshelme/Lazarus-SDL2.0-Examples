@@ -56,6 +56,8 @@ uses
 
     statusbar := gtk_statusbar_new;
     gtk_widget_modify_bg(statusbar, GTK_STATE_NORMAL, @red);
+    gtk_widget_modify_bg(statusbar, GTK_STATE_PRELIGHT, @red);
+    gtk_widget_modify_bg(statusbar, GTK_STATE_ACTIVE, @red);
     gtk_box_pack_end(GTK_BOX(vbox), statusbar, False, True, 0);
 
     g_signal_connect(G_OBJECT(tog_statMi), 'activate', G_CALLBACK(@toggle_statusbar), statusbar);
