@@ -1,6 +1,7 @@
 program project1;
 
 uses
+  Math,
   glib2,
   gdk2,
   gtk2;
@@ -10,8 +11,8 @@ uses
 const
   GDK_q = $071;
 
-  cmTest0=  1000;
-  cmTest1= 1001;
+  cmTest0 = 1000;
+  cmTest1 = 1001;
 
   //  procedure gtk_widget_set_tooltip_text(window: PGtkWidget; title: Pgchar); cdecl; external gtklib;
 
@@ -21,7 +22,7 @@ const
   begin
     WriteLn('menu click');
     if Data <> nil then begin
-      i := Integer(Data);
+      i := integer(Data);
       //      WriteLn(PChar(Data));
       case i of
         cmTest0: begin
@@ -64,23 +65,23 @@ const
     gtk_widget_add_accelerator(quitMi, 'activate', accel_group, gdk_q, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(fileMi), fileMenu);
-    //    gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu), newMi);
-    //    gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu), openMi);
+    gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu), newMi);
+    gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu), openMi);
 
     gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu), testMi0);
-    g_signal_connect(G_OBJECT(testMi0), 'activate', G_CALLBACK(@menu_click_msg),Pointer( cmTest0));
+    g_signal_connect(G_OBJECT(testMi0), 'activate', G_CALLBACK(@menu_click_msg), Pointer(cmTest0));
 
     gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu), sep);
 
     gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu), testMi1);
-    g_signal_connect(G_OBJECT(testMi1), 'activate', G_CALLBACK(@menu_click_msg),Pointer( cmTest1));
+    g_signal_connect(G_OBJECT(testMi1), 'activate', G_CALLBACK(@menu_click_msg), Pointer(cmTest1));
 
-    //    gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu), quitMi);
+    gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu), quitMi);
     gtk_menu_shell_append(GTK_MENU_SHELL(menubar), fileMi);
     gtk_box_pack_start(GTK_BOX(vbox), menubar, gFALSE, False, 0);
 
     g_signal_connect(G_OBJECT(window), 'destroy', G_CALLBACK(@gtk_main_quit), nil);
-    //    g_signal_connect(G_OBJECT(quitMi), 'activate', G_CALLBACK(@gtk_main_quit), nil);
+    g_signal_connect(G_OBJECT(quitMi), 'activate', G_CALLBACK(@gtk_main_quit), nil);
 
     gtk_widget_show_all(window);
     gtk_main;
@@ -88,5 +89,6 @@ const
   end;
 
 begin
+  SetExceptionMask([exDenormalized, exInvalidOp, exOverflow, exPrecision, exUnderflow, exZeroDivide]);
   Halt(main(argc, @argv));
 end.

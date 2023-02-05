@@ -82,7 +82,7 @@ uses
     statusbar := gtk_statusbar_new;
     g_signal_connect(G_OBJECT(statusbar), 'expose-event', G_CALLBACK(@StatusBar_draw_event), NULL);
     g_signal_connect(G_OBJECT(statusbar), 'button-press-event', G_CALLBACK(@statusBar_click_msg), nil);
-    gtk_box_pack_end(GTK_BOX(vbox), statusbar, False, True, 0);
+    gtk_box_pack_end(GTK_BOX(vbox), statusbar, True, True, 0);
 
     WriteLn('statusbar: ', PtrUInt(statusbar));
 
@@ -158,7 +158,7 @@ uses
     gtk_menu_shell_append(GTK_MENU_SHELL(helpMenu), aboutMi);
     g_signal_connect(G_OBJECT(aboutMi), 'activate', G_CALLBACK(@menu_click_msg), PChar('About...'));
 
-    gtk_box_pack_start(GTK_BOX(vbox), menubar, gFALSE, False, 0);
+    gtk_box_pack_start(GTK_BOX(vbox), menubar, False, False, 0);
 
     g_signal_connect(G_OBJECT(window), 'destroy', G_CALLBACK(@gtk_main_quit), nil);
 

@@ -1,6 +1,7 @@
 program project1;
 
 uses
+  Math,
   glib2,
   gdk2,
   gtk2;
@@ -60,5 +61,6 @@ const
   end;
 
 begin
+  SetExceptionMask([exDenormalized, exInvalidOp, exOverflow, exPrecision, exUnderflow, exZeroDivide]);
   Halt(main(argc, @argv));
 end.
