@@ -63,13 +63,14 @@ var    start_Games: boolean = False;
   procedure press_Run(widget: PGtkWidget; event: PGdkEventButton; data: gpointer); cdecl;
   begin
     start_Games := True;
-      gtk_main_quit;
+ //     gtk_main_quit;
     WriteLn('Starte Games');
     WriteLn('run: ', start_Games);
   end;
 
   begin
     Result := 0;
+    start_Games:=False;
 
     gtk_init(@argc, @argv);
     window := gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -80,7 +81,11 @@ var    start_Games: boolean = False;
 
     Btn_RunGames := gtk_button_new_with_label('Start Game');
     gtk_box_pack_start(GTK_BOX(vbox), Btn_RunGames, False, False, 0);
+
+
+    g_signal_connect(Btn_RunGames, 'clicked', G_CALLBACK(@gtk_main_quit), nil);
     g_signal_connect(Btn_RunGames, 'clicked', G_CALLBACK(@press_Run), nil);
+
 
     Btn_Quit := gtk_button_new_with_label('Quit');
     gtk_box_pack_start(GTK_BOX(vbox), Btn_Quit, False, False, 0);
@@ -91,7 +96,10 @@ var    start_Games: boolean = False;
 
     gtk_widget_show_all(window);
     gtk_main;
-//    gtk_main_quit;
+
+    gtk_widget_destroy(window);
+  //  ReadLn;
+//   gtk_main_quit;
 
 WriteLn('result: ', start_Games);
     if start_Games then begin
@@ -103,13 +111,14 @@ WriteLn('result: ', start_Games);
 
   function main(argc: integer; argv: PChar): integer;
   begin
-    while Run_GTK <> 0 do begin
+    while Run_GTK = 1 do begin
       Run_SDL;
     end;
   end;
 
 begin
   main(argc, @argv);
+   //   ReadLn;
 
   //  Halt(main(argc, @argv));
 end.

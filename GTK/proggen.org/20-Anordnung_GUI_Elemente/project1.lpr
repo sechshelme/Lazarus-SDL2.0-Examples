@@ -27,7 +27,10 @@ uses
 
     gtk_main;
     Result := 0;
-    gtk_main_quit;
+  //  gtk_main_quit;
+
+
+    ReadLn;
 
 
     window := gtk_window_new(GTK_WINDOW_TOPLEVEL);
