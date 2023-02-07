@@ -13,6 +13,7 @@ const
   cmQuestion = 1003;
   cmOthero = 1004;
   cmYesNo = 1005;
+  cmUser = 1006;
 
 var
   Text: string;
@@ -50,7 +51,13 @@ var
         gtk_widget_destroy(error_msg);
       end;
       cmYesNo: begin
-        error_msg := gtk_message_dialog_new(nil, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, 'Im Text befinden sich noch ungespeicherte Änderungen !');
+        error_msg := gtk_message_dialog_new(nil, GTK_DIALOG_MODAL, TGtkMessageType(4), GTK_BUTTONS_YES_NO, 'für sonstige Zwecke, es wird kein Icon gezeigt');
+        res:=gtk_dialog_run(GTK_DIALOG(error_msg));
+        WriteLn(res);
+        gtk_widget_destroy(error_msg);
+      end;
+      cmUser: begin
+        error_msg := gtk_message_dialog_new(nil, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE, 'Im Text befinden sich noch ungespeicherte Änderungen !');
         gtk_dialog_add_buttons(GTK_DIALOG(error_msg), 'Beenden', 100, 'Abbrechen', 101, 'Speichern', 102, nil);
         res:= gtk_dialog_run(GTK_DIALOG(error_msg));
         WriteLn(res);
@@ -73,7 +80,8 @@ var
 
   function main(argc: integer; argv: PChar): integer;
   var
-    window, vbox, label1, button1, buttonQuit, button2, button3, button4, button5, buttonYesNo: PGtkWidget;
+    window, vbox, label1, button1, buttonQuit, button2, button3, button4, button5, buttonYesNo,
+      buttonUser: PGtkWidget;
   begin
     gtk_init(@argc, @argv);
     window := gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -108,6 +116,10 @@ var
     buttonYesNo := gtk_button_new_with_label('Ja / Nein');
     gtk_box_pack_start(GTK_BOX(vbox), buttonYesNo, False, False, 0);
     g_signal_connect(buttonYesNo, 'clicked', G_CALLBACK(@show_dialog), Pointer(cmYesNo));
+
+    buttonUser := gtk_button_new_with_label('Eigenbau');
+    gtk_box_pack_start(GTK_BOX(vbox), buttonUser, False, False, 0);
+    g_signal_connect(buttonUser, 'clicked', G_CALLBACK(@show_dialog), Pointer(cmUser));
 
     buttonQuit := gtk_button_new_with_label('Programm beenden');
     gtk_box_pack_start(GTK_BOX(vbox), buttonQuit, False, False, 5);
