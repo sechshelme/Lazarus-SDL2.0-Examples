@@ -1,6 +1,8 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
+// https://stackoverflow.com/questions/26698378/how-to-use-sdl-createtexture
+
 int main(int argc, char *argv[]) {
 
   GtkWidget *window;
