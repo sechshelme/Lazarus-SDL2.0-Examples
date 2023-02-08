@@ -75,7 +75,7 @@ begin
     SDL_SetRenderDrawColor(renderer, $00, $FF, $00, $FF);
     SDL_RenderClear(renderer);
     //    SDL_RenderGeometry(renderer, nil, vert, Length(vert), nil, 0);
-    //    SDL_RenderGeometry(renderer, texture, vert, Length(vert), nil, 0);
+//        SDL_RenderGeometry(renderer, texture, vert, Length(vert), nil, 0);
     SDL_RenderCopy(renderer, Texture, nil, nil);
 
     SDL_RenderPresent(renderer);
