@@ -15,8 +15,8 @@ const
 
   Total_Date = 10;
 
-  textColor: TSDL_Color = (r: 0; g: 0; b: 0; a: $FF);
-  highlightColor: TSDL_Color = (r: $FF; g: 0; b: 0; a: $FF);
+  textColor: TSDL_Color = (r: $80; g: $80; b: $80; a: $FF);
+  highlightColor: TSDL_Color = (r: $FF; g: $FF; b: 0; a: $FF);
 
 var
   gWindow: PSDL_Window;
@@ -31,7 +31,6 @@ var
 
   gFont: PTTF_Font;
   inputText: string;
-  renderText: boolean;
   currentData: integer = 0;
   s: string;
   i: integer;
@@ -141,7 +140,6 @@ var
     datei := SDL_RWFromFile('nums.bin', 'w+b');
     if datei <> nil then  begin
       for i := 0 to Length(gData) - 1 do begin
-        gData[i] := 0;
         SDL_RWwrite(datei, @gData[i], SizeOf(integer), 1);
       end;
       SDL_RWclose(datei);
@@ -175,10 +173,7 @@ begin
       WriteLn('Failed to load media');
     end else begin
       inputText := 'Some Text';
-      //      gInputTextTexture.LoadFromRenderedText(gFont, inputText, textColor);
       while not quit do begin
-        renderText := False;
-
         while SDL_PollEvent(@e) <> 0 do begin
           case e.type_ of
             SDL_KEYDOWN: begin
@@ -224,15 +219,14 @@ begin
           end;
         end;
 
-        SDL_SetRenderDrawColor(gRenderer, $FF, $FF, $FF, $FF);
+        SDL_SetRenderDrawColor(gRenderer, $40, $00, $00, $FF);
         SDL_RenderClear(gRenderer);
 
         gPromptTextTexture.Render((Screen_Widht - gPromptTextTexture.Widht) div 2, 0);
 
         for i := 0 to Length(gDataTextures) - 1 do begin
-          gDataTextures[i].Render((Screen_Widht - gDataTextures[i].Widht) div 2, gPromptTextTexture.Height + gDataTextures[0].Height * i);
+          gDataTextures[i].Render((Screen_Widht - gDataTextures[i].Widht) div 2, gPromptTextTexture.Height * 2 + gDataTextures[0].Height * i);
         end;
-
 
         SDL_RenderPresent(gRenderer);
       end;
