@@ -24,7 +24,7 @@ var
   e: TSDL_Event;
 
   gDotTexture: TLTexture;
-  capTimer, fpsTimer: TLTimer;
+  fpsTimer: TLTimer;
   myDot: Tdot;
 
   frameTicks: uint32;
@@ -63,7 +63,6 @@ var
 
     gDotTexture := TLTexture.Create(gRenderer);
     fpsTimer := TLTimer.Create;
-    capTimer := TLTimer.Create;
     myDot := Tdot.Create(Screen_Widht, Screen_Height);
   end;
 
@@ -84,7 +83,6 @@ var
   begin
     gDotTexture.Free;
     fpsTimer.Free;
-    capTimer.Free;
     myDot.Free;
 
     SDL_DestroyRenderer(gRenderer);
@@ -103,7 +101,7 @@ begin
     if not loadMedia then begin
       WriteLn('Failed to load media');
     end else begin
-      fpsTimer.start;
+//      fpsTimer.start;
       while not quit do begin
         while SDL_PollEvent(@e) <> 0 do begin
           case e.type_ of
@@ -130,7 +128,7 @@ begin
 
         SDL_RenderPresent(gRenderer);
 
-        frameTicks := capTimer.getTicks;
+        frameTicks := fpsTimer.getTicks;
         if frameTicks < Screen_Tick_Per_Frame then begin
           SDL_Delay(Screen_Tick_Per_Frame - frameTicks);
         end;

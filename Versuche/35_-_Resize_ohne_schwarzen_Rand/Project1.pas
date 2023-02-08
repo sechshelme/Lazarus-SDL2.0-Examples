@@ -5,10 +5,7 @@ program Project1;
 uses
   sdl2,
   sdl2_image,
-  ctypes,
-  LTexture,
-  LTimer,
-  LWindow;
+  ctypes;
 
 const
   Screen_Widht = 640;
@@ -17,13 +14,14 @@ const
   Screen_Tick_Per_Frame = 1000 div Screen_FPS;
 
 var
-  gWindow: TLWindow;
+  gWindow: PSDL_Window;
   gRenderer: PSDL_Renderer;
 
   quit: boolean = False;
   e: TSDL_Event;
-
-  gSceneTexture: TLTexture;
+  FWidth: integer = Screen_Widht;
+  FHeight: integer = Screen_Height;
+  rect: TSDL_Rect;
 
   function init: boolean;
   var
@@ -38,13 +36,12 @@ var
       if not SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, '1') then begin
         WriteLn('Warning: Linear texture filtering not enabled!');
       end;
-
-      gWindow := TLWindow.Create;
-      if not gWindow.Init(Screen_Widht, Screen_Height) then begin
+      gWindow := SDL_CreateWindow('SDL Tutorial', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Screen_Widht, Screen_Height, SDL_WINDOW_SHOWN or SDL_WINDOW_RESIZABLE);
+      if gWindow = nil then begin
         WriteLn('Window could not be created! SDL Error: ', SDL_GetError);
         sucess := False;
       end else begin
-        gRenderer := gWindow.createRenderer;
+        gRenderer := SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
         if gRenderer = nil then begin
           WriteLn('Renderer could not be created! SDL Error: ', SDL_GetError);
           sucess := False;
@@ -61,28 +58,12 @@ var
     end;
     Result := sucess;
 
-    gSceneTexture := TLTexture.Create(gRenderer);
-  end;
-
-  function loadMedia: boolean;
-  var
-    sucess: boolean = True;
-  begin
-    gSceneTexture.LoadFromFile('window.png');
-    if gSceneTexture = nil then begin
-      WriteLn('Failed to load dot texture! SDL_ttf Error: ');
-      sucess := False;
-    end;
-
-    Result := sucess;
   end;
 
   procedure Close;
   begin
-    gSceneTexture.Free;
-
     SDL_DestroyRenderer(gRenderer);
-    gWindow.Free;
+    SDL_DestroyWindow(gWindow);
 
     gWindow := nil;
     gRenderer := nil;
@@ -95,33 +76,42 @@ begin
   if not init then begin
     WriteLn('Failed to initialize');
   end else begin
-    if not loadMedia then begin
-      WriteLn('Failed to load media');
-    end else begin
-      while not quit do begin
-        while SDL_PollEvent(@e) <> 0 do begin
-          case e.type_ of
-            SDL_KEYDOWN: begin
-              case e.key.keysym.sym of
-                SDLK_ESCAPE: begin
-                  quit := True;
-                end;
+    while not quit do begin
+      while SDL_PollEvent(@e) <> 0 do begin
+        case e.type_ of
+          SDL_KEYDOWN: begin
+            case e.key.keysym.sym of
+              SDLK_ESCAPE: begin
+                quit := True;
               end;
             end;
-            SDL_QUITEV: begin
-              quit := True;
+          end;
+          SDL_QUITEV: begin
+            quit := True;
+          end;
+          SDL_WINDOWEVENT: begin
+            case e.window.event of
+              SDL_WINDOWEVENT_SIZE_CHANGED: begin
+                FWidth := e.window.data1;
+                FHeight := e.window.data2;
+              end;
             end;
           end;
-          gWindow.handleEvent(e, @gRenderer);
         end;
-
-        SDL_SetRenderDrawColor(gRenderer, $00, $9F, $00, $FF);
-        SDL_RenderClear(gRenderer);
-
-        gSceneTexture.Render((gWindow.Width - gSceneTexture.Widht) div 2, (gWindow.Height - gSceneTexture.Height) div 2);
-
-        SDL_RenderPresent(gRenderer);
       end;
+
+//      SDL_SetRenderDrawColor(gRenderer, $00, $9F, $00, $FF);
+      SDL_SetRenderDrawColor(gRenderer, $FF, $FF, $FF, $FF);
+      SDL_RenderClear(gRenderer);
+
+      rect.x := 100;
+      rect.y := 100;
+      rect.w := FWidth - 200;
+      rect.h := FHeight - 200;
+      SDL_SetRenderDrawColor(gRenderer, $80, $80, $00, $FF);
+      SDL_RenderFillRect(gRenderer, @rect);
+
+      SDL_RenderPresent(gRenderer);
     end;
   end;
   Close;

@@ -71,6 +71,7 @@ end;
 procedure TLWindow.handleEvent(e: TSDL_Event; ARenderer: PSDL_Renderer);
 var
   updateCaption: boolean;
+  s: string;
 begin
   case e.type_ of
     SDL_WINDOWEVENT: begin
@@ -108,6 +109,24 @@ begin
         end;
         SDL_WINDOWEVENT_RESTORED: begin
           mMinimized := False;
+        end;
+      end;
+      if updateCaption then begin
+        WriteStr(s, 'SDL Tutorial - MouseFocus:', mMouseFocus, 'KeyboardFocus:', mKeybordFocus);
+        SDL_SetWindowTitle(mWindow, PChar(s));
+      end;
+    end;
+    SDL_KEYDOWN: begin
+      case e.key.keysym.sym of
+        SDLK_RETURN: begin
+          if mFullScreeen then  begin
+            SDL_SetWindowFullscreen(mWindow, SDL_FALSE);
+            mFullScreeen := False;
+          end else begin
+            SDL_SetWindowFullscreen(mWindow, SDL_TRUE);
+            mFullScreeen := True;
+            mMinimized := False;
+          end;
         end;
       end;
     end;
