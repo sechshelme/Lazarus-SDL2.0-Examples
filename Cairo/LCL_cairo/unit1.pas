@@ -47,7 +47,7 @@ begin
   bit.Height := 480;
 
   //  cr_surface := cairo_image_surface_create_for_data(sd_surface^.pixels, CAIRO_FORMAT_RGB24, sd_surface^.w, sd_surface^.h, sd_surface^.pitch);
-  cr_surface := cairo_image_surface_create_for_data(bit.RawImage.Data, CAIRO_FORMAT_RGB24, bit.Width, bit.Height, 2560);
+  cr_surface := cairo_image_surface_create_for_data(bit.RawImage.Data, CAIRO_FORMAT_RGB24, bit.Width, bit.Height, 640*4);
 
   cr := cairo_create(cr_surface);
 
