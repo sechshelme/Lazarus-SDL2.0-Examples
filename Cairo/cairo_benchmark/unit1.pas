@@ -19,10 +19,12 @@ type
 
   TForm1 = class(TForm)
     BtnBitmap: TButton;
+    Button1: TButton;
     ButtonSDL: TButton;
     GTKButton: TButton;
     procedure BtnBitmapClick(Sender: TObject);
     procedure BtnGTKClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
     procedure ButtonSDLClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormPaint(Sender: TObject);
@@ -76,6 +78,69 @@ begin
   gtk_main;
 end;
 
+// --- SDL ohne Textur
+
+procedure TForm1.Button1Click(Sender: TObject);
+var
+  renderer_width: integer = 640;
+  renderer_height: integer = 480;
+
+  window: PSDL_Window;
+  renderer: PSDL_Renderer;
+  sd_surface: PSDL_Surface;
+  cr_surface: Pcairo_surface_t;
+  cr: Pcairo_t;
+//  texture: PSDL_Texture;
+  quit: boolean = False;
+  e: TSDL_Event;
+begin
+  SDL_Init(SDL_INIT_VIDEO);
+  window := SDL_CreateWindow('An SDL2 window', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN or SDL_WINDOW_ALLOW_HIGHDPI);
+  renderer := SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED or SDL_RENDERER_PRESENTVSYNC);
+
+
+//  sd_surface := SDL_CreateRGBSurface(0, renderer_width, renderer_height, 32, $FF0000, $00FF00, $0000FF, 0);
+  sd_surface:=SDL_GetWindowSurface(window);
+
+
+  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+  SDL_RenderClear(renderer);
+
+  cr_surface := cairo_image_surface_create_for_data(sd_surface^.pixels, CAIRO_FORMAT_RGB24, sd_surface^.w, sd_surface^.h, sd_surface^.pitch);
+  cr := cairo_create(cr_surface);
+  Draw(cr, 'SDL_no_tex');
+
+//  texture := SDL_CreateTextureFromSurface(renderer, sd_surface);
+
+  SDL_FreeSurface(sd_surface);
+//  SDL_RenderCopy(renderer, texture, nil, nil);
+  SDL_RenderPresent(renderer);
+
+  while not quit do begin
+    while SDL_PollEvent(@e) <> 0 do begin
+      case e.type_ of
+        SDL_QUITEV: begin
+          quit := True;
+        end;
+        SDL_KEYDOWN: begin
+          case e.key.keysym.sym of
+            SDLK_ESCAPE: begin
+              quit := True;
+            end;
+          end;
+        end;
+      end;
+    end;
+    SDL_UpdateWindowSurface(window);
+  end;
+
+//  SDL_DestroyTexture(texture);
+
+
+  SDL_DestroyWindow(window);
+  SDL_Quit();
+end;
+
 // --- SDL
 
 procedure TForm1.ButtonSDLClick(Sender: TObject);
@@ -108,8 +173,6 @@ begin
   texture := SDL_CreateTextureFromSurface(renderer, sd_surface);
 
   SDL_FreeSurface(sd_surface);
-  SDL_RenderCopy(renderer, texture, nil, nil);
-  SDL_RenderPresent(renderer);
 
   while not quit do begin
     while SDL_PollEvent(@e) <> 0 do begin
@@ -126,6 +189,8 @@ begin
         end;
       end;
     end;
+    SDL_RenderCopy(renderer, texture, nil, nil);
+    SDL_RenderPresent(renderer);
   end;
 
   SDL_DestroyTexture(texture);
