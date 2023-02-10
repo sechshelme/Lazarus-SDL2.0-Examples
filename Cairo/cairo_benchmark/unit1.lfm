@@ -1,18 +1,18 @@
 object Form1: TForm1
-  Left = 424
-  Height = 657
-  Top = 144
-  Width = 911
+  Left = 406
+  Height = 670
+  Top = 186
+  Width = 923
   Caption = 'Form1'
-  ClientHeight = 657
-  ClientWidth = 911
+  ClientHeight = 670
+  ClientWidth = 923
   OnCreate = FormCreate
   OnPaint = FormPaint
   LCLVersion = '2.2.4.0'
   object GTKButton: TButton
-    Left = 648
+    Left = 664
     Height = 25
-    Top = 616
+    Top = 631
     Width = 75
     Anchors = [akRight, akBottom]
     Caption = 'GTK'
@@ -20,9 +20,9 @@ object Form1: TForm1
     TabOrder = 0
   end
   object BtnBitmap: TButton
-    Left = 808
+    Left = 824
     Height = 25
-    Top = 616
+    Top = 631
     Width = 75
     Anchors = [akRight, akBottom]
     Caption = 'TBitmap'
@@ -30,9 +30,9 @@ object Form1: TForm1
     TabOrder = 1
   end
   object ButtonSDL: TButton
-    Left = 728
+    Left = 744
     Height = 25
-    Top = 616
+    Top = 631
     Width = 75
     Anchors = [akRight, akBottom]
     Caption = 'SDL'
@@ -40,12 +40,23 @@ object Form1: TForm1
     TabOrder = 2
   end
   object Button1: TButton
-    Left = 736
+    Left = 752
     Height = 25
-    Top = 577
+    Top = 592
     Width = 75
+    Anchors = [akRight, akBottom]
     Caption = 'Button1'
     OnClick = Button1Click
     TabOrder = 3
+  end
+  object ButtonX11: TButton
+    Left = 584
+    Height = 25
+    Top = 631
+    Width = 75
+    Anchors = [akRight, akBottom]
+    Caption = 'X11'
+    OnClick = ButtonX11Click
+    TabOrder = 4
   end
 end
