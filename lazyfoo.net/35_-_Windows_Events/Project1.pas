@@ -39,12 +39,8 @@ var
         WriteLn('Warning: Linear texture filtering not enabled!');
       end;
 
-      gWindow := TLWindow.Create;
-      if not gWindow.Init(Screen_Widht, Screen_Height) then begin
-        WriteLn('Window could not be created! SDL Error: ', SDL_GetError);
-        sucess := False;
-      end else begin
-        gRenderer := gWindow.createRenderer;
+      gWindow := TLWindow.Create(Screen_Widht,Screen_Height);
+        gRenderer := gWindow.Renderer;
         if gRenderer = nil then begin
           WriteLn('Renderer could not be created! SDL Error: ', SDL_GetError);
           sucess := False;
@@ -55,8 +51,6 @@ var
             WriteLn('SDL_image could not initialize! SDL_image Error: ', IMG_GetError);
             sucess := False;
           end;
-
-        end;
       end;
     end;
     Result := sucess;
@@ -112,7 +106,7 @@ begin
               quit := True;
             end;
           end;
-          gWindow.handleEvent(e, @gRenderer);
+          gWindow.handleEvent(e);
         end;
 
         SDL_SetRenderDrawColor(gRenderer, $00, $9F, $00, $FF);
