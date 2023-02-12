@@ -160,18 +160,32 @@ var
   texture: PSDL_Texture;
   quit: boolean = False;
   e: TSDL_Event;
+  p: Pointer;
+  pitch: integer;
+
+  buffer: PBuffer;
 begin
+
   SDL_Init(SDL_INIT_VIDEO);
   window := SDL_CreateWindow('An SDL2 window', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN or SDL_WINDOW_ALLOW_HIGHDPI);
   renderer := SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED or SDL_RENDERER_PRESENTVSYNC);
+
 
   sd_surface := SDL_CreateRGBSurface(0, renderer_width, renderer_height, 32, $FF0000, $00FF00, $0000FF, 0);
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
   SDL_RenderClear(renderer);
 
+  //  texture := SDL_CreateTextureFromSurface(renderer, sd_surface);
+  //  SDL_LockTexture(texture, nil, @Pointer( buffer), @pitch);
+  //  WriteLn(pitch);
+  //  cr_surface := cairo_image_surface_create_for_data(@buffer^[0,0], CAIRO_FORMAT_RGB24, 640, 480, pitch);
+
+
+
   cr_surface := cairo_image_surface_create_for_data(sd_surface^.pixels, CAIRO_FORMAT_RGB24, sd_surface^.w, sd_surface^.h, sd_surface^.pitch);
   cr := cairo_create(cr_surface);
   Draw(cr, 'SDL');
+  //  SDL_UnlockTexture(texture);
 
   texture := SDL_CreateTextureFromSurface(renderer, sd_surface);
 
