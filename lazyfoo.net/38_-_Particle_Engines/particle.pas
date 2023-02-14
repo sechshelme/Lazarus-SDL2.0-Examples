@@ -4,7 +4,8 @@ interface
 
 uses
   sdl2,
-  sdl2_image, LTexture;
+  sdl2_image,
+  LTexture;
 
 type
 

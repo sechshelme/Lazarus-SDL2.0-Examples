@@ -4,7 +4,7 @@ interface
 
 uses
   sdl2,
-  sdl2_image, LTexture;
+  LTexture;
 
 type
 
@@ -13,22 +13,24 @@ type
   Tdot = class(TObject)
   private
     widht, Height, mPosX, mPosY, mVelX, mVelY: integer;
+    gDotTexture: TLTexture;
   public
   const
     DOT_WIDTH = 20;
     DOT_HEIGHT = 20;
     DOT_VEL = 10;
-    constructor Create(Awidht, Aheigth: integer);
+    constructor Create(ARenderer: PSDL_Renderer; Awidht, Aheigth: integer);
+    destructor Destroy; override;
     procedure HandleEvent(var e: TSDL_Event);
     procedure move;
-    procedure render(tex: TLTexture);
+    procedure render;
   end;
 
 implementation
 
 { Tdot }
 
-constructor Tdot.Create(Awidht, Aheigth: integer);
+constructor Tdot.Create(ARenderer: PSDL_Renderer; Awidht, Aheigth: integer);
 begin
   mPosX := 0;
   mPosY := 0;
@@ -36,6 +38,18 @@ begin
   mVelY := 0;
   widht := Awidht;
   Height := Aheigth;
+
+  gDotTexture := TLTexture.Create(ARenderer);
+  gDotTexture.LoadFromFile('dot.bmp', $FF, $FF, $FF);
+  if gDotTexture = nil then begin
+    WriteLn('Failed to load dot texture!');
+  end;
+end;
+
+destructor Tdot.Destroy;
+begin
+  gDotTexture.Free;
+  inherited Destroy;
 end;
 
 procedure Tdot.HandleEvent(var e: TSDL_Event);
@@ -93,9 +107,9 @@ begin
   end;
 end;
 
-procedure Tdot.render(tex: TLTexture);
+procedure Tdot.render;
 begin
-  tex.Render(mPosX, mPosY);
+  gDotTexture.Render(mPosX, mPosY);
 end;
 
 end.

@@ -23,7 +23,6 @@ var
   quit: boolean = False;
   e: TSDL_Event;
 
-  gDotTexture: TLTexture;
   fpsTimer: TLTimer;
   myDot: Tdot;
 
@@ -61,27 +60,20 @@ var
     end;
     Result := sucess;
 
-    gDotTexture := TLTexture.Create(gRenderer);
     fpsTimer := TLTimer.Create;
-    myDot := Tdot.Create(Screen_Widht, Screen_Height);
+    myDot := Tdot.Create(gRenderer, Screen_Widht, Screen_Height);
   end;
 
   function loadMedia: boolean;
   var
     sucess: boolean = True;
   begin
-    gDotTexture.LoadFromFile('dot.bmp', $FF, $FF, $FF);
-    if gDotTexture = nil then begin
-      WriteLn('Failed to load dot texture! SDL_ttf Error: ');
-      sucess := False;
-    end;
 
     Result := sucess;
   end;
 
   procedure Close;
   begin
-    gDotTexture.Free;
     fpsTimer.Free;
     myDot.Free;
 
@@ -124,7 +116,7 @@ begin
         SDL_SetRenderDrawColor(gRenderer, $00, $9F, $00, $FF);
         SDL_RenderClear(gRenderer);
 
-        myDot.render(gDotTexture);
+        myDot.render;
 
         SDL_RenderPresent(gRenderer);
 

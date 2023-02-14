@@ -14,15 +14,17 @@ type
   private
     widht, Height, mPosX, mPosY, mVelX, mVelY: integer;
     mCollider: TSDL_Rect;
+    gDotTexture: TLTexture;
   public
   const
     DOT_WIDTH = 20;
     DOT_HEIGHT = 20;
     DOT_VEL = 10;
-    constructor Create(Awidht, Aheigth: integer);
+    constructor Create(ARenderer: PSDL_Renderer; Awidht, Aheigth: integer);
+    destructor Destroy; override;
     procedure HandleEvent(var e: TSDL_Event);
     procedure move(wall: TSDL_Rect);
-    procedure render(tex: TLTexture);
+    procedure render;
   end;
 
 function checkCollision(var a, b: TSDL_Rect): boolean;
@@ -60,7 +62,7 @@ end;
 
 { Tdot }
 
-constructor Tdot.Create(Awidht, Aheigth: integer);
+constructor Tdot.Create(ARenderer: PSDL_Renderer; Awidht, Aheigth: integer);
 begin
   mPosX := 0;
   mPosY := 0;
@@ -70,6 +72,18 @@ begin
   Height := Aheigth;
   mCollider.w := DOT_WIDTH;
   mCollider.h := DOT_HEIGHT;
+
+  gDotTexture := TLTexture.Create(ARenderer);
+  gDotTexture.LoadFromFile('dot.bmp', $FF, $FF, $FF);
+  if gDotTexture = nil then begin
+    WriteLn('Failed to load dot texture!');
+  end;
+end;
+
+destructor Tdot.Destroy;
+begin
+  gDotTexture.Free;
+  inherited Destroy;
 end;
 
 procedure Tdot.HandleEvent(var e: TSDL_Event);
@@ -124,7 +138,6 @@ begin
   mCollider.x := mPosX;
   if (mPosX < 0) or (mPosX + DOT_WIDTH > widht) or checkCollision(mCollider, wall) then begin
     mPosX := oldX;
-    //    Dec(mPosX, mVelX);
     mCollider.x := mPosX;
   end;
 
@@ -132,14 +145,13 @@ begin
   mCollider.y := mPosY;
   if (mPosY < 0) or (mPosY + DOT_HEIGHT > Height) or checkCollision(mCollider, wall) then begin
     mPosY := oldY;
-    //    Dec(mPosY, mVelY);
     mCollider.y := mPosY;
   end;
 end;
 
-procedure Tdot.render(tex: TLTexture);
+procedure Tdot.render;
 begin
-  tex.Render(mPosX, mPosY);
+  gDotTexture.Render(mPosX, mPosY);
 end;
 
 end.

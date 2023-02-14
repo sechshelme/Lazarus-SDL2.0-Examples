@@ -13,7 +13,7 @@ type
   Tdot = class(TObject)
   private
     widht, Height, mPosX, mPosY, mVelX, mVelY: integer;
-    tex: TLTexture;
+    gDotTexture: TLTexture;
     FRenderer: PSDL_Renderer;
     particles: array of TParticle;
     procedure renderParticles;
@@ -34,17 +34,9 @@ implementation
 
 { Tdot }
 
-procedure Tdot.renderParticles;
+constructor Tdot.Create(ARenderer: PSDL_Renderer; Awidht, Aheigth: integer);
 var
   i: integer;
-begin
-  SetLength(particles, TOTAL_PARTICLES);
-  for i := 0 to Length(particles) - 1 do begin
-    particles[i] := TParticle.Create(FRenderer,mPosX,mPosY);
-  end;
-end;
-
-constructor Tdot.Create(ARenderer: PSDL_Renderer; Awidht, Aheigth: integer);
 begin
   mPosX := 0;
   mPosY := 0;
@@ -54,17 +46,22 @@ begin
   Height := Aheigth;
   FRenderer := ARenderer;
 
-  tex := TLTexture.Create(FRenderer);
-  if not tex.LoadFromFile('dot.bmp', $FF, $FF, $FF) then begin
+  gDotTexture := TLTexture.Create(FRenderer);
+  if not gDotTexture.LoadFromFile('dot.bmp', $FF, $FF, $FF) then begin
     WriteLn('Failed to load dottexture!');
+  end;
+
+  SetLength(particles, TOTAL_PARTICLES);
+  for i := 0 to Length(particles) - 1 do begin
+    particles[i] := TParticle.Create(FRenderer, mPosX, mPosY);
   end;
 end;
 
 destructor Tdot.Destroy;
 var
-  i: Integer;
+  i: integer;
 begin
-  tex.Free;
+  gDotTexture.Free;
   for i := 0 to Length(particles) - 1 do begin
     particles[i].Free;
   end;
@@ -113,6 +110,21 @@ begin
   end;
 end;
 
+procedure Tdot.renderParticles;
+var
+  i: integer;
+begin
+  for i := 0 to Length(particles) - 1 do begin
+    if particles[i].isDead then begin
+      //    particles[i].Free;
+      particles[i].Create(FRenderer, mPosX, mPosY);
+    end;
+  end;
+  for i := 0 to Length(particles) - 1 do begin
+    particles[i].render;
+  end;
+end;
+
 procedure Tdot.move;
 begin
   Inc(mPosX, mVelX);
@@ -128,7 +140,8 @@ end;
 
 procedure Tdot.render;
 begin
-  tex.Render(mPosX, mPosY);
+  gDotTexture.Render(mPosX, mPosY);
+  renderParticles;
 end;
 
 end.
