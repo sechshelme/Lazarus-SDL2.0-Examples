@@ -22,6 +22,7 @@ type
     gDotTexture: TLTexture;
     FRenderer: PSDL_Renderer;
     particles: array of TLParticle;
+    function checkCollision(var a: TSDL_Rect; b: TSDL_Rects): boolean;
     procedure renderParticles;
   public
   const
@@ -37,29 +38,6 @@ type
   end;
 
 implementation
-
-function checkCollision(var a: TSDL_Rect; b: TSDL_Rects): boolean;
-var
-  leftA, leftB, rightA, rightB, topA, topB, bottomA, bottomB, i: integer;
-begin
-  leftA := A.x;
-  rightA := A.x + A.w;
-  topA := A.y;
-  bottomA := A.y + A.h;
-
-  Result := False;
-  for i := 0 to Length(b) - 1 do begin
-    leftB := B[i].x;
-    rightB := B[i].x + B[i].w;
-    topB := B[i].y;
-    bottomB := B[i].y + B[i].h;
-
-    if (bottomA > topB) and (topA < bottomB) and (rightA > leftB) and (leftA < rightB) then begin
-      Result := True;
-      Exit;
-    end;
-  end;
-end;
 
 { TLDot }
 
@@ -143,6 +121,29 @@ begin
           end;
         end;
       end;
+    end;
+  end;
+end;
+
+function TLDot.checkCollision(var a: TSDL_Rect; b: TSDL_Rects): boolean;
+var
+  leftA, leftB, rightA, rightB, topA, topB, bottomA, bottomB, i: integer;
+begin
+  leftA := A.x;
+  rightA := A.x + A.w;
+  topA := A.y;
+  bottomA := A.y + A.h;
+
+  Result := False;
+  for i := 0 to Length(b) - 1 do begin
+    leftB := B[i].x;
+    rightB := B[i].x + B[i].w;
+    topB := B[i].y;
+    bottomB := B[i].y + B[i].h;
+
+    if (bottomA > topB) and (topA < bottomB) and (rightA > leftB) and (leftA < rightB) then begin
+      Result := True;
+      Exit;
     end;
   end;
 end;

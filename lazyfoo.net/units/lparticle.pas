@@ -7,7 +7,7 @@ uses
   LTexture;
 
 const
-  BMPPath='../units/';
+  BMPPath = '../units/';
 
 type
 
@@ -15,13 +15,13 @@ type
 
   TLParticle = class(TObject)
   private
-    mPos:TSDL_Point;
-      mFrame: integer;
+    mPos: TSDL_Point;
+    mFrame: integer;
     mTexture, gRedTexture, gGreenTexture, gBlueTexture, gShimmerTexture: TLTexture;
   public
     constructor Create(ARenderer: PSDL_Renderer; x, y: integer);
     destructor Destroy; override;
-    procedure reset(x,y:Integer);
+    procedure reset(x, y: integer);
     procedure render;
     function isDead: boolean;
   end;
@@ -29,34 +29,34 @@ type
 implementation
 
 const
-  Part_Step=50;
+  Part_Step = 50;
 
 { TLParticle }
 
 constructor TLParticle.Create(ARenderer: PSDL_Renderer; x, y: integer);
 begin
   gRedTexture := TLTexture.Create(ARenderer);
-  if not gRedTexture.LoadFromFile(BMPPath+'red.bmp') then begin
+  if not gRedTexture.LoadFromFile(BMPPath + 'red.bmp') then begin
     WriteLn('Failed to load red texture!');
   end;
   gRedTexture.SetAlpha(192);
   gGreenTexture := TLTexture.Create(ARenderer);
-  if not gGreenTexture.LoadFromFile(BMPPath+'green.bmp') then begin
+  if not gGreenTexture.LoadFromFile(BMPPath + 'green.bmp') then begin
     WriteLn('Failed to load green texture!');
   end;
   gGreenTexture.SetAlpha(192);
   gBlueTexture := TLTexture.Create(ARenderer);
-  if not gBlueTexture.LoadFromFile(BMPPath+'blue.bmp') then begin
+  if not gBlueTexture.LoadFromFile(BMPPath + 'blue.bmp') then begin
     WriteLn('Failed to load blue texture!');
   end;
   gBlueTexture.SetAlpha(192);
   gShimmerTexture := TLTexture.Create(ARenderer);
-  if not gShimmerTexture.LoadFromFile(BMPPath+'shimmer.bmp') then begin
+  if not gShimmerTexture.LoadFromFile(BMPPath + 'shimmer.bmp') then begin
     WriteLn('Failed to load shimmer texture!');
   end;
   gShimmerTexture.SetAlpha(192);
 
-  reset(x,y);
+  reset(x, y);
 end;
 
 destructor TLParticle.Destroy;
@@ -68,7 +68,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TLParticle.reset(x, y: Integer);
+procedure TLParticle.reset(x, y: integer);
 begin
   mPos.X := x - 5 + Random(25);
   mPos.Y := y - 5 + Random(25);
