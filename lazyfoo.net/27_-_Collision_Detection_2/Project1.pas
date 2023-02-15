@@ -9,12 +9,12 @@ uses
   ctypes,
   LTexture,
   LTimer,
-  dot;
+  LDot;
 
 const
   Screen_Widht = 640;
   Screen_Height = 480;
-  Screen_FPS = 200;
+  Screen_FPS = 240;
   Screen_Tick_Per_Frame = 1000 div Screen_FPS;
 
   //  {$MODESWITCH ADVANCEDRECORDS}
@@ -50,10 +50,10 @@ var
   e: TSDL_Event;
 
   capTimer, fpsTimer: TLTimer;
-  myDot: Tdot;
+  myDot: TLDot;
 
   frameTicks: uint32;
-  wall: TSDL_Rects=nil;
+  wall: TSDL_Rects = nil;
 
   i: integer;
 
@@ -91,14 +91,14 @@ var
 
     fpsTimer := TLTimer.Create;
     capTimer := TLTimer.Create;
-    myDot := Tdot.Create(gRenderer, Screen_Widht, Screen_Height);
+    myDot := TLDot.Create(gRenderer, Screen_Widht, Screen_Height, True);
 
     Randomize;
     for i := 0 to 7 do begin
       if i mod 2 = 1 then  begin
-        wall.Add(random(Screen_Widht - 100)+20, random(100), random(50), random(Screen_Height - 100)+20);
+        wall.Add(random(Screen_Widht - 100) + 20, random(100), random(50) + 1, random(Screen_Height - 100) + 20);
       end else begin
-        wall.Add(random(100), random(Screen_Height - 100)+20, random(Screen_Widht - 100)+20, random(50));
+        wall.Add(random(100), random(Screen_Height - 100) + 20, random(Screen_Widht - 100) + 20, random(50) + 1);
       end;
     end;
     //wall.Add(300, 40, 40, 400);

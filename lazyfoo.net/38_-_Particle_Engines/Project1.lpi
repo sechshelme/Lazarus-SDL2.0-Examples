@@ -39,13 +39,14 @@
         <UnitName Value="LTexture"/>
       </Unit>
       <Unit>
-        <Filename Value="dot.pas"/>
+        <Filename Value="../units/ldot.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="LDot"/>
       </Unit>
       <Unit>
-        <Filename Value="particle.pas"/>
+        <Filename Value="../units/lparticle.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="Particle"/>
+        <UnitName Value="LParticle"/>
       </Unit>
     </Units>
   </ProjectOptions>

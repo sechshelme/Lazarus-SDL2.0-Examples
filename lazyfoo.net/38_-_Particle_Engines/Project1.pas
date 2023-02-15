@@ -8,12 +8,12 @@ uses
   ctypes,
   LTexture,
   LTimer,
-  dot, Particle;
+  LDot, LParticle;
 
 const
   Screen_Widht = 640;
   Screen_Height = 480;
-  Screen_FPS = 60;
+  Screen_FPS = 300;
   Screen_Tick_Per_Frame = 1000 div Screen_FPS;
 
 var
@@ -25,7 +25,7 @@ var
 
   gDotTexture: TLTexture;
   fpsTimer: TLTimer;
-  myDot: Tdot;
+  myDot: TLDot;
 
   frameTicks: uint32;
 
@@ -63,20 +63,7 @@ var
 
     gDotTexture := TLTexture.Create(gRenderer);
     fpsTimer := TLTimer.Create;
-    myDot := Tdot.Create(gRenderer,Screen_Widht, Screen_Height);
-  end;
-
-  function loadMedia: boolean;
-  var
-    sucess: boolean = True;
-  begin
-    gDotTexture.LoadFromFile('dot.bmp', $FF, $FF, $FF);
-    if gDotTexture = nil then begin
-      WriteLn('Failed to load dot texture! SDL_ttf Error: ');
-      sucess := False;
-    end;
-
-    Result := sucess;
+    myDot := TLDot.Create(gRenderer,Screen_Widht, Screen_Height);
   end;
 
   procedure Close;
@@ -98,9 +85,6 @@ begin
   if not init then begin
     WriteLn('Failed to initialize');
   end else begin
-    if not loadMedia then begin
-      WriteLn('Failed to load media');
-    end else begin
 //      fpsTimer.start;
       while not quit do begin
         while SDL_PollEvent(@e) <> 0 do begin
@@ -133,7 +117,6 @@ begin
           SDL_Delay(Screen_Tick_Per_Frame - frameTicks);
         end;
       end;
-    end;
   end;
   Close;
 end.
