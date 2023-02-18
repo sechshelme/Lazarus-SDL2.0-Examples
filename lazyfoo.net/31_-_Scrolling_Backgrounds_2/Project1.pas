@@ -16,22 +16,22 @@ const
   Screen_FPS = 240;
   Screen_Tick_Per_Frame = 1000 div Screen_FPS;
 
-  Level_Width = 1280;
-  Level_Height = 960;
-
 var
   gWindow: PSDL_Window;
   gRenderer: PSDL_Renderer;
 
   quit: boolean = False;
   e: TSDL_Event;
-  camera: TSDL_Rect = (x: 0; y: 0; w: Screen_Widht; h: Screen_Height);
+  //  camera: TSDL_Rect = (x: 0; y: 0; w: Screen_Widht; h: Screen_Height);
+  scrollingOffset: integer;
 
   fpsTimer: TLTimer;
   frameTicks: uint32;
 
   gBGTexture: TLTexture;
   Dot: TLDot;
+
+  wall: TSDL_Rects = nil;
   i: integer;
   w: TSDL_Rect;
 
@@ -68,8 +68,12 @@ var
     Result := sucess;
 
     fpsTimer := TLTimer.Create;
-    Dot := TLDot.Create(gRenderer, Level_Width, Level_Height);
+    Dot := TLDot.Create(gRenderer, Screen_Widht, Screen_Height);
     gBGTexture := TLTexture.Create(gRenderer);
+
+    wall.Add(300, 150, 40, 200);
+    wall.Add(150, 150, 40, 200);
+    wall.Add(450, 150, 40, 200);
   end;
 
   function loadMedia: boolean;
@@ -80,6 +84,8 @@ var
       WriteLn('Failed to load background texture!');
       sucess := False;
     end;
+
+    dot.LoadTextures('foo.png',$00,$FF,$FF);
 
     Result := sucess;
   end;
@@ -123,30 +129,28 @@ begin
           Dot.HandleEvent(e);
         end;
 
-        Dot.move;
+        Dot.move(wall);
 
-        camera.x := (Dot.PosXY.x + Dot.PosXY.w div 2) - Screen_Widht div 2;
-        camera.y := (Dot.PosXY.y + Dot.PosXY.h div 2) - Screen_Height div 2;
-
-        if camera.x < 0 then begin
-          camera.x := 0;
-        end;
-        if camera.y < 0 then begin
-          camera.y := 0;
-        end;
-        if camera.x > Level_Width - camera.w then begin
-          camera.x := Level_Width - camera.w;
-        end;
-        if camera.y > Level_Height - camera.h then begin
-          camera.y := Level_Height - camera.h;
+        Dec(scrollingOffset);
+        if scrollingOffset < -gBGTexture.Widht then begin
+          scrollingOffset := 0;
         end;
 
         SDL_SetRenderDrawColor(gRenderer, $00, $9F, $00, $FF);
         SDL_RenderClear(gRenderer);
 
-        gBGTexture.Render(0, 0, @camera);
+        gBGTexture.Render(scrollingOffset, 0);
+        gBGTexture.Render(scrollingOffset + gBGTexture.Widht, 0);
 
-        Dot.render(camera.x, camera.y);
+        SDL_SetRenderDrawColor(gRenderer, $80, $40, $00, $FF);
+        for i := 0 to Length(wall) - 1 do begin
+          w := wall[i];
+//          w.x := w.x - scrollingOffset;
+//          w.y := w.y - camera.y;
+          SDL_RenderFillRect(gRenderer, @w);
+        end;
+
+        Dot.render;
 
         SDL_RenderPresent(gRenderer);
 

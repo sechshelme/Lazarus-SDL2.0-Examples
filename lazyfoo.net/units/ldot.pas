@@ -39,6 +39,7 @@ type
     property PosXY: TSDL_Rect read FPosXY;
 
     constructor Create(ARenderer: PSDL_Renderer; Awidht, Aheigth: integer);
+    procedure LoadTextures(pfad: string; r: byte = $FF; g: byte = $FF; b: byte = $FF);
     destructor Destroy; override;
     procedure HandleEvent(var e: TSDL_Event);
     procedure move(const wall: TSDL_Rects = nil);
@@ -76,10 +77,17 @@ begin
   FIsParticle := False;
 
   gDotTexture := TLTexture.Create(FRenderer);
-  if not gDotTexture.LoadFromFile(BMPPath + 'dot.bmp', $FF, $FF, $FF) then begin
-    WriteLn('Failed to load dottexture!');
-  end;
+  LoadTextures(BMPPath + 'dot.bmp');
+end;
 
+procedure TLDot.LoadTextures(pfad: string; r: byte; g: byte; b: byte);
+begin
+  if not gDotTexture.LoadFromFile(pfad, r, g, b) then begin
+    WriteLn('Failed to load dottexture!');
+  end else begin
+    FPosXY.w := gDotTexture.Widht;
+    FPosXY.h := gDotTexture.Height;
+  end;
 end;
 
 destructor TLDot.Destroy;

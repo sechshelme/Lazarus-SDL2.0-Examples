@@ -74,7 +74,6 @@ begin
 
   mTexture := newTexture;
   Result := mTexture <> nil;
-
 end;
 
 function TLTexture.LoadFromRenderedText(gFont: PTTF_Font; textureText: string; textColor: TSDL_Color): boolean;

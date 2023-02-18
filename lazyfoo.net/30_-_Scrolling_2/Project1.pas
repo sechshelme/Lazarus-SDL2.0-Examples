@@ -32,6 +32,7 @@ var
 
   gBGTexture: TLTexture;
   Dot: TLDot;
+  wall: TSDL_Rects = nil;
   i: integer;
   w: TSDL_Rect;
 
@@ -70,6 +71,14 @@ var
     fpsTimer := TLTimer.Create;
     Dot := TLDot.Create(gRenderer, Level_Width, Level_Height);
     gBGTexture := TLTexture.Create(gRenderer);
+
+    wall.Add(300, 40, 40, 400);
+    wall.Add(150, 40, 40, 400);
+    wall.Add(450, 40, 40, 400);
+
+    wall.Add(400, 520, 40, 400);
+    wall.Add(250, 520, 40, 400);
+    wall.Add(550, 520, 40, 400);
   end;
 
   function loadMedia: boolean;
@@ -123,7 +132,7 @@ begin
           Dot.HandleEvent(e);
         end;
 
-        Dot.move;
+        Dot.move(wall);
 
         camera.x := (Dot.PosXY.x + Dot.PosXY.w div 2) - Screen_Widht div 2;
         camera.y := (Dot.PosXY.y + Dot.PosXY.h div 2) - Screen_Height div 2;
@@ -145,6 +154,14 @@ begin
         SDL_RenderClear(gRenderer);
 
         gBGTexture.Render(0, 0, @camera);
+
+        SDL_SetRenderDrawColor(gRenderer, $80, $40, $00, $FF);
+        for i := 0 to Length(wall) - 1 do begin
+          w := wall[i];
+          w.x := w.x - camera.x;
+          w.y := w.y - camera.y;
+          SDL_RenderFillRect(gRenderer, @w);
+        end;
 
         Dot.render(camera.x, camera.y);
 
