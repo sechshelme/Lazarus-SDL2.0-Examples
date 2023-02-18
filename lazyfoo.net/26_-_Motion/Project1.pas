@@ -2,18 +2,18 @@ program Project1;
 
 // https://github.com/PascalGameDevelopment/SDL2-for-Pascal
 
-uses
+uses     heaptrc,
   sdl2,
   sdl2_image,
   ctypes,
   LTexture,
   LTimer,
-  dot;
+  LDot;
 
 const
   Screen_Widht = 640;
   Screen_Height = 480;
-  Screen_FPS = 60;
+  Screen_FPS = 240;
   Screen_Tick_Per_Frame = 1000 div Screen_FPS;
 
 var
@@ -24,7 +24,7 @@ var
   e: TSDL_Event;
 
   fpsTimer: TLTimer;
-  myDot: Tdot;
+  myDot: TLDot;
 
   frameTicks: uint32;
 
@@ -61,7 +61,8 @@ var
     Result := sucess;
 
     fpsTimer := TLTimer.Create;
-    myDot := Tdot.Create(gRenderer, Screen_Widht, Screen_Height);
+    myDot := TLDot.Create(gRenderer, Screen_Widht, Screen_Height);
+    myDot.IsParticle:=True;
   end;
 
   function loadMedia: boolean;

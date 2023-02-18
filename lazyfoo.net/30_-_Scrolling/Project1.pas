@@ -8,13 +8,16 @@ uses
   ctypes,
   LTexture,
   LTimer,
-  LDot, LParticle;
+  LDot;
 
 const
   Screen_Widht = 640;
   Screen_Height = 480;
-  Screen_FPS = 300;
+  Screen_FPS = 240;
   Screen_Tick_Per_Frame = 1000 div Screen_FPS;
+
+  Level_Width = 1280;
+  Level_Height = 960;
 
 var
   gWindow: PSDL_Window;
@@ -22,12 +25,16 @@ var
 
   quit: boolean = False;
   e: TSDL_Event;
+  camera: TSDL_Rect = (x: 0; y: 0; w: Screen_Widht; h: Screen_Height);
 
-  gDotTexture: TLTexture;
   fpsTimer: TLTimer;
-  myDot: TLDot;
-
   frameTicks: uint32;
+
+  BGTexture: TLTexture;
+  Dot: TLDot;
+  wall: TSDL_Rects = nil;
+  i: integer;
+  w: TSDL_Rect;
 
   function init: boolean;
   var
@@ -61,17 +68,35 @@ var
     end;
     Result := sucess;
 
-    gDotTexture := TLTexture.Create(gRenderer);
     fpsTimer := TLTimer.Create;
-    myDot := TLDot.Create(gRenderer,Screen_Widht, Screen_Height);
-    myDot.IsParticle:=True;
+    Dot := TLDot.Create(gRenderer, Level_Width, Level_Height);
+    BGTexture := TLTexture.Create(gRenderer);
+
+    wall.Add(300, 40, 40, 400);
+    wall.Add(150, 40, 40, 400);
+    wall.Add(450, 40, 40, 400);
+
+    wall.Add(400, 520, 40, 400);
+    wall.Add(250, 520, 40, 400);
+    wall.Add(550, 520, 40, 400);
+  end;
+
+  function loadMedia: boolean;
+  var
+    sucess: boolean = True;
+  begin
+    if not BGTexture.LoadFromFile('bg.png') then begin
+      WriteLn('Failed to load background texture!');
+      sucess := False;
+    end;
+
+    Result := sucess;
   end;
 
   procedure Close;
   begin
-    gDotTexture.Free;
     fpsTimer.Free;
-    myDot.Free;
+    Dot.Free;
 
     SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);
@@ -86,7 +111,10 @@ begin
   if not init then begin
     WriteLn('Failed to initialize');
   end else begin
-//      fpsTimer.start;
+    if not loadMedia then begin
+      WriteLn('Failed to load media');
+    end else begin
+      //      fpsTimer.start;
       while not quit do begin
         while SDL_PollEvent(@e) <> 0 do begin
           case e.type_ of
@@ -101,15 +129,41 @@ begin
               quit := True;
             end;
           end;
-          myDot.HandleEvent(e);
+          Dot.HandleEvent(e);
         end;
 
-        myDot.move;
+        Dot.move(wall);
+
+        camera.x := (Dot.PosXY.x + Dot.PosXY.w div 2) - Screen_Widht div 2;
+        camera.y := (Dot.PosXY.y + Dot.PosXY.h div 2) - Screen_Height div 2;
+
+        if camera.x < 0 then begin
+          camera.x := 0;
+        end;
+        if camera.y < 0 then begin
+          camera.y := 0;
+        end;
+        if camera.x > Level_Width - camera.w then begin
+          camera.x := Level_Width - camera.w;
+        end;
+        if camera.y > Level_Height - camera.h then begin
+          camera.y := Level_Height - camera.h;
+        end;
 
         SDL_SetRenderDrawColor(gRenderer, $00, $9F, $00, $FF);
         SDL_RenderClear(gRenderer);
 
-        myDot.render;
+        BGTexture.Render(0, 0, @camera);
+
+        SDL_SetRenderDrawColor(gRenderer, $80, $40, $00, $FF);
+        for i := 0 to Length(wall) - 1 do begin
+          w := wall[i];
+          w.x := w.x - camera.x;
+          w.y := w.y - camera.y;
+          SDL_RenderFillRect(gRenderer, @w);
+        end;
+
+        Dot.render(camera.x, camera.y);
 
         SDL_RenderPresent(gRenderer);
 
@@ -118,6 +172,7 @@ begin
           SDL_Delay(Screen_Tick_Per_Frame - frameTicks);
         end;
       end;
+    end;
   end;
   Close;
 end.

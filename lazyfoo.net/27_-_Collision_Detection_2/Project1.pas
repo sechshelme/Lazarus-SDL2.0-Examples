@@ -91,7 +91,8 @@ var
 
     fpsTimer := TLTimer.Create;
     capTimer := TLTimer.Create;
-    myDot := TLDot.Create(gRenderer, Screen_Widht, Screen_Height, True);
+    myDot := TLDot.Create(gRenderer, Screen_Widht, Screen_Height);
+    myDot.IsParticle := True;
 
     Randomize;
     for i := 0 to 7 do begin

@@ -1,5 +1,7 @@
 unit LDot;
 
+{$modeswitch typehelpers}
+
 interface
 
 uses
@@ -7,80 +9,106 @@ uses
   LTexture, LParticle;
 
 type
-
   TSDL_Rects = array of TSDL_Rect;
+
+  TSDL_RectsHelper = type Helper for  TSDL_Rects
+  public
+    procedure Add(x, y, w, h: integer);
+  end;
 
   { TLDot }
 
   TLDot = class(TObject)
   private
+    FIsParticle: boolean;
     widht, Height: integer;
     mVel: TSDL_Point;
-    mPos: TSDL_Rect;
-    misParticle: boolean;
+    FPosXY: TSDL_Rect;
 
     gDotTexture: TLTexture;
     FRenderer: PSDL_Renderer;
     particles: array of TLParticle;
     function checkCollision(var a: TSDL_Rect; b: TSDL_Rects): boolean;
     procedure renderParticles;
+    procedure SetIsParticle(AValue: boolean);
   public
   const
-    DOT_WIDTH = 20;
-    DOT_HEIGHT = 20;
     DOT_VEL = 1;
     TOTAL_PARTICLES = 20;
-    constructor Create(ARenderer: PSDL_Renderer; Awidht, Aheigth: integer; AisParticle: boolean = False);
+    property IsParticle: boolean read FIsParticle write SetIsParticle;
+    property PosXY: TSDL_Rect read FPosXY;
+
+    constructor Create(ARenderer: PSDL_Renderer; Awidht, Aheigth: integer);
     destructor Destroy; override;
     procedure HandleEvent(var e: TSDL_Event);
     procedure move(const wall: TSDL_Rects = nil);
-    procedure render;
+    procedure render(camX: integer = 0; camY: integer = 0);
   end;
 
 implementation
 
+procedure TSDL_RectsHelper.Add(x, y, w, h: integer);
+var
+  l: SizeInt;
+begin
+  l := Length(self);
+  SetLength(Self, l + 1);
+  Self[l].x := x;
+  Self[l].y := y;
+  Self[l].w := w;
+  Self[l].h := h;
+end;
+
 { TLDot }
 
-constructor TLDot.Create(ARenderer: PSDL_Renderer; Awidht, Aheigth: integer; AisParticle: boolean);
-var
-  i: integer;
+constructor TLDot.Create(ARenderer: PSDL_Renderer; Awidht, Aheigth: integer);
 begin
-  mPos.X := 0;
-  mPos.Y := 0;
-  mPos.w := DOT_WIDTH;
-  mPos.h := DOT_HEIGHT;
+  FPosXY.X := 0;
+  FPosXY.Y := 0;
+  FPosXY.w := 20;
+  FPosXY.h := 20;
   mVel.X := 0;
   mVel.Y := 0;
   widht := Awidht;
   Height := Aheigth;
 
   FRenderer := ARenderer;
-  misParticle := AisParticle;
+  FIsParticle := False;
 
   gDotTexture := TLTexture.Create(FRenderer);
   if not gDotTexture.LoadFromFile(BMPPath + 'dot.bmp', $FF, $FF, $FF) then begin
     WriteLn('Failed to load dottexture!');
   end;
 
-  if misParticle then begin
-    SetLength(particles, TOTAL_PARTICLES);
-    for i := 0 to Length(particles) - 1 do begin
-      particles[i] := TLParticle.Create(FRenderer, mPos.X, mPos.Y);
-    end;
-  end;
 end;
 
 destructor TLDot.Destroy;
+begin
+  gDotTexture.Free;
+  if FIsParticle then begin
+    SetIsParticle(False);
+  end;
+  inherited Destroy;
+end;
+
+procedure TLDot.SetIsParticle(AValue: boolean);
 var
   i: integer;
 begin
-  gDotTexture.Free;
-  if misParticle then begin
-    for i := 0 to Length(particles) - 1 do begin
-      particles[i].Free;
+  if FIsParticle <> AValue then begin
+    FIsParticle := AValue;
+    if FIsParticle then begin
+      SetLength(particles, TOTAL_PARTICLES);
+      for i := 0 to Length(particles) - 1 do begin
+        particles[i] := TLParticle.Create(FRenderer, FPosXY.X, FPosXY.Y);
+      end;
+    end else begin
+      for i := 0 to Length(particles) - 1 do begin
+        particles[i].Free;
+      end;
+      SetLength(particles, 0);
     end;
   end;
-  inherited Destroy;
 end;
 
 procedure TLDot.HandleEvent(var e: TSDL_Event);
@@ -100,6 +128,9 @@ begin
           end;
           SDLK_RIGHT: begin
             Inc(mVel.X, DOT_VEL);
+          end;
+          SDLK_p: begin
+            IsParticle := not IsParticle;
           end;
         end;
       end;
@@ -154,7 +185,7 @@ var
 begin
   for i := 0 to Length(particles) - 1 do begin
     if particles[i].isDead then begin
-      particles[i].reset(mPos.X, mPos.Y);
+      particles[i].reset(FPosXY.X, FPosXY.Y);
     end;
   end;
   for i := 0 to Length(particles) - 1 do begin
@@ -166,25 +197,24 @@ procedure TLDot.move(const wall: TSDL_Rects);
 var
   oldX, oldY: integer;
 begin
-  oldX := mPos.x;
-  oldY := mPos.y;
+  oldX := FPosXY.x;
+  oldY := FPosXY.y;
 
-  Inc(mPos.x, mVel.X);
-
-  if (mPos.x < 0) or (mPos.x + DOT_WIDTH > widht) or checkCollision(mPos, wall) then begin
-    mPos.x := oldX;
+  Inc(FPosXY.x, mVel.X);
+  if (FPosXY.x < 0) or (FPosXY.x + FPosXY.w > widht) or checkCollision(FPosXY, wall) then begin
+    FPosXY.x := oldX;
   end;
 
-  Inc(mPos.y, mVel.Y);
-  if (mPos.y < 0) or (mPos.y + DOT_HEIGHT > Height) or checkCollision(mPos, wall) then begin
-    mPos.y := oldY;
+  Inc(FPosXY.y, mVel.Y);
+  if (FPosXY.y < 0) or (FPosXY.y + FPosXY.h > Height) or checkCollision(FPosXY, wall) then begin
+    FPosXY.y := oldY;
   end;
 end;
 
-procedure TLDot.render;
+procedure TLDot.render(camX: integer; camY: integer);
 begin
-  gDotTexture.Render(mPos.X, mPos.Y);
-  if misParticle then  begin
+  gDotTexture.Render(FPosXY.X - camX, FPosXY.Y - camY);
+  if FIsParticle then  begin
     renderParticles;
   end;
 end;
