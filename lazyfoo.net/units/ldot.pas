@@ -32,12 +32,11 @@ type
     procedure renderParticles;
     procedure SetIsParticle(AValue: boolean);
   public
-  const
-    DOT_VEL = 1;
-    TOTAL_PARTICLES = 20;
+    const
+      DOT_VEL = 1;
+      TOTAL_PARTICLES = 20;
     property IsParticle: boolean read FIsParticle write SetIsParticle;
     property PosXY: TSDL_Rect read FPosXY;
-
     constructor Create(ARenderer: PSDL_Renderer; Awidht, Aheigth: integer);
     procedure LoadTextures(pfad: string; r: byte = $FF; g: byte = $FF; b: byte = $FF);
     destructor Destroy; override;

@@ -17,9 +17,9 @@ type
     mPosition: TSDL_Point;
     mCurrentSprite: (BUTTON_SPRITE_MOUSE_OUT, BUTTON_SPRITE_MOUSE_OVER_MOTION, BUTTON_SPRITE_MOUSE_DOWN, BUTTON_SPRITE_MOUSE_UP, BUTTON_SPRITE_TOTAL);
     gSpritesChlips: array[0..3] of TSDL_Rect;
-    FButtonSpriteSheetTexture:TLTexture;
+    FButtonSpriteSheetTexture: TLTexture;
   public
-    constructor Create(AButtonSpriteSheetTexture:TLTexture);
+    constructor Create(AButtonSpriteSheetTexture: TLTexture);
     procedure SetPosition(Ax, Ay: integer);
     procedure HandleEvent(e: PSDL_Event);
     procedure Renderer;
@@ -31,7 +31,7 @@ constructor TLButton.Create(AButtonSpriteSheetTexture: TLTexture);
 var
   i: integer;
 begin
-  FButtonSpriteSheetTexture:=AButtonSpriteSheetTexture;
+  FButtonSpriteSheetTexture := AButtonSpriteSheetTexture;
   mPosition.x := 0;
   mPosition.y := 0;
   mCurrentSprite := BUTTON_SPRITE_MOUSE_OUT;
@@ -91,7 +91,7 @@ end;
 procedure TLButton.Renderer;
 begin
   FButtonSpriteSheetTexture.Render(mPosition.x, mPosition.y, @gSpritesChlips[shortint(mCurrentSprite)]);
-//  FButtonSpriteSheetTexture.Render(mPosition.x, mPosition.y, @gSpritesChlips[mCurrentSprite]);
+  //  FButtonSpriteSheetTexture.Render(mPosition.x, mPosition.y, @gSpritesChlips[mCurrentSprite]);
 end;
 
 end.

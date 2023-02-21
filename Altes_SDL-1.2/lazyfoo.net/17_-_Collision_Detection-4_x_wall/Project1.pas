@@ -16,7 +16,12 @@ const
 
 var
   square, screen: PSDL_Surface;
-  wall: array [0..3] of SDL_Rect;
+const
+  wall: array [0..3] of SDL_Rect = (
+    (x: 300; y: 40; w: 40; h: 400),
+    (x: 150; y: 40; w: 40; h: 400),
+    (x: 450; y: 40; w: 40; h: 400),
+    (x: 150; y: 140; w: 200; h: 40));
 
 type
 
@@ -117,7 +122,7 @@ type
   procedure TSquare.handle_Input(event: TSDL_Event);
   begin
     case event.type_ of
-        SDL_KEYDOWN: begin
+      SDL_KEYDOWN: begin
         case event.key.keysym.sym of
           SDLK_UP: begin
             yVel -= Square_Height div 2;
@@ -296,26 +301,6 @@ var
       Result := False;
       Exit;
     end;
-
-    wall[0].x := 300;
-    wall[0].y := 40;
-    wall[0].w := 40;
-    wall[0].h := 400;
-
-    wall[1].x := 150;
-    wall[1].y := 40;
-    wall[1].w := 40;
-    wall[1].h := 400;
-
-    wall[2].x := 450;
-    wall[2].y := 40;
-    wall[2].w := 40;
-    wall[2].h := 400;
-
-    wall[3].x := 150;
-    wall[3].y := 140;
-    wall[3].w := 200;
-    wall[3].h := 40;
 
     Result := True;
 
