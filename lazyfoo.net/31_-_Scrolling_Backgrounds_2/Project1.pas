@@ -8,6 +8,7 @@ uses
   ctypes,
   LTexture,
   LTimer,
+  LWall,
   LDot;
 
 const
@@ -31,7 +32,7 @@ var
   gBGTexture: TLTexture;
   Dot: TLDot;
 
-  wall: TSDL_Rects = nil;
+  wall: TLWall = nil;
   i: integer;
   w: TSDL_Rect;
 
@@ -71,6 +72,8 @@ var
     Dot := TLDot.Create(gRenderer, Screen_Widht, Screen_Height);
     gBGTexture := TLTexture.Create(gRenderer);
 
+    wall:=TLWall.Create(gRenderer);
+
     wall.Add(300, 150, 40, 200);
     wall.Add(150, 150, 40, 200);
     wall.Add(450, 150, 40, 200);
@@ -94,6 +97,7 @@ var
   begin
     fpsTimer.Free;
     Dot.Free;
+    wall.Free;
 
     SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);
@@ -129,7 +133,7 @@ begin
           Dot.HandleEvent(e);
         end;
 
-        Dot.move(wall);
+        Dot.move(wall.Rect);
 
         Dec(scrollingOffset);
         if scrollingOffset < -gBGTexture.Widht then begin
@@ -142,13 +146,7 @@ begin
         gBGTexture.Render(scrollingOffset, 0);
         gBGTexture.Render(scrollingOffset + gBGTexture.Widht, 0);
 
-        SDL_SetRenderDrawColor(gRenderer, $80, $40, $00, $FF);
-        for i := 0 to Length(wall) - 1 do begin
-          w := wall[i];
-//          w.x := w.x - scrollingOffset;
-//          w.y := w.y - camera.y;
-          SDL_RenderFillRect(gRenderer, @w);
-        end;
+        wall.renderer;
 
         Dot.render;
 

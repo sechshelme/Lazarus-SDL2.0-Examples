@@ -42,6 +42,11 @@
         <Filename Value="dot.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="../units/lwall.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="LWall"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

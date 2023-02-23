@@ -9,6 +9,7 @@ uses
   ctypes,
   LTexture,
   LTimer,
+  LWall,
   LDot;
 
 const
@@ -16,31 +17,6 @@ const
   Screen_Height = 480;
   Screen_FPS = 240;
   Screen_Tick_Per_Frame = 1000 div Screen_FPS;
-
-  //  {$MODESWITCH ADVANCEDRECORDS}
-type
-  TSDL_Rects = array of TSDL_Rect;
-
-  { TSDL_RectsHelper }
-
-  TSDL_RectsHelper = type Helper for  TSDL_Rects
-  public
-    procedure Add(x, y, w, h: integer);
-  end;
-
-  { TSDL_RectsHelper }
-
-  procedure TSDL_RectsHelper.Add(x, y, w, h: integer);
-  var
-    l: SizeInt;
-  begin
-    l := Length(self);
-    SetLength(Self, l + 1);
-    Self[l].x := x;
-    Self[l].y := y;
-    Self[l].w := w;
-    Self[l].h := h;
-  end;
 
 var
   gWindow: PSDL_Window;
@@ -53,7 +29,7 @@ var
   myDot: TLDot;
 
   frameTicks: uint32;
-  wall: TSDL_Rects = nil;
+  wall: TLWall;
 
   i: integer;
 
@@ -93,6 +69,8 @@ var
     capTimer := TLTimer.Create;
     myDot := TLDot.Create(gRenderer, Screen_Widht, Screen_Height);
     myDot.IsParticle := True;
+
+    wall:=TLWall.Create(gRenderer);
 
     Randomize;
     for i := 0 to 7 do begin
@@ -154,17 +132,12 @@ begin
           myDot.HandleEvent(e);
         end;
 
-        myDot.move(wall);
+        myDot.move(wall.Rect);
 
         SDL_SetRenderDrawColor(gRenderer, $00, $80, $00, $FF);
         SDL_RenderClear(gRenderer);
 
-        SDL_SetRenderDrawColor(gRenderer, $80, $40, $00, $FF);
-
-        for i := 0 to Length(wall) - 1 do begin
-          SDL_RenderFillRect(gRenderer, @wall[i]);
-        end;
-
+        wall.renderer;
         myDot.render;
 
         SDL_RenderPresent(gRenderer);

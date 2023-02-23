@@ -8,12 +8,13 @@ uses
   ctypes,
   LTexture,
   LTimer,
-  LDot;
+  LDot,
+  LWall;
 
 const
   Screen_Widht = 640;
   Screen_Height = 480;
-  Screen_FPS = 240;
+  Screen_FPS = 480;
   Screen_Tick_Per_Frame = 1000 div Screen_FPS;
 
   Level_Width = 1280;
@@ -32,7 +33,8 @@ var
 
   gBGTexture: TLTexture;
   Dot: TLDot;
-  wall: TSDL_Rects = nil;
+  //  wall: TSDL_Rects = nil;
+  wall: TLWall = nil;
   i: integer;
   w: TSDL_Rect;
 
@@ -69,16 +71,18 @@ var
     Result := sucess;
 
     fpsTimer := TLTimer.Create;
-    Dot := TLDot.Create(gRenderer, Level_Width, Level_Height);
+    Dot := TLDot.Create(gRenderer, Level_Width, Level_Height, Screen_Widht, Screen_Height);
     gBGTexture := TLTexture.Create(gRenderer);
 
-    wall.Add(300, 40, 40, 400);
+    wall := TLWall.Create(gRenderer);
+
     wall.Add(150, 40, 40, 400);
+    wall.Add(300, 40, 40, 400);
     wall.Add(450, 40, 40, 400);
 
-    wall.Add(400, 520, 40, 400);
-    wall.Add(250, 520, 40, 400);
-    wall.Add(550, 520, 40, 400);
+    wall.Add(790, 520, 40, 400);
+    wall.Add(940, 520, 40, 400);
+    wall.Add(1150, 520, 40, 400);
   end;
 
   function loadMedia: boolean;
@@ -97,6 +101,7 @@ var
   begin
     fpsTimer.Free;
     Dot.Free;
+    wall.Free;
 
     SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);
@@ -132,38 +137,18 @@ begin
           Dot.HandleEvent(e);
         end;
 
-        Dot.move(wall);
-
-        camera.x := (Dot.PosXY.x + Dot.PosXY.w div 2) - Screen_Widht div 2;
-        camera.y := (Dot.PosXY.y + Dot.PosXY.h div 2) - Screen_Height div 2;
-
-        if camera.x < 0 then begin
-          camera.x := 0;
-        end;
-        if camera.y < 0 then begin
-          camera.y := 0;
-        end;
-        if camera.x > Level_Width - camera.w then begin
-          camera.x := Level_Width - camera.w;
-        end;
-        if camera.y > Level_Height - camera.h then begin
-          camera.y := Level_Height - camera.h;
-        end;
+        Dot.move(wall.Rect);
+        Dot.CameraMove(camera);
 
         SDL_SetRenderDrawColor(gRenderer, $00, $9F, $00, $FF);
         SDL_RenderClear(gRenderer);
 
         gBGTexture.Render(0, 0, @camera);
 
-        SDL_SetRenderDrawColor(gRenderer, $80, $40, $00, $FF);
-        for i := 0 to Length(wall) - 1 do begin
-          w := wall[i];
-          w.x := w.x - camera.x;
-          w.y := w.y - camera.y;
-          SDL_RenderFillRect(gRenderer, @w);
-        end;
+        wall.CameraMove(camera);
+        wall.renderer;
 
-        Dot.render(camera.x, camera.y);
+        Dot.render;
 
         SDL_RenderPresent(gRenderer);
 
