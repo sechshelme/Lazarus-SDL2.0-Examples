@@ -4,8 +4,8 @@ program Project1;
 
 // {$UNITPATH ../units/units}
 
-uses
-  SDL2;
+//uses
+//  SDL2;
 
 const
 //  SDL_LibName = '/usr/local/lib/libSDL';
@@ -29,9 +29,7 @@ var
 
 begin
   //  SDL_VERSION(ver);
-  //WriteLn(ver.major,'.',ver.minor,'.',ver.patch);
+  //WriteLn(ver.major,' .',ver.minor,'.',ver.patch);
   SDL_GetVersion(@ver);
   WriteLn(ver.major, '.', ver.minor, '.', ver.patch);
-  halt;
-
 end.

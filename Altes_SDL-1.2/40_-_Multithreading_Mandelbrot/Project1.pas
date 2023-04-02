@@ -5,7 +5,7 @@ uses
 
 const
   Screen_Width: integer = 1280;
-  Screen_Heigth: integer = 960;
+  Screen_Heigth: integer = 800;
   Screen_BPP: integer = 32;
 
   ThreadCount: integer = 0;
@@ -41,7 +41,7 @@ var
 
   function my_thread(Data: Pointer): integer; cdecl;
   const
-    interation = 10000;
+    interation = 20000;
   var
     Para: TThread;
     Farbe, x, y: word;
