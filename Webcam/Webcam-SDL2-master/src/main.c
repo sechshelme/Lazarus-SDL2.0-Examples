@@ -155,6 +155,8 @@ int main(int argc, char const *argv[]) {
     goto exit_;
   }
 
+printf("----- %d\n", V4L2_PIX_FMT_YUYV);
+
   // most of devices support YUYV422 packed.
   if (v4l2_sfmt(video_fildes, V4L2_PIX_FMT_YUYV) == -1) {
     perror("v4l2_sfmt");
