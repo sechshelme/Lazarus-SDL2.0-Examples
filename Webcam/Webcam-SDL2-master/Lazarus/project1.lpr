@@ -30,7 +30,7 @@ var
   sdlRenderer: PSDL_Renderer;
   sdlRect: TSDL_Rect;
   sdlScreen: PSDL_Window;
-  quit:Boolean=False;
+  quit: boolean = False;
 
   procedure frame_handler(pframe: Pointer; len: cint);
   begin
@@ -62,7 +62,7 @@ begin
     Halt(1);
   end;
 
-  if v4l2_sfmt(video_fildes,30) = -1 then begin
+  if v4l2_sfmt(video_fildes, 30) = -1 then begin
     WriteLn('v4l2_sfmt()');
     Halt(1);
   end;
@@ -77,19 +77,28 @@ begin
     Halt(1);
   end;
 
-
   sH.fd := video_fildes;
   sH.framehandler := @frame_handler;
 
+  SDL_Init(SDL_INIT_VIDEO or SDL_INIT_TIMER);
 
-  sdlScreen:=SDL_CreateWindow('webcam', SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,640,480,SDL_WINDOW_SHOWN);
-  if sdlScreen=nil then WriteLn('Kann SDL nicht öffnen');
+  sdlScreen := SDL_CreateWindow('webcam', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
+  if sdlScreen = nil then begin
+    WriteLn('Kann SDL nicht öffnen');
+  end;
 
-  repeat until quit;
+  sdlRenderer := SDL_CreateRenderer(sdlScreen, -1, SDL_RENDERER_ACCELERATED or SDL_RENDERER_PRESENTVSYNC);
+  if sdlRenderer = nil then begin
+    Write('Kann Renderer nicht öffnen');
+  end;
 
+  sdlTexture:= SDL_CreateTexture( sdlRenderer,SDL_PIXELFORMAT_YUY2, SDL_TEXTUREACCESS_STREAMING,640,480);
 
+  sdlRect.w:=640;
+  sdlRect.h:=480;
 
-
+  repeat
+  until quit;
 
 
 
