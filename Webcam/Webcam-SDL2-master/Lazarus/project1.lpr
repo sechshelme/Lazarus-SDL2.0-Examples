@@ -5,7 +5,7 @@ uses
   unixtype,
   SDL2,
   ctypes,
-  v4l2_driver;
+  v4l2_driver, v4l2;
 
   // https://github.com/chendotjs/Webcam-SDL2
 
@@ -28,17 +28,28 @@ var
   tv: TTimeVal = (tv_sec: 1; tv_usec: 0);
   buf: Tv4l2_buffer;
 
-begin
-  video_fildes := v4l2_open(device);
-  if video_fildes = -1 then begin
-    WriteLn('Kann Gerät "', device, '" nicht öffnen');
-    Halt(1);
-  end;
+  My_v4l2:Tv4l2;
 
-  if v4l2_querycap(video_fildes, nil) = -1 then begin
-    WriteLn('Fehler: "v4l2_querycap"');
-    Halt(1);
-  end;
+begin
+  My_v4l2:=Tv4l2.Create(device);
+
+
+//  video_fildes := v4l2_open(device);
+  video_fildes:=My_v4l2.getHandler;
+
+  //if video_fildes = -1 then begin
+  //  WriteLn('Kann Gerät "', device, '" nicht öffnen');
+  //  Halt(1);
+  //end;
+  //
+
+  My_v4l2.QueryCap;
+  //if v4l2_querycap(video_fildes, nil) = -1 then begin
+  //  WriteLn('Fehler: "v4l2_querycap"');
+  //  Halt(1);
+  //end;
+
+  WriteLn('-----------------------------------------------------------');
 
   if v4l2_sfmt(video_fildes, V4L2_PIX_FMT_YUYV) = -1 then begin
     WriteLn('v4l2_sfmt');
@@ -123,6 +134,8 @@ begin
     v4l2_close(video_fildes);
 
     SDL_Quit();
+
+    My_v4l2.Free;
 
   WriteLn('ende.');
 end.
