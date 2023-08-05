@@ -1,0 +1,1293 @@
+{ was #define dname(params) para_def_expr }
+{ argument types are unknown }
+{ return type might be wrong }   
+function V4L2_TYPE_IS_CAPTURE(_type : longint) : longint;
+begin
+  V4L2_TYPE_IS_CAPTURE:= not (V4L2_TYPE_IS_OUTPUT(_type));
+end;
+
+{ was #define dname(params) para_def_expr }
+{ argument types are unknown }
+{ return type might be wrong }   
+function V4L2_MAP_COLORSPACE_DEFAULT(is_sdtv,is_hdtv : longint) : longint;
+var
+   if_local1, if_local2 : longint;
+(* result types are not known *)
+begin
+  if is_hdtv then
+    if_local1:=V4L2_COLORSPACE_REC709
+  else
+    if_local1:=V4L2_COLORSPACE_SRGB;
+  if is_sdtv then
+    if_local2:=V4L2_COLORSPACE_SMPTE170M
+  else
+    if_local2:=if_local1;
+  V4L2_MAP_COLORSPACE_DEFAULT:=if_local2;
+end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGB332 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_RGB332:=v4l2_fourcc('R','G','B','1');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGB444 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_RGB444:=v4l2_fourcc('R','4','4','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_ARGB444 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_ARGB444:=v4l2_fourcc('A','R','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_XRGB444 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_XRGB444:=v4l2_fourcc('X','R','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGBA444 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_RGBA444:=v4l2_fourcc('R','A','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGBX444 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_RGBX444:=v4l2_fourcc('R','X','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_ABGR444 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_ABGR444:=v4l2_fourcc('A','B','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_XBGR444 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_XBGR444:=v4l2_fourcc('X','B','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_BGRA444 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_BGRA444:=v4l2_fourcc('G','A','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_BGRX444 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_BGRX444:=v4l2_fourcc('B','X','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGB555 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_RGB555:=v4l2_fourcc('R','G','B','O');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_ARGB555 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_ARGB555:=v4l2_fourcc('A','R','1','5');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_XRGB555 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_XRGB555:=v4l2_fourcc('X','R','1','5');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGBA555 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_RGBA555:=v4l2_fourcc('R','A','1','5');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGBX555 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_RGBX555:=v4l2_fourcc('R','X','1','5');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_ABGR555 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_ABGR555:=v4l2_fourcc('A','B','1','5');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_XBGR555 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_XBGR555:=v4l2_fourcc('X','B','1','5');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_BGRA555 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_BGRA555:=v4l2_fourcc('B','A','1','5');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_BGRX555 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_BGRX555:=v4l2_fourcc('B','X','1','5');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGB565 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_RGB565:=v4l2_fourcc('R','G','B','P');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGB555X : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_RGB555X:=v4l2_fourcc('R','G','B','Q');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_ARGB555X : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_ARGB555X:=v4l2_fourcc_be('A','R','1','5');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_XRGB555X : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_XRGB555X:=v4l2_fourcc_be('X','R','1','5');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGB565X : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_RGB565X:=v4l2_fourcc('R','G','B','R');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_BGR666 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_BGR666:=v4l2_fourcc('B','G','R','H');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_BGR24 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_BGR24:=v4l2_fourcc('B','G','R','3');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGB24 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_RGB24:=v4l2_fourcc('R','G','B','3');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_BGR32 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_BGR32:=v4l2_fourcc('B','G','R','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_ABGR32 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_ABGR32:=v4l2_fourcc('A','R','2','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_XBGR32 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_XBGR32:=v4l2_fourcc('X','R','2','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_BGRA32 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_BGRA32:=v4l2_fourcc('R','A','2','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_BGRX32 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_BGRX32:=v4l2_fourcc('R','X','2','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGB32 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_RGB32:=v4l2_fourcc('R','G','B','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGBA32 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_RGBA32:=v4l2_fourcc('A','B','2','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGBX32 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_RGBX32:=v4l2_fourcc('X','B','2','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_ARGB32 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_ARGB32:=v4l2_fourcc('B','A','2','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_XRGB32 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_XRGB32:=v4l2_fourcc('B','X','2','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_GREY : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_GREY:=v4l2_fourcc('G','R','E','Y');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y4 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_Y4:=v4l2_fourcc('Y','0','4',' ');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y6 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_Y6:=v4l2_fourcc('Y','0','6',' ');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y10 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_Y10:=v4l2_fourcc('Y','1','0',' ');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y12 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_Y12:=v4l2_fourcc('Y','1','2',' ');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y14 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_Y14:=v4l2_fourcc('Y','1','4',' ');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y16 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_Y16:=v4l2_fourcc('Y','1','6',' ');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y16_BE : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_Y16_BE:=v4l2_fourcc_be('Y','1','6',' ');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y10BPACK : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_Y10BPACK:=v4l2_fourcc('Y','1','0','B');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y10P : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_Y10P:=v4l2_fourcc('Y','1','0','P');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_PAL8 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_PAL8:=v4l2_fourcc('P','A','L','8');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_UV8 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_UV8:=v4l2_fourcc('U','V','8',' ');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUYV : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YUYV:=v4l2_fourcc('Y','U','Y','V');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YYUV : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YYUV:=v4l2_fourcc('Y','Y','U','V');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YVYU : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YVYU:=v4l2_fourcc('Y','V','Y','U');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_UYVY : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_UYVY:=v4l2_fourcc('U','Y','V','Y');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_VYUY : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_VYUY:=v4l2_fourcc('V','Y','U','Y');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y41P : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_Y41P:=v4l2_fourcc('Y','4','1','P');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV444 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YUV444:=v4l2_fourcc('Y','4','4','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV555 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YUV555:=v4l2_fourcc('Y','U','V','O');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV565 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YUV565:=v4l2_fourcc('Y','U','V','P');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV24 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YUV24:=v4l2_fourcc('Y','U','V','3');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV32 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YUV32:=v4l2_fourcc('Y','U','V','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_AYUV32 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_AYUV32:=v4l2_fourcc('A','Y','U','V');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_XYUV32 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_XYUV32:=v4l2_fourcc('X','Y','U','V');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_VUYA32 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_VUYA32:=v4l2_fourcc('V','U','Y','A');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_VUYX32 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_VUYX32:=v4l2_fourcc('V','U','Y','X');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_M420 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_M420:=v4l2_fourcc('M','4','2','0');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV12 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_NV12:=v4l2_fourcc('N','V','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV21 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_NV21:=v4l2_fourcc('N','V','2','1');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV16 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_NV16:=v4l2_fourcc('N','V','1','6');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV61 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_NV61:=v4l2_fourcc('N','V','6','1');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV24 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_NV24:=v4l2_fourcc('N','V','2','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV42 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_NV42:=v4l2_fourcc('N','V','4','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_HM12 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_HM12:=v4l2_fourcc('H','M','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV12M : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_NV12M:=v4l2_fourcc('N','M','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV21M : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_NV21M:=v4l2_fourcc('N','M','2','1');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV16M : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_NV16M:=v4l2_fourcc('N','M','1','6');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV61M : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_NV61M:=v4l2_fourcc('N','M','6','1');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV12MT : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_NV12MT:=v4l2_fourcc('T','M','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV12MT_16X16 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_NV12MT_16X16:=v4l2_fourcc('V','M','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV410 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YUV410:=v4l2_fourcc('Y','U','V','9');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YVU410 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YVU410:=v4l2_fourcc('Y','V','U','9');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV411P : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YUV411P:=v4l2_fourcc('4','1','1','P');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV420 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YUV420:=v4l2_fourcc('Y','U','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YVU420 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YVU420:=v4l2_fourcc('Y','V','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV422P : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YUV422P:=v4l2_fourcc('4','2','2','P');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV420M : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YUV420M:=v4l2_fourcc('Y','M','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YVU420M : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YVU420M:=v4l2_fourcc('Y','M','2','1');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV422M : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YUV422M:=v4l2_fourcc('Y','M','1','6');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YVU422M : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YVU422M:=v4l2_fourcc('Y','M','6','1');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV444M : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YUV444M:=v4l2_fourcc('Y','M','2','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YVU444M : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_YVU444M:=v4l2_fourcc('Y','M','4','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR8 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SBGGR8:=v4l2_fourcc('B','A','8','1');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG8 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGBRG8:=v4l2_fourcc('G','B','R','G');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG8 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGRBG8:=v4l2_fourcc('G','R','B','G');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB8 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SRGGB8:=v4l2_fourcc('R','G','G','B');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR10 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SBGGR10:=v4l2_fourcc('B','G','1','0');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG10 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGBRG10:=v4l2_fourcc('G','B','1','0');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG10 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGRBG10:=v4l2_fourcc('B','A','1','0');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB10 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SRGGB10:=v4l2_fourcc('R','G','1','0');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR10P : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SBGGR10P:=v4l2_fourcc('p','B','A','A');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG10P : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGBRG10P:=v4l2_fourcc('p','G','A','A');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG10P : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGRBG10P:=v4l2_fourcc('p','g','A','A');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB10P : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SRGGB10P:=v4l2_fourcc('p','R','A','A');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR10ALAW8 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SBGGR10ALAW8:=v4l2_fourcc('a','B','A','8');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG10ALAW8 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGBRG10ALAW8:=v4l2_fourcc('a','G','A','8');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG10ALAW8 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGRBG10ALAW8:=v4l2_fourcc('a','g','A','8');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB10ALAW8 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SRGGB10ALAW8:=v4l2_fourcc('a','R','A','8');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR10DPCM8 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SBGGR10DPCM8:=v4l2_fourcc('b','B','A','8');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG10DPCM8 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGBRG10DPCM8:=v4l2_fourcc('b','G','A','8');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG10DPCM8 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGRBG10DPCM8:=v4l2_fourcc('B','D','1','0');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB10DPCM8 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SRGGB10DPCM8:=v4l2_fourcc('b','R','A','8');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR12 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SBGGR12:=v4l2_fourcc('B','G','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG12 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGBRG12:=v4l2_fourcc('G','B','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG12 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGRBG12:=v4l2_fourcc('B','A','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB12 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SRGGB12:=v4l2_fourcc('R','G','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR12P : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SBGGR12P:=v4l2_fourcc('p','B','C','C');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG12P : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGBRG12P:=v4l2_fourcc('p','G','C','C');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG12P : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGRBG12P:=v4l2_fourcc('p','g','C','C');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB12P : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SRGGB12P:=v4l2_fourcc('p','R','C','C');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR14 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SBGGR14:=v4l2_fourcc('B','G','1','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG14 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGBRG14:=v4l2_fourcc('G','B','1','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG14 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGRBG14:=v4l2_fourcc('G','R','1','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB14 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SRGGB14:=v4l2_fourcc('R','G','1','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR14P : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SBGGR14P:=v4l2_fourcc('p','B','E','E');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG14P : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGBRG14P:=v4l2_fourcc('p','G','E','E');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG14P : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGRBG14P:=v4l2_fourcc('p','g','E','E');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB14P : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SRGGB14P:=v4l2_fourcc('p','R','E','E');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR16 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SBGGR16:=v4l2_fourcc('B','Y','R','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG16 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGBRG16:=v4l2_fourcc('G','B','1','6');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG16 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SGRBG16:=v4l2_fourcc('G','R','1','6');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB16 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SRGGB16:=v4l2_fourcc('R','G','1','6');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_HSV24 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_HSV24:=v4l2_fourcc('H','S','V','3');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_HSV32 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_HSV32:=v4l2_fourcc('H','S','V','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_MJPEG : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_MJPEG:=v4l2_fourcc('M','J','P','G');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_JPEG : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_JPEG:=v4l2_fourcc('J','P','E','G');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_DV : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_DV:=v4l2_fourcc('d','v','s','d');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_MPEG : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_MPEG:=v4l2_fourcc('M','P','E','G');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_H264 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_H264:=v4l2_fourcc('H','2','6','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_H264_NO_SC : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_H264_NO_SC:=v4l2_fourcc('A','V','C','1');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_H264_MVC : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_H264_MVC:=v4l2_fourcc('M','2','6','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_H263 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_H263:=v4l2_fourcc('H','2','6','3');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_MPEG1 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_MPEG1:=v4l2_fourcc('M','P','G','1');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_MPEG2 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_MPEG2:=v4l2_fourcc('M','P','G','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_MPEG2_SLICE : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_MPEG2_SLICE:=v4l2_fourcc('M','G','2','S');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_MPEG4 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_MPEG4:=v4l2_fourcc('M','P','G','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_XVID : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_XVID:=v4l2_fourcc('X','V','I','D');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_VC1_ANNEX_G : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_VC1_ANNEX_G:=v4l2_fourcc('V','C','1','G');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_VC1_ANNEX_L : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_VC1_ANNEX_L:=v4l2_fourcc('V','C','1','L');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_VP8 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_VP8:=v4l2_fourcc('V','P','8','0');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_VP8_FRAME : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_VP8_FRAME:=v4l2_fourcc('V','P','8','F');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_VP9 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_VP9:=v4l2_fourcc('V','P','9','0');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_HEVC : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_HEVC:=v4l2_fourcc('H','E','V','C');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_FWHT : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_FWHT:=v4l2_fourcc('F','W','H','T');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_FWHT_STATELESS : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_FWHT_STATELESS:=v4l2_fourcc('S','F','W','H');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_H264_SLICE : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_H264_SLICE:=v4l2_fourcc('S','2','6','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_CPIA1 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_CPIA1:=v4l2_fourcc('C','P','I','A');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_WNVA : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_WNVA:=v4l2_fourcc('W','N','V','A');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SN9C10X : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SN9C10X:=v4l2_fourcc('S','9','1','0');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SN9C20X_I420 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SN9C20X_I420:=v4l2_fourcc('S','9','2','0');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_PWC1 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_PWC1:=v4l2_fourcc('P','W','C','1');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_PWC2 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_PWC2:=v4l2_fourcc('P','W','C','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_ET61X251 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_ET61X251:=v4l2_fourcc('E','6','2','5');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SPCA501 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SPCA501:=v4l2_fourcc('S','5','0','1');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SPCA505 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SPCA505:=v4l2_fourcc('S','5','0','5');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SPCA508 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SPCA508:=v4l2_fourcc('S','5','0','8');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SPCA561 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SPCA561:=v4l2_fourcc('S','5','6','1');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_PAC207 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_PAC207:=v4l2_fourcc('P','2','0','7');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_MR97310A : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_MR97310A:=v4l2_fourcc('M','3','1','0');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_JL2005BCD : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_JL2005BCD:=v4l2_fourcc('J','L','2','0');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SN9C2028 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SN9C2028:=v4l2_fourcc('S','O','N','X');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SQ905C : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SQ905C:=v4l2_fourcc('9','0','5','C');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_PJPG : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_PJPG:=v4l2_fourcc('P','J','P','G');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_OV511 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_OV511:=v4l2_fourcc('O','5','1','1');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_OV518 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_OV518:=v4l2_fourcc('O','5','1','8');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_STV0680 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_STV0680:=v4l2_fourcc('S','6','8','0');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_TM6000 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_TM6000:=v4l2_fourcc('T','M','6','0');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_CIT_YYVYUY : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_CIT_YYVYUY:=v4l2_fourcc('C','I','T','V');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_KONICA420 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_KONICA420:=v4l2_fourcc('K','O','N','I');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_JPGL : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_JPGL:=v4l2_fourcc('J','P','G','L');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SE401 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SE401:=v4l2_fourcc('S','4','0','1');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_S5C_UYVY_JPG : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_S5C_UYVY_JPG:=v4l2_fourcc('S','5','C','I');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y8I : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_Y8I:=v4l2_fourcc('Y','8','I',' ');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y12I : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_Y12I:=v4l2_fourcc('Y','1','2','I');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Z16 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_Z16:=v4l2_fourcc('Z','1','6',' ');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_MT21C : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_MT21C:=v4l2_fourcc('M','T','2','1');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_INZI : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_INZI:=v4l2_fourcc('I','N','Z','I');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SUNXI_TILED_NV12 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_SUNXI_TILED_NV12:=v4l2_fourcc('S','T','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_CNF4 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_CNF4:=v4l2_fourcc('C','N','F','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_HI240 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_HI240:=v4l2_fourcc('H','I','2','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_IPU3_SBGGR10 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_IPU3_SBGGR10:=v4l2_fourcc('i','p','3','b');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_IPU3_SGBRG10 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_IPU3_SGBRG10:=v4l2_fourcc('i','p','3','g');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_IPU3_SGRBG10 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_IPU3_SGRBG10:=v4l2_fourcc('i','p','3','G');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_IPU3_SRGGB10 : longint; { return type might be wrong }
+  begin
+    V4L2_PIX_FMT_IPU3_SRGGB10:=v4l2_fourcc('i','p','3','r');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_SDR_FMT_CU8 : longint; { return type might be wrong }
+  begin
+    V4L2_SDR_FMT_CU8:=v4l2_fourcc('C','U','0','8');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_SDR_FMT_CU16LE : longint; { return type might be wrong }
+  begin
+    V4L2_SDR_FMT_CU16LE:=v4l2_fourcc('C','U','1','6');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_SDR_FMT_CS8 : longint; { return type might be wrong }
+  begin
+    V4L2_SDR_FMT_CS8:=v4l2_fourcc('C','S','0','8');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_SDR_FMT_CS14LE : longint; { return type might be wrong }
+  begin
+    V4L2_SDR_FMT_CS14LE:=v4l2_fourcc('C','S','1','4');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_SDR_FMT_RU12LE : longint; { return type might be wrong }
+  begin
+    V4L2_SDR_FMT_RU12LE:=v4l2_fourcc('R','U','1','2');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_SDR_FMT_PCU16BE : longint; { return type might be wrong }
+  begin
+    V4L2_SDR_FMT_PCU16BE:=v4l2_fourcc('P','C','1','6');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_SDR_FMT_PCU18BE : longint; { return type might be wrong }
+  begin
+    V4L2_SDR_FMT_PCU18BE:=v4l2_fourcc('P','C','1','8');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_SDR_FMT_PCU20BE : longint; { return type might be wrong }
+  begin
+    V4L2_SDR_FMT_PCU20BE:=v4l2_fourcc('P','C','2','0');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_TCH_FMT_DELTA_TD16 : longint; { return type might be wrong }
+  begin
+    V4L2_TCH_FMT_DELTA_TD16:=v4l2_fourcc('T','D','1','6');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_TCH_FMT_DELTA_TD08 : longint; { return type might be wrong }
+  begin
+    V4L2_TCH_FMT_DELTA_TD08:=v4l2_fourcc('T','D','0','8');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_TCH_FMT_TU16 : longint; { return type might be wrong }
+  begin
+    V4L2_TCH_FMT_TU16:=v4l2_fourcc('T','U','1','6');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_TCH_FMT_TU08 : longint; { return type might be wrong }
+  begin
+    V4L2_TCH_FMT_TU08:=v4l2_fourcc('T','U','0','8');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_META_FMT_VSP1_HGO : longint; { return type might be wrong }
+  begin
+    V4L2_META_FMT_VSP1_HGO:=v4l2_fourcc('V','S','P','H');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_META_FMT_VSP1_HGT : longint; { return type might be wrong }
+  begin
+    V4L2_META_FMT_VSP1_HGT:=v4l2_fourcc('V','S','P','T');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_META_FMT_UVC : longint; { return type might be wrong }
+  begin
+    V4L2_META_FMT_UVC:=v4l2_fourcc('U','V','C','H');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_META_FMT_D4XX : longint; { return type might be wrong }
+  begin
+    V4L2_META_FMT_D4XX:=v4l2_fourcc('D','4','X','X');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_META_FMT_VIVID : longint; { return type might be wrong }
+  begin
+    V4L2_META_FMT_VIVID:=v4l2_fourcc('V','I','V','D');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_META_FMT_RK_ISP1_PARAMS : longint; { return type might be wrong }
+  begin
+    V4L2_META_FMT_RK_ISP1_PARAMS:=v4l2_fourcc('R','K','1','P');
+  end;
+
+{ was #define dname def_expr }
+function V4L2_META_FMT_RK_ISP1_STAT_3A : longint; { return type might be wrong }
+  begin
+    V4L2_META_FMT_RK_ISP1_STAT_3A:=v4l2_fourcc('R','K','1','S');
+  end;
+

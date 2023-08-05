@@ -1,6 +1,8 @@
 program project1;
 
 uses
+  BaseUnix,
+  unixtype,
   SDL2,
   ctypes,
   v4l2_driver;
@@ -25,12 +27,15 @@ var
   video_fildes: longint;
   sH: TStreamHandle;
 
-var
   sdlTexture: PSDL_Texture;
   sdlRenderer: PSDL_Renderer;
   sdlRect: TSDL_Rect;
   sdlScreen: PSDL_Window;
   quit: boolean = False;
+  fds: TFDSet;
+
+  tv: TTimeVal = (tv_sec: 1; tv_usec: 0);
+  buf:Tv4l2_buffer;
 
   procedure frame_handler(pframe: Pointer; len: cint);
   begin
@@ -92,12 +97,33 @@ begin
     Write('Kann Renderer nicht öffnen');
   end;
 
-  sdlTexture:= SDL_CreateTexture( sdlRenderer,SDL_PIXELFORMAT_YUY2, SDL_TEXTUREACCESS_STREAMING,640,480);
+  sdlTexture := SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_YUY2, SDL_TEXTUREACCESS_STREAMING, 640, 480);
 
-  sdlRect.w:=640;
-  sdlRect.h:=480;
+  sdlRect.w := 640;
+  sdlRect.h := 480;
+
+//  #define VIDIOC_QBUF		_IOWR('V', 15, struct v4l2_buffer)
+//  #define VIDIOC_EXPBUF		_IOWR('V', 16, struct v4l2_exportbuffer)
+//  #define VIDIOC_DQBUF		_IOWR('V', 17, struct v4l2_buffer)
+
 
   repeat
+    fpFD_ZERO(fds);
+    fpFD_SET(video_fildes, fds);
+
+    fpSelect(video_fildes + 1, @fds, nil, nil, @tv);
+
+    buf._type:=V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    buf.memory:=V4L2_MEMORY_MMAP;
+    FpIOCtl(video_fildes, VIDIOC_DQBUF, @buf);
+
+    buf._type:=V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    buf.memory:=V4L2_MEMORY_MMAP;
+    FpIOCtl(video_fildes, VIDIOC_QBUF, @buf);
+
+    //////////////77
+
+
   until quit;
 
 

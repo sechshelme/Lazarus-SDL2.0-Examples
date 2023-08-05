@@ -1,0 +1,1600 @@
+
+{ SPDX-License-Identifier: ((GPL-2.0+ WITH Linux-syscall-note) OR BSD-3-Clause)  }
+{
+ *  Video for Linux Two header file
+ *
+ *  Copyright (C) 1999-2012 the contributors
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  Alternatively you can redistribute this file under the terms of the
+ *  BSD license as stated below:
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *  1. Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *  3. The names of its contributors may not be used to endorse or promote
+ *     products derived from this software without specific prior written
+ *     permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ *  TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ *  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ *  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ *	Header file for v4l or V4L2 drivers and applications
+ * with public API.
+ * All kernel-specific stuff were moved to media/v4l2-dev.h, so
+ * no #if __KERNEL tests are allowed here
+ *
+ *	See https://linuxtv.org for more info
+ *
+ *	Author: Bill Dirks <bill@thedirks.org>
+ *		Justin Schoeman
+ *              Hans Verkuil <hverkuil@xs4all.nl>
+ *		et al.
+  }
+{$ifndef __LINUX_VIDEODEV2_H}
+{$define __LINUX_VIDEODEV2_H}
+{$include <sys/time.h>}
+{$include <linux/ioctl.h>}
+{$include <linux/types.h>}
+{$include <linux/v4l2-common.h>}
+{$include <linux/v4l2-controls.h>}
+{
+ * Common stuff for both V4L1 and V4L2
+ * Moved from videodev.h
+  }
+
+const
+  VIDEO_MAX_FRAME = 32;  
+  VIDEO_MAX_PLANES = 8;  
+{
+ *	M I S C E L L A N E O U S
+  }
+{  Four-character-code (FOURCC)  }
+{#define v4l2_fourcc(a, b, c, d)\ }
+{	((__u32)(a) | ((__u32)(b) << 8) | ((__u32)(c) << 16) | ((__u32)(d) << 24)) }
+{#define v4l2_fourcc_be(a, b, c, d)	(v4l2_fourcc(a, b, c, d) | (1U << 31)) }
+{
+ *	E N U M S
+  }
+{ driver can choose from none,
+					 top, bottom, interlaced
+					 depending on whatever it thinks
+					 is approximate ...  }
+{ this device has no fields ...  }
+{ top field only  }
+{ bottom field only  }
+{ both fields interlaced  }
+{ both fields sequential into one
+					 buffer, top-bottom order  }
+{ same as above + bottom-top order  }
+{ both fields alternating into
+					 separate buffers  }
+{ both fields interlaced, top field
+					 first and the top field is
+					 transmitted first  }
+{ both fields interlaced, top field
+					 first and the bottom field is
+					 transmitted first  }
+type
+  Tv4l2_field =  Longint;
+  Const
+    V4L2_FIELD_ANY = 0;
+    V4L2_FIELD_NONE = 1;
+    V4L2_FIELD_TOP = 2;
+    V4L2_FIELD_BOTTOM = 3;
+    V4L2_FIELD_INTERLACED = 4;
+    V4L2_FIELD_SEQ_TB = 5;
+    V4L2_FIELD_SEQ_BT = 6;
+    V4L2_FIELD_ALTERNATE = 7;
+    V4L2_FIELD_INTERLACED_TB = 8;
+    V4L2_FIELD_INTERLACED_BT = 9;
+
+{ Deprecated, do not use  }
+type
+  Tv4l2_buf_type =  Longint;
+  Const
+    V4L2_BUF_TYPE_VIDEO_CAPTURE = 1;
+    V4L2_BUF_TYPE_VIDEO_OUTPUT = 2;
+    V4L2_BUF_TYPE_VIDEO_OVERLAY = 3;
+    V4L2_BUF_TYPE_VBI_CAPTURE = 4;
+    V4L2_BUF_TYPE_VBI_OUTPUT = 5;
+    V4L2_BUF_TYPE_SLICED_VBI_CAPTURE = 6;
+    V4L2_BUF_TYPE_SLICED_VBI_OUTPUT = 7;
+    V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY = 8;
+    V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE = 9;
+    V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE = 10;
+    V4L2_BUF_TYPE_SDR_CAPTURE = 11;
+    V4L2_BUF_TYPE_SDR_OUTPUT = 12;
+    V4L2_BUF_TYPE_META_CAPTURE = 13;
+    V4L2_BUF_TYPE_META_OUTPUT = 14;
+    V4L2_BUF_TYPE_PRIVATE = $80;
+
+{ was #define dname(params) para_def_expr }
+{ argument types are unknown }
+{ return type might be wrong }   
+
+function V4L2_TYPE_IS_CAPTURE(_type : longint) : longint;
+
+type
+  Tv4l2_tuner_type =  Longint;
+  Const
+    V4L2_TUNER_RADIO = 1;
+    V4L2_TUNER_ANALOG_TV = 2;
+    V4L2_TUNER_DIGITAL_TV = 3;
+    V4L2_TUNER_SDR = 4;
+    V4L2_TUNER_RF = 5;
+
+{ Deprecated, do not use  }
+  V4L2_TUNER_ADC = V4L2_TUNER_SDR;  
+type
+  Tv4l2_memory =  Longint;
+  Const
+    V4L2_MEMORY_MMAP = 1;
+    V4L2_MEMORY_USERPTR = 2;
+    V4L2_MEMORY_OVERLAY = 3;
+    V4L2_MEMORY_DMABUF = 4;
+
+{ see also http://vektor.theorem.ca/graphics/ycbcr/  }
+{
+	 * Default colorspace, i.e. let the driver figure it out.
+	 * Can only be used with video capture.
+	  }
+{ SMPTE 170M: used for broadcast NTSC/PAL SDTV  }
+{ Obsolete pre-1998 SMPTE 240M HDTV standard, superseded by Rec 709  }
+{ Rec.709: used for HDTV  }
+{
+	 * Deprecated, do not use. No driver will ever return this. This was
+	 * based on a misunderstanding of the bt878 datasheet.
+	  }
+{
+	 * NTSC 1953 colorspace. This only makes sense when dealing with
+	 * really, really old NTSC recordings. Superseded by SMPTE 170M.
+	  }
+{
+	 * EBU Tech 3213 PAL/SECAM colorspace.
+	  }
+{
+	 * Effectively shorthand for V4L2_COLORSPACE_SRGB, V4L2_YCBCR_ENC_601
+	 * and V4L2_QUANTIZATION_FULL_RANGE. To be used for (Motion-)JPEG.
+	  }
+{ For RGB colorspaces such as produces by most webcams.  }
+{ opRGB colorspace  }
+{ BT.2020 colorspace, used for UHDTV.  }
+{ Raw colorspace: for RAW unprocessed images  }
+{ DCI-P3 colorspace, used by cinema projectors  }
+type
+  Tv4l2_colorspace =  Longint;
+  Const
+    V4L2_COLORSPACE_DEFAULT = 0;
+    V4L2_COLORSPACE_SMPTE170M = 1;
+    V4L2_COLORSPACE_SMPTE240M = 2;
+    V4L2_COLORSPACE_REC709 = 3;
+    V4L2_COLORSPACE_BT878 = 4;
+    V4L2_COLORSPACE_470_SYSTEM_M = 5;
+    V4L2_COLORSPACE_470_SYSTEM_BG = 6;
+    V4L2_COLORSPACE_JPEG = 7;
+    V4L2_COLORSPACE_SRGB = 8;
+    V4L2_COLORSPACE_OPRGB = 9;
+    V4L2_COLORSPACE_BT2020 = 10;
+    V4L2_COLORSPACE_RAW = 11;
+    V4L2_COLORSPACE_DCI_P3 = 12;
+
+{
+ * Determine how COLORSPACE_DEFAULT should map to a proper colorspace.
+ * This depends on whether this is a SDTV image (use SMPTE 170M), an
+ * HDTV image (use Rec. 709), or something else (use sRGB).
+  }
+{ was #define dname(params) para_def_expr }
+{ argument types are unknown }
+{ return type might be wrong }   
+
+function V4L2_MAP_COLORSPACE_DEFAULT(is_sdtv,is_hdtv : longint) : longint;
+
+{
+	 * Mapping of V4L2_XFER_FUNC_DEFAULT to actual transfer functions
+	 * for the various colorspaces:
+	 *
+	 * V4L2_COLORSPACE_SMPTE170M, V4L2_COLORSPACE_470_SYSTEM_M,
+	 * V4L2_COLORSPACE_470_SYSTEM_BG, V4L2_COLORSPACE_REC709 and
+	 * V4L2_COLORSPACE_BT2020: V4L2_XFER_FUNC_709
+	 *
+	 * V4L2_COLORSPACE_SRGB, V4L2_COLORSPACE_JPEG: V4L2_XFER_FUNC_SRGB
+	 *
+	 * V4L2_COLORSPACE_OPRGB: V4L2_XFER_FUNC_OPRGB
+	 *
+	 * V4L2_COLORSPACE_SMPTE240M: V4L2_XFER_FUNC_SMPTE240M
+	 *
+	 * V4L2_COLORSPACE_RAW: V4L2_XFER_FUNC_NONE
+	 *
+	 * V4L2_COLORSPACE_DCI_P3: V4L2_XFER_FUNC_DCI_P3
+	  }
+type
+  Tv4l2_xfer_func =  Longint;
+  Const
+    V4L2_XFER_FUNC_DEFAULT = 0;
+    V4L2_XFER_FUNC_709 = 1;
+    V4L2_XFER_FUNC_SRGB = 2;
+    V4L2_XFER_FUNC_OPRGB = 3;
+    V4L2_XFER_FUNC_SMPTE240M = 4;
+    V4L2_XFER_FUNC_NONE = 5;
+    V4L2_XFER_FUNC_DCI_P3 = 6;
+    V4L2_XFER_FUNC_SMPTE2084 = 7;
+
+{
+	 * Mapping of V4L2_YCBCR_ENC_DEFAULT to actual encodings for the
+	 * various colorspaces:
+	 *
+	 * V4L2_COLORSPACE_SMPTE170M, V4L2_COLORSPACE_470_SYSTEM_M,
+	 * V4L2_COLORSPACE_470_SYSTEM_BG, V4L2_COLORSPACE_SRGB,
+	 * V4L2_COLORSPACE_OPRGB and V4L2_COLORSPACE_JPEG: V4L2_YCBCR_ENC_601
+	 *
+	 * V4L2_COLORSPACE_REC709 and V4L2_COLORSPACE_DCI_P3: V4L2_YCBCR_ENC_709
+	 *
+	 * V4L2_COLORSPACE_BT2020: V4L2_YCBCR_ENC_BT2020
+	 *
+	 * V4L2_COLORSPACE_SMPTE240M: V4L2_YCBCR_ENC_SMPTE240M
+	  }
+{ ITU-R 601 -- SDTV  }
+{ Rec. 709 -- HDTV  }
+{ ITU-R 601/EN 61966-2-4 Extended Gamut -- SDTV  }
+{ Rec. 709/EN 61966-2-4 Extended Gamut -- HDTV  }
+{
+	 * sYCC (Y'CbCr encoding of sRGB), identical to ENC_601. It was added
+	 * originally due to a misunderstanding of the sYCC standard. It should
+	 * not be used, instead use V4L2_YCBCR_ENC_601.
+	  }
+{ BT.2020 Non-constant Luminance Y'CbCr  }
+{ BT.2020 Constant Luminance Y'CbcCrc  }
+{ SMPTE 240M -- Obsolete HDTV  }
+type
+  Tv4l2_ycbcr_encoding =  Longint;
+  Const
+    V4L2_YCBCR_ENC_DEFAULT = 0;
+    V4L2_YCBCR_ENC_601 = 1;
+    V4L2_YCBCR_ENC_709 = 2;
+    V4L2_YCBCR_ENC_XV601 = 3;
+    V4L2_YCBCR_ENC_XV709 = 4;
+    V4L2_YCBCR_ENC_SYCC = 5;
+    V4L2_YCBCR_ENC_BT2020 = 6;
+    V4L2_YCBCR_ENC_BT2020_CONST_LUM = 7;
+    V4L2_YCBCR_ENC_SMPTE240M = 8;
+
+{
+ * enum v4l2_hsv_encoding values should not collide with the ones from
+ * enum v4l2_ycbcr_encoding.
+  }
+{ Hue mapped to 0 - 179  }
+{ Hue mapped to 0-255  }
+type
+  Tv4l2_hsv_encoding =  Longint;
+  Const
+    V4L2_HSV_ENC_180 = 128;
+    V4L2_HSV_ENC_256 = 129;
+
+{
+ * Determine how YCBCR_ENC_DEFAULT should map to a proper Y'CbCr encoding.
+ * This depends on the colorspace.
+  }
+{
+	 * The default for R'G'B' quantization is always full range.
+	 * For Y'CbCr the quantization is always limited range, except
+	 * for COLORSPACE_JPEG: this is full range.
+	  }
+type
+  Tv4l2_quantization =  Longint;
+  Const
+    V4L2_QUANTIZATION_DEFAULT = 0;
+    V4L2_QUANTIZATION_FULL_RANGE = 1;
+    V4L2_QUANTIZATION_LIM_RANGE = 2;
+
+{
+ * Determine how QUANTIZATION_DEFAULT should map to a proper quantization.
+ * This depends on whether the image is RGB or not, the colorspace.
+ * The Y'CbCr encoding is not used anymore, but is still there for backwards
+ * compatibility.
+  }
+{
+ * Deprecated names for opRGB colorspace (IEC 61966-2-5)
+ *
+ * WARNING: Please don't use these deprecated defines in your code, as
+ * there is a chance we have to remove them in the future.
+  }
+  V4L2_COLORSPACE_ADOBERGB = V4L2_COLORSPACE_OPRGB;  
+  V4L2_XFER_FUNC_ADOBERGB = V4L2_XFER_FUNC_OPRGB;  
+{ not initialized  }
+type
+  Tv4l2_priority =  Longint;
+  Const
+    V4L2_PRIORITY_UNSET = 0;
+    V4L2_PRIORITY_BACKGROUND = 1;
+    V4L2_PRIORITY_INTERACTIVE = 2;
+    V4L2_PRIORITY_RECORD = 3;
+    V4L2_PRIORITY_DEFAULT = V4L2_PRIORITY_INTERACTIVE;
+
+type
+  Pv4l2_rect = ^Tv4l2_rect;
+  Tv4l2_rect = record
+      left : Ts32;
+      top : Ts32;
+      width : Tu32;
+      height : Tu32;
+    end;
+
+  Pv4l2_fract = ^Tv4l2_fract;
+  Tv4l2_fract = record
+      numerator : Tu32;
+      denominator : Tu32;
+    end;
+
+  Pv4l2_area = ^Tv4l2_area;
+  Tv4l2_area = record
+      width : Tu32;
+      height : Tu32;
+    end;
+
+{*
+  * struct v4l2_capability - Describes V4L2 device caps returned by VIDIOC_QUERYCAP
+  *
+  * @driver:	   name of the driver module (e.g. "bttv")
+  * @card:	   name of the card (e.g. "Hauppauge WinTV")
+  * @bus_info:	   name of the bus (e.g. "PCI:" + pci_name(pci_dev) )
+  * @version:	   KERNEL_VERSION
+  * @capabilities: capabilities of the physical device as a whole
+  * @device_caps:  capabilities accessed via this particular device (node)
+  * @reserved:	   reserved fields for future extensions
+   }
+  Pv4l2_capability = ^Tv4l2_capability;
+  Tv4l2_capability = record
+      driver : array[0..15] of Tu8;
+      card : array[0..31] of Tu8;
+      bus_info : array[0..31] of Tu8;
+      version : Tu32;
+      capabilities : Tu32;
+      device_caps : Tu32;
+      reserved : array[0..2] of Tu32;
+    end;
+
+{ Values for 'capabilities' field  }
+{ Is a video capture device  }
+
+const
+  V4L2_CAP_VIDEO_CAPTURE = $00000001;  
+{ Is a video output device  }
+  V4L2_CAP_VIDEO_OUTPUT = $00000002;  
+{ Can do video overlay  }
+  V4L2_CAP_VIDEO_OVERLAY = $00000004;  
+{ Is a raw VBI capture device  }
+  V4L2_CAP_VBI_CAPTURE = $00000010;  
+{ Is a raw VBI output device  }
+  V4L2_CAP_VBI_OUTPUT = $00000020;  
+{ Is a sliced VBI capture device  }
+  V4L2_CAP_SLICED_VBI_CAPTURE = $00000040;  
+{ Is a sliced VBI output device  }
+  V4L2_CAP_SLICED_VBI_OUTPUT = $00000080;  
+{ RDS data capture  }
+  V4L2_CAP_RDS_CAPTURE = $00000100;  
+{ Can do video output overlay  }
+  V4L2_CAP_VIDEO_OUTPUT_OVERLAY = $00000200;  
+{ Can do hardware frequency seek   }
+  V4L2_CAP_HW_FREQ_SEEK = $00000400;  
+{ Is an RDS encoder  }
+  V4L2_CAP_RDS_OUTPUT = $00000800;  
+{ Is a video capture device that supports multiplanar formats  }
+  V4L2_CAP_VIDEO_CAPTURE_MPLANE = $00001000;  
+{ Is a video output device that supports multiplanar formats  }
+  V4L2_CAP_VIDEO_OUTPUT_MPLANE = $00002000;  
+{ Is a video mem-to-mem device that supports multiplanar formats  }
+  V4L2_CAP_VIDEO_M2M_MPLANE = $00004000;  
+{ Is a video mem-to-mem device  }
+  V4L2_CAP_VIDEO_M2M = $00008000;  
+{ has a tuner  }
+  V4L2_CAP_TUNER = $00010000;  
+{ has audio support  }
+  V4L2_CAP_AUDIO = $00020000;  
+{ is a radio device  }
+  V4L2_CAP_RADIO = $00040000;  
+{ has a modulator  }
+  V4L2_CAP_MODULATOR = $00080000;  
+{ Is a SDR capture device  }
+  V4L2_CAP_SDR_CAPTURE = $00100000;  
+{ Supports the extended pixel format  }
+  V4L2_CAP_EXT_PIX_FORMAT = $00200000;  
+{ Is a SDR output device  }
+  V4L2_CAP_SDR_OUTPUT = $00400000;  
+{ Is a metadata capture device  }
+  V4L2_CAP_META_CAPTURE = $00800000;  
+{ read/write systemcalls  }
+  V4L2_CAP_READWRITE = $01000000;  
+{ async I/O  }
+  V4L2_CAP_ASYNCIO = $02000000;  
+{ streaming I/O ioctls  }
+  V4L2_CAP_STREAMING = $04000000;  
+{ Is a metadata output device  }
+  V4L2_CAP_META_OUTPUT = $08000000;  
+{ Is a touch device  }
+  V4L2_CAP_TOUCH = $10000000;  
+{ Is input/output controlled by the media controller  }
+  V4L2_CAP_IO_MC = $20000000;  
+{ sets device capabilities field  }
+  V4L2_CAP_DEVICE_CAPS = $80000000;  
+{
+ *	V I D E O   I M A G E   F O R M A T
+  }
+{      Pixel format         FOURCC                          depth  Description   }
+{ RGB formats (1 or 2 bytes per pixel)  }
+{  8  RGB-3-3-2      }
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGB332 : longint; { return type might be wrong }
+
+{ 16  xxxxrrrr ggggbbbb  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGB444 : longint; { return type might be wrong }
+
+{ 16  aaaarrrr ggggbbbb  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_ARGB444 : longint; { return type might be wrong }
+
+{ 16  xxxxrrrr ggggbbbb  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_XRGB444 : longint; { return type might be wrong }
+
+{ 16  rrrrgggg bbbbaaaa  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGBA444 : longint; { return type might be wrong }
+
+{ 16  rrrrgggg bbbbxxxx  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGBX444 : longint; { return type might be wrong }
+
+{ 16  aaaabbbb ggggrrrr  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_ABGR444 : longint; { return type might be wrong }
+
+{ 16  xxxxbbbb ggggrrrr  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_XBGR444 : longint; { return type might be wrong }
+
+{ 16  bbbbgggg rrrraaaa  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_BGRA444 : longint; { return type might be wrong }
+
+{ 16  bbbbgggg rrrrxxxx  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_BGRX444 : longint; { return type might be wrong }
+
+{ 16  RGB-5-5-5      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGB555 : longint; { return type might be wrong }
+
+{ 16  ARGB-1-5-5-5   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_ARGB555 : longint; { return type might be wrong }
+
+{ 16  XRGB-1-5-5-5   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_XRGB555 : longint; { return type might be wrong }
+
+{ 16  RGBA-5-5-5-1   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGBA555 : longint; { return type might be wrong }
+
+{ 16  RGBX-5-5-5-1   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGBX555 : longint; { return type might be wrong }
+
+{ 16  ABGR-1-5-5-5   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_ABGR555 : longint; { return type might be wrong }
+
+{ 16  XBGR-1-5-5-5   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_XBGR555 : longint; { return type might be wrong }
+
+{ 16  BGRA-5-5-5-1   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_BGRA555 : longint; { return type might be wrong }
+
+{ 16  BGRX-5-5-5-1   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_BGRX555 : longint; { return type might be wrong }
+
+{ 16  RGB-5-6-5      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGB565 : longint; { return type might be wrong }
+
+{ 16  RGB-5-5-5 BE   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGB555X : longint; { return type might be wrong }
+
+{ 16  ARGB-5-5-5 BE  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_ARGB555X : longint; { return type might be wrong }
+
+{ 16  XRGB-5-5-5 BE  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_XRGB555X : longint; { return type might be wrong }
+
+{ 16  RGB-5-6-5 BE   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGB565X : longint; { return type might be wrong }
+
+{ RGB formats (3 or 4 bytes per pixel)  }
+{ 18  BGR-6-6-6	   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_BGR666 : longint; { return type might be wrong }
+
+{ 24  BGR-8-8-8      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_BGR24 : longint; { return type might be wrong }
+
+{ 24  RGB-8-8-8      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGB24 : longint; { return type might be wrong }
+
+{ 32  BGR-8-8-8-8    }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_BGR32 : longint; { return type might be wrong }
+
+{ 32  BGRA-8-8-8-8   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_ABGR32 : longint; { return type might be wrong }
+
+{ 32  BGRX-8-8-8-8   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_XBGR32 : longint; { return type might be wrong }
+
+{ 32  ABGR-8-8-8-8   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_BGRA32 : longint; { return type might be wrong }
+
+{ 32  XBGR-8-8-8-8   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_BGRX32 : longint; { return type might be wrong }
+
+{ 32  RGB-8-8-8-8    }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGB32 : longint; { return type might be wrong }
+
+{ 32  RGBA-8-8-8-8   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGBA32 : longint; { return type might be wrong }
+
+{ 32  RGBX-8-8-8-8   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_RGBX32 : longint; { return type might be wrong }
+
+{ 32  ARGB-8-8-8-8   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_ARGB32 : longint; { return type might be wrong }
+
+{ 32  XRGB-8-8-8-8   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_XRGB32 : longint; { return type might be wrong }
+
+{ Grey formats  }
+{  8  Greyscale      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_GREY : longint; { return type might be wrong }
+
+{  4  Greyscale      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y4 : longint; { return type might be wrong }
+
+{  6  Greyscale      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y6 : longint; { return type might be wrong }
+
+{ 10  Greyscale      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y10 : longint; { return type might be wrong }
+
+{ 12  Greyscale      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y12 : longint; { return type might be wrong }
+
+{ 14  Greyscale      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y14 : longint; { return type might be wrong }
+
+{ 16  Greyscale      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y16 : longint; { return type might be wrong }
+
+{ 16  Greyscale BE   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y16_BE : longint; { return type might be wrong }
+
+{ Grey bit-packed formats  }
+{ 10  Greyscale bit-packed  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y10BPACK : longint; { return type might be wrong }
+
+{ 10  Greyscale, MIPI RAW10 packed  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y10P : longint; { return type might be wrong }
+
+{ Palette formats  }
+{  8  8-bit palette  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_PAL8 : longint; { return type might be wrong }
+
+{ Chrominance formats  }
+{  8  UV 4:4  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_UV8 : longint; { return type might be wrong }
+
+{ Luminance+Chrominance formats  }
+{ 16  YUV 4:2:2      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUYV : longint; { return type might be wrong }
+
+{ 16  YUV 4:2:2      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YYUV : longint; { return type might be wrong }
+
+{ 16 YVU 4:2:2  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YVYU : longint; { return type might be wrong }
+
+{ 16  YUV 4:2:2      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_UYVY : longint; { return type might be wrong }
+
+{ 16  YUV 4:2:2      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_VYUY : longint; { return type might be wrong }
+
+{ 12  YUV 4:1:1      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y41P : longint; { return type might be wrong }
+
+{ 16  xxxxyyyy uuuuvvvv  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV444 : longint; { return type might be wrong }
+
+{ 16  YUV-5-5-5      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV555 : longint; { return type might be wrong }
+
+{ 16  YUV-5-6-5      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV565 : longint; { return type might be wrong }
+
+{ 24  YUV-8-8-8      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV24 : longint; { return type might be wrong }
+
+{ 32  YUV-8-8-8-8    }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV32 : longint; { return type might be wrong }
+
+{ 32  AYUV-8-8-8-8   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_AYUV32 : longint; { return type might be wrong }
+
+{ 32  XYUV-8-8-8-8   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_XYUV32 : longint; { return type might be wrong }
+
+{ 32  VUYA-8-8-8-8   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_VUYA32 : longint; { return type might be wrong }
+
+{ 32  VUYX-8-8-8-8   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_VUYX32 : longint; { return type might be wrong }
+
+{ 12  YUV 4:2:0 2 lines y, 1 line uv interleaved  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_M420 : longint; { return type might be wrong }
+
+{ two planes -- one Y, one Cr + Cb interleaved   }
+{ 12  Y/CbCr 4:2:0   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV12 : longint; { return type might be wrong }
+
+{ 12  Y/CrCb 4:2:0   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV21 : longint; { return type might be wrong }
+
+{ 16  Y/CbCr 4:2:2   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV16 : longint; { return type might be wrong }
+
+{ 16  Y/CrCb 4:2:2   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV61 : longint; { return type might be wrong }
+
+{ 24  Y/CbCr 4:4:4   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV24 : longint; { return type might be wrong }
+
+{ 24  Y/CrCb 4:4:4   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV42 : longint; { return type might be wrong }
+
+{  8  YUV 4:2:0 16x16 macroblocks  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_HM12 : longint; { return type might be wrong }
+
+{ two non contiguous planes - one Y, one Cr + Cb interleaved   }
+{ 12  Y/CbCr 4:2:0   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV12M : longint; { return type might be wrong }
+
+{ 21  Y/CrCb 4:2:0   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV21M : longint; { return type might be wrong }
+
+{ 16  Y/CbCr 4:2:2   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV16M : longint; { return type might be wrong }
+
+{ 16  Y/CrCb 4:2:2   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV61M : longint; { return type might be wrong }
+
+{ 12  Y/CbCr 4:2:0 64x32 macroblocks  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV12MT : longint; { return type might be wrong }
+
+{ 12  Y/CbCr 4:2:0 16x16 macroblocks  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_NV12MT_16X16 : longint; { return type might be wrong }
+
+{ three planes - Y Cb, Cr  }
+{  9  YUV 4:1:0      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV410 : longint; { return type might be wrong }
+
+{  9  YVU 4:1:0      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YVU410 : longint; { return type might be wrong }
+
+{ 12  YVU411 planar  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV411P : longint; { return type might be wrong }
+
+{ 12  YUV 4:2:0      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV420 : longint; { return type might be wrong }
+
+{ 12  YVU 4:2:0      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YVU420 : longint; { return type might be wrong }
+
+{ 16  YVU422 planar  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV422P : longint; { return type might be wrong }
+
+{ three non contiguous planes - Y, Cb, Cr  }
+{ 12  YUV420 planar  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV420M : longint; { return type might be wrong }
+
+{ 12  YVU420 planar  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YVU420M : longint; { return type might be wrong }
+
+{ 16  YUV422 planar  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV422M : longint; { return type might be wrong }
+
+{ 16  YVU422 planar  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YVU422M : longint; { return type might be wrong }
+
+{ 24  YUV444 planar  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YUV444M : longint; { return type might be wrong }
+
+{ 24  YVU444 planar  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_YVU444M : longint; { return type might be wrong }
+
+{ Bayer formats - see http://www.siliconimaging.com/RGB%20Bayer.htm  }
+{  8  BGBG.. GRGR..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR8 : longint; { return type might be wrong }
+
+{  8  GBGB.. RGRG..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG8 : longint; { return type might be wrong }
+
+{  8  GRGR.. BGBG..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG8 : longint; { return type might be wrong }
+
+{  8  RGRG.. GBGB..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB8 : longint; { return type might be wrong }
+
+{ 10  BGBG.. GRGR..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR10 : longint; { return type might be wrong }
+
+{ 10  GBGB.. RGRG..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG10 : longint; { return type might be wrong }
+
+{ 10  GRGR.. BGBG..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG10 : longint; { return type might be wrong }
+
+{ 10  RGRG.. GBGB..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB10 : longint; { return type might be wrong }
+
+{ 10bit raw bayer packed, 5 bytes for every 4 pixels  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR10P : longint; { return type might be wrong }
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG10P : longint; { return type might be wrong }
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG10P : longint; { return type might be wrong }
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB10P : longint; { return type might be wrong }
+
+{ 10bit raw bayer a-law compressed to 8 bits  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR10ALAW8 : longint; { return type might be wrong }
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG10ALAW8 : longint; { return type might be wrong }
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG10ALAW8 : longint; { return type might be wrong }
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB10ALAW8 : longint; { return type might be wrong }
+
+{ 10bit raw bayer DPCM compressed to 8 bits  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR10DPCM8 : longint; { return type might be wrong }
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG10DPCM8 : longint; { return type might be wrong }
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG10DPCM8 : longint; { return type might be wrong }
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB10DPCM8 : longint; { return type might be wrong }
+
+{ 12  BGBG.. GRGR..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR12 : longint; { return type might be wrong }
+
+{ 12  GBGB.. RGRG..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG12 : longint; { return type might be wrong }
+
+{ 12  GRGR.. BGBG..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG12 : longint; { return type might be wrong }
+
+{ 12  RGRG.. GBGB..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB12 : longint; { return type might be wrong }
+
+{ 12bit raw bayer packed, 6 bytes for every 4 pixels  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR12P : longint; { return type might be wrong }
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG12P : longint; { return type might be wrong }
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG12P : longint; { return type might be wrong }
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB12P : longint; { return type might be wrong }
+
+{ 14  BGBG.. GRGR..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR14 : longint; { return type might be wrong }
+
+{ 14  GBGB.. RGRG..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG14 : longint; { return type might be wrong }
+
+{ 14  GRGR.. BGBG..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG14 : longint; { return type might be wrong }
+
+{ 14  RGRG.. GBGB..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB14 : longint; { return type might be wrong }
+
+{ 14bit raw bayer packed, 7 bytes for every 4 pixels  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR14P : longint; { return type might be wrong }
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG14P : longint; { return type might be wrong }
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG14P : longint; { return type might be wrong }
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB14P : longint; { return type might be wrong }
+
+{ 16  BGBG.. GRGR..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SBGGR16 : longint; { return type might be wrong }
+
+{ 16  GBGB.. RGRG..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGBRG16 : longint; { return type might be wrong }
+
+{ 16  GRGR.. BGBG..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SGRBG16 : longint; { return type might be wrong }
+
+{ 16  RGRG.. GBGB..  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SRGGB16 : longint; { return type might be wrong }
+
+{ HSV formats  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_HSV24 : longint; { return type might be wrong }
+
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_HSV32 : longint; { return type might be wrong }
+
+{ compressed formats  }
+{ Motion-JPEG    }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_MJPEG : longint; { return type might be wrong }
+
+{ JFIF JPEG      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_JPEG : longint; { return type might be wrong }
+
+{ 1394           }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_DV : longint; { return type might be wrong }
+
+{ MPEG-1/2/4 Multiplexed  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_MPEG : longint; { return type might be wrong }
+
+{ H264 with start codes  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_H264 : longint; { return type might be wrong }
+
+{ H264 without start codes  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_H264_NO_SC : longint; { return type might be wrong }
+
+{ H264 MVC  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_H264_MVC : longint; { return type might be wrong }
+
+{ H263           }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_H263 : longint; { return type might be wrong }
+
+{ MPEG-1 ES      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_MPEG1 : longint; { return type might be wrong }
+
+{ MPEG-2 ES      }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_MPEG2 : longint; { return type might be wrong }
+
+{ MPEG-2 parsed slice data  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_MPEG2_SLICE : longint; { return type might be wrong }
+
+{ MPEG-4 part 2 ES  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_MPEG4 : longint; { return type might be wrong }
+
+{ Xvid            }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_XVID : longint; { return type might be wrong }
+
+{ SMPTE 421M Annex G compliant stream  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_VC1_ANNEX_G : longint; { return type might be wrong }
+
+{ SMPTE 421M Annex L compliant stream  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_VC1_ANNEX_L : longint; { return type might be wrong }
+
+{ VP8  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_VP8 : longint; { return type might be wrong }
+
+{ VP8 parsed frame  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_VP8_FRAME : longint; { return type might be wrong }
+
+{ VP9  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_VP9 : longint; { return type might be wrong }
+
+{ HEVC aka H.265  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_HEVC : longint; { return type might be wrong }
+
+{ Fast Walsh Hadamard Transform (vicodec)  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_FWHT : longint; { return type might be wrong }
+
+{ Stateless FWHT (vicodec)  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_FWHT_STATELESS : longint; { return type might be wrong }
+
+{ H264 parsed slices  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_H264_SLICE : longint; { return type might be wrong }
+
+{  Vendor-specific formats    }
+{ cpia1 YUV  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_CPIA1 : longint; { return type might be wrong }
+
+{ Winnov hw compress  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_WNVA : longint; { return type might be wrong }
+
+{ SN9C10x compression  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SN9C10X : longint; { return type might be wrong }
+
+{ SN9C20x YUV 4:2:0  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SN9C20X_I420 : longint; { return type might be wrong }
+
+{ pwc older webcam  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_PWC1 : longint; { return type might be wrong }
+
+{ pwc newer webcam  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_PWC2 : longint; { return type might be wrong }
+
+{ ET61X251 compression  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_ET61X251 : longint; { return type might be wrong }
+
+{ YUYV per line  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SPCA501 : longint; { return type might be wrong }
+
+{ YYUV per line  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SPCA505 : longint; { return type might be wrong }
+
+{ YUVY per line  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SPCA508 : longint; { return type might be wrong }
+
+{ compressed GBRG bayer  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SPCA561 : longint; { return type might be wrong }
+
+{ compressed BGGR bayer  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_PAC207 : longint; { return type might be wrong }
+
+{ compressed BGGR bayer  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_MR97310A : longint; { return type might be wrong }
+
+{ compressed RGGB bayer  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_JL2005BCD : longint; { return type might be wrong }
+
+{ compressed GBRG bayer  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SN9C2028 : longint; { return type might be wrong }
+
+{ compressed RGGB bayer  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SQ905C : longint; { return type might be wrong }
+
+{ Pixart 73xx JPEG  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_PJPG : longint; { return type might be wrong }
+
+{ ov511 JPEG  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_OV511 : longint; { return type might be wrong }
+
+{ ov518 JPEG  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_OV518 : longint; { return type might be wrong }
+
+{ stv0680 bayer  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_STV0680 : longint; { return type might be wrong }
+
+{ tm5600/tm60x0  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_TM6000 : longint; { return type might be wrong }
+
+{ one line of Y then 1 line of VYUY  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_CIT_YYVYUY : longint; { return type might be wrong }
+
+{ YUV420 planar in blocks of 256 pixels  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_KONICA420 : longint; { return type might be wrong }
+
+{ JPEG-Lite  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_JPGL : longint; { return type might be wrong }
+
+{ se401 janggu compressed rgb  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SE401 : longint; { return type might be wrong }
+
+{ S5C73M3 interleaved UYVY/JPEG  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_S5C_UYVY_JPG : longint; { return type might be wrong }
+
+{ Greyscale 8-bit L/R interleaved  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y8I : longint; { return type might be wrong }
+
+{ Greyscale 12-bit L/R interleaved  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Y12I : longint; { return type might be wrong }
+
+{ Depth data 16-bit  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_Z16 : longint; { return type might be wrong }
+
+{ Mediatek compressed block mode   }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_MT21C : longint; { return type might be wrong }
+
+{ Intel Planar Greyscale 10-bit and Depth 16-bit  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_INZI : longint; { return type might be wrong }
+
+{ Sunxi Tiled NV12 Format  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_SUNXI_TILED_NV12 : longint; { return type might be wrong }
+
+{ Intel 4-bit packed depth confidence information  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_CNF4 : longint; { return type might be wrong }
+
+{ BTTV 8-bit dithered RGB  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_HI240 : longint; { return type might be wrong }
+
+{ 10bit raw bayer packed, 32 bytes for every 25 pixels, last LSB 6 bits unused  }
+{ IPU3 packed 10-bit BGGR bayer  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_IPU3_SBGGR10 : longint; { return type might be wrong }
+
+{ IPU3 packed 10-bit GBRG bayer  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_IPU3_SGBRG10 : longint; { return type might be wrong }
+
+{ IPU3 packed 10-bit GRBG bayer  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_IPU3_SGRBG10 : longint; { return type might be wrong }
+
+{ IPU3 packed 10-bit RGGB bayer  }
+{ was #define dname def_expr }
+function V4L2_PIX_FMT_IPU3_SRGGB10 : longint; { return type might be wrong }
+
+{ SDR formats - used only for Software Defined Radio devices  }
+{ IQ u8  }
+{ was #define dname def_expr }
+function V4L2_SDR_FMT_CU8 : longint; { return type might be wrong }
+
+{ IQ u16le  }
+{ was #define dname def_expr }
+function V4L2_SDR_FMT_CU16LE : longint; { return type might be wrong }
+
+{ complex s8  }
+{ was #define dname def_expr }
+function V4L2_SDR_FMT_CS8 : longint; { return type might be wrong }
+
+{ complex s14le  }
+{ was #define dname def_expr }
+function V4L2_SDR_FMT_CS14LE : longint; { return type might be wrong }
+
+{ real u12le  }
+{ was #define dname def_expr }
+function V4L2_SDR_FMT_RU12LE : longint; { return type might be wrong }
+
+{ planar complex u16be  }
+{ was #define dname def_expr }
+function V4L2_SDR_FMT_PCU16BE : longint; { return type might be wrong }
+
+{ planar complex u18be  }
+{ was #define dname def_expr }
+function V4L2_SDR_FMT_PCU18BE : longint; { return type might be wrong }
+
+{ planar complex u20be  }
+{ was #define dname def_expr }
+function V4L2_SDR_FMT_PCU20BE : longint; { return type might be wrong }
+
+{ Touch formats - used for Touch devices  }
+{ 16-bit signed deltas  }
+{ was #define dname def_expr }
+function V4L2_TCH_FMT_DELTA_TD16 : longint; { return type might be wrong }
+
+{ 8-bit signed deltas  }
+{ was #define dname def_expr }
+function V4L2_TCH_FMT_DELTA_TD08 : longint; { return type might be wrong }
+
+{ 16-bit unsigned touch data  }
+{ was #define dname def_expr }
+function V4L2_TCH_FMT_TU16 : longint; { return type might be wrong }
+
+{ 8-bit unsigned touch data  }
+{ was #define dname def_expr }
+function V4L2_TCH_FMT_TU08 : longint; { return type might be wrong }
+
+{ Meta-data formats  }
+{ R-Car VSP1 1-D Histogram  }
+{ was #define dname def_expr }
+function V4L2_META_FMT_VSP1_HGO : longint; { return type might be wrong }
+
+{ R-Car VSP1 2-D Histogram  }
+{ was #define dname def_expr }
+function V4L2_META_FMT_VSP1_HGT : longint; { return type might be wrong }
+
+{ UVC Payload Header metadata  }
+{ was #define dname def_expr }
+function V4L2_META_FMT_UVC : longint; { return type might be wrong }
+
+{ D4XX Payload Header metadata  }
+{ was #define dname def_expr }
+function V4L2_META_FMT_D4XX : longint; { return type might be wrong }
+
+{ Vivid Metadata  }
+{ was #define dname def_expr }
+function V4L2_META_FMT_VIVID : longint; { return type might be wrong }
+
+{ Vendor specific - used for RK_ISP1 camera sub-system  }
+{ Rockchip ISP1 3A Parameters  }
+{ was #define dname def_expr }
+function V4L2_META_FMT_RK_ISP1_PARAMS : longint; { return type might be wrong }
+
+{ Rockchip ISP1 3A Statistics  }
+{ was #define dname def_expr }
+function V4L2_META_FMT_RK_ISP1_STAT_3A : longint; { return type might be wrong }
+
+{ priv field value to indicates that subsequent fields are valid.  }
+const
+  V4L2_PIX_FMT_PRIV_MAGIC = $feedcafe;  
+{ Flags  }
+  V4L2_PIX_FMT_FLAG_PREMUL_ALPHA = $00000001;  
+  V4L2_PIX_FMT_FLAG_SET_CSC = $00000002;  
+{
+ *	F O R M A T   E N U M E R A T I O N
+  }
+{ Format number       }
+{ enum v4l2_buf_type  }
+{ Description string  }
+{ Format fourcc       }
+{ Media bus code     }
+type
+  Pv4l2_fmtdesc = ^Tv4l2_fmtdesc;
+  Tv4l2_fmtdesc = record
+      index : Tu32;
+      _type : Tu32;
+      flags : Tu32;
+      description : array[0..31] of Tu8;
+      pixelformat : Tu32;
+      mbus_code : Tu32;
+      reserved : array[0..2] of Tu32;
+    end;
+
+
+const
+  V4L2_FMT_FLAG_COMPRESSED = $0001;  
+  V4L2_FMT_FLAG_EMULATED = $0002;  
+  V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM = $0004;  
+  V4L2_FMT_FLAG_DYN_RESOLUTION = $0008;  
+  V4L2_FMT_FLAG_ENC_CAP_FRAME_INTERVAL = $0010;  
+  V4L2_FMT_FLAG_CSC_COLORSPACE = $0020;  
+  V4L2_FMT_FLAG_CSC_XFER_FUNC = $0040;  
+  V4L2_FMT_FLAG_CSC_YCBCR_ENC = $0080;  
+  V4L2_FMT_FLAG_CSC_HSV_ENC = V4L2_FMT_FLAG_CSC_YCBCR_ENC;  
+  V4L2_FMT_FLAG_CSC_QUANTIZATION = $0100;  
+{ Frame Size and frame rate enumeration  }
+{
+ *	F R A M E   S I Z E   E N U M E R A T I O N
+  }
+type
+  Tv4l2_frmsizetypes =  Longint;
+  Const
+    V4L2_FRMSIZE_TYPE_DISCRETE = 1;
+    V4L2_FRMSIZE_TYPE_CONTINUOUS = 2;
+    V4L2_FRMSIZE_TYPE_STEPWISE = 3;
+
+{ Frame width [pixel]  }
+{ Frame height [pixel]  }
+type
+  Pv4l2_frmsize_discrete = ^Tv4l2_frmsize_discrete;
+  Tv4l2_frmsize_discrete = record
+      width : Tu32;
+      height : Tu32;
+    end;
+
+{ Minimum frame width [pixel]  }
+{ Maximum frame width [pixel]  }
+{ Frame width step size [pixel]  }
+{ Minimum frame height [pixel]  }
+{ Maximum frame height [pixel]  }
+{ Frame height step size [pixel]  }
+  Pv4l2_frmsize_stepwise = ^Tv4l2_frmsize_stepwise;
+  Tv4l2_frmsize_stepwise = record
+      min_width : Tu32;
+      max_width : Tu32;
+      step_width : Tu32;
+      min_height : Tu32;
+      max_height : Tu32;
+      step_height : Tu32;
+    end;
+
+{
+ *	F R A M E   R A T E   E N U M E R A T I O N
+  }
+  Tv4l2_frmivaltypes =  Longint;
+  Const
+    V4L2_FRMIVAL_TYPE_DISCRETE = 1;
+    V4L2_FRMIVAL_TYPE_CONTINUOUS = 2;
+    V4L2_FRMIVAL_TYPE_STEPWISE = 3;
+
+{ Minimum frame interval [s]  }
+{ Maximum frame interval [s]  }
+{ Frame interval step size [s]  }
+type
+  Pv4l2_frmival_stepwise = ^Tv4l2_frmival_stepwise;
+  Tv4l2_frmival_stepwise = record
+      min : Tv4l2_fract;
+      max : Tv4l2_fract;
+      step : Tv4l2_fract;
+    end;
+
+{
+ *	T I M E C O D E
+  }
+  Pv4l2_timecode = ^Tv4l2_timecode;
+  Tv4l2_timecode = record
+      _type : Tu32;
+      flags : Tu32;
+      frames : Tu8;
+      seconds : Tu8;
+      minutes : Tu8;
+      hours : Tu8;
+      userbits : array[0..3] of Tu8;
+    end;
+
+{  Type   }
+
+const
+  V4L2_TC_TYPE_24FPS = 1;  
+  V4L2_TC_TYPE_25FPS = 2;  
+  V4L2_TC_TYPE_30FPS = 3;  
+  V4L2_TC_TYPE_50FPS = 4;  
+  V4L2_TC_TYPE_60FPS = 5;  
+{  Flags   }
+{ "drop-frame" mode  }
+  V4L2_TC_FLAG_DROPFRAME = $0001;  
+  V4L2_TC_FLAG_COLORFRAME = $0002;  
+  V4L2_TC_USERBITS_field = $000C;  
+  V4L2_TC_USERBITS_USERDEFINED = $0000;  
+  V4L2_TC_USERBITS_8BITCHARS = $0008;  
+{ The above is based on SMPTE timecodes  }
+{
+ *	M E M O R Y - M A P P I N G   B U F F E R S
+  }
+{ enum v4l2_buf_type  }
+{ enum v4l2_memory  }
+type
+  Pv4l2_requestbuffers = ^Tv4l2_requestbuffers;
+  Tv4l2_requestbuffers = record
+      count : Tu32;
+      _type : Tu32;
+      memory : Tu32;
+      capabilities : Tu32;
+      reserved : array[0..0] of Tu32;
+    end;
+
+{ capabilities for struct v4l2_requestbuffers and v4l2_create_buffers  }
+
+const
+  V4L2_BUF_CAP_SUPPORTS_MMAP = 1 shl 0;  
+  V4L2_BUF_CAP_SUPPORTS_USERPTR = 1 shl 1;  
+  V4L2_BUF_CAP_SUPPORTS_DMABUF = 1 shl 2;  
+  V4L2_BUF_CAP_SUPPORTS_REQUESTS = 1 shl 3;  
+  V4L2_BUF_CAP_SUPPORTS_ORPHANED_BUFS = 1 shl 4;  
+  V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF = 1 shl 5;  
+  V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS = 1 shl 6;  
+{*
+ * struct v4l2_plane - plane info for multi-planar buffers
+ * @bytesused:		number of bytes occupied by data in the plane (payload)
+ * @length:		size of this plane (NOT the payload) in bytes
+ * @mem_offset:		when memory in the associated struct v4l2_buffer is
+ *			V4L2_MEMORY_MMAP, equals the offset from the start of
+ *			the device memory for this plane (or is a "cookie" that
+ *			should be passed to mmap() called on the video node)
+ * @userptr:		when memory is V4L2_MEMORY_USERPTR, a userspace pointer
+ *			pointing to this plane
+ * @fd:			when memory is V4L2_MEMORY_DMABUF, a userspace file
+ *			descriptor associated with this plane
+ * @m:			union of @mem_offset, @userptr and @fd
+ * @data_offset:	offset in the plane to the start of data; usually 0,
+ *			unless there is a header in front of the data
+ * @reserved:		drivers and applications must zero this array
+ *
+ * Multi-planar buffers consist of one or more planes, e.g. an YCbCr buffer
+ * with two planes can have one plane for Y, and another for interleaved CbCr
+ * components. Each plane can reside in a separate memory buffer, or even in
+ * a completely separate memory node (e.g. in embedded devices).
+  }
+type
+  Pv4l2_plane = ^Tv4l2_plane;
+  Tv4l2_plane = record
+      bytesused : Tu32;
+      length : Tu32;
+      m : record
+          case longint of
+            0 : ( mem_offset : Tu32 );
+            1 : ( userptr : dword );
+            2 : ( fd : Ts32 );
+          end;
+      data_offset : Tu32;
+      reserved : array[0..10] of Tu32;
+    end;
+
+{*
+ * struct v4l2_buffer - video buffer info
+ * @index:	id number of the buffer
+ * @type:	enum v4l2_buf_type; buffer type (type == *_MPLANE for
+ *		multiplanar buffers);
+ * @bytesused:	number of bytes occupied by data in the buffer (payload);
+ *		unused (set to 0) for multiplanar buffers
+ * @flags:	buffer informational flags
+ * @field:	enum v4l2_field; field order of the image in the buffer
+ * @timestamp:	frame timestamp
+ * @timecode:	frame timecode
+ * @sequence:	sequence count of this frame
+ * @memory:	enum v4l2_memory; the method, in which the actual video data is
+ *		passed
+ * @offset:	for non-multiplanar buffers with memory == V4L2_MEMORY_MMAP;
+ *		offset from the start of the device memory for this plane,
+ *		(or a "cookie" that should be passed to mmap() as offset)
+ * @userptr:	for non-multiplanar buffers with memory == V4L2_MEMORY_USERPTR;
+ *		a userspace pointer pointing to this buffer
+ * @fd:		for non-multiplanar buffers with memory == V4L2_MEMORY_DMABUF;
+ *		a userspace file descriptor associated with this buffer
+ * @planes:	for multiplanar buffers; userspace pointer to the array of plane
+ *		info structs for this buffer
+ * @m:		union of @offset, @userptr, @planes and @fd
+ * @length:	size in bytes of the buffer (NOT its payload) for single-plane
+ *		buffers (when type != *_MPLANE); number of elements in the
+ *		planes array for multi-plane buffers
+ * @reserved2:	drivers and applications must zero this field
+ * @request_fd: fd of the request that this buffer should use
+ * @reserved:	for backwards compatibility with applications that do not know
+ *		about @request_fd
+ *
+ * Contains data exchanged by application and driver using one of the Streaming
+ * I/O methods.
+  }
+{ memory location  }
+(* error 
+	};
+ in member_list *)
+(* error 
+};
+{*
+ * v4l2_timeval_to_ns - Convert timeval to nanoseconds
+ * @tv:		pointer to the timeval variable to be converted
+ *
+ * Returns the scalar nanosecond representation of the timeval
+ * parameter.
+  }
+ in member_list *)
+{  Flags for 'flags' field  }
+{ Buffer is mapped (flag)  }
+(* error 
+#define V4L2_BUF_FLAG_MAPPED			0x00000001
+{ Buffer is queued for processing  }
+{ Buffer is ready  }
+{ Image is a keyframe (I-frame)  }
+{ Image is a P-frame  }
+{ Image is a B-frame  }
+{ Buffer is ready, but the data contained within is corrupted.  }
+{ Buffer is added to an unqueued request  }
+{ timecode field is valid  }
+{ Don't return the capture buffer until OUTPUT timestamp changes  }
+{ Buffer is prepared for queuing  }
+{ Cache handling flags  }
+{ Timestamp type  }
+{ Timestamp sources.  }
+{ mem2mem encoder/decoder  }
+{ request_fd is valid  }
+{*
+ * struct v4l2_exportbuffer - export of video buffer as DMABUF file descriptor
+ *
+ * @index:	id number of the buffer
+ * @type:	enum v4l2_buf_type; buffer type (type == *_MPLANE for
+ *		multiplanar buffers);
+ * @plane:	index of the plane to be exported, 0 for single plane queues
+ * @flags:	flags for newly created file, currently only O_CLOEXEC is
+ *		supported, refer to manual of open syscall for more details
+ * @fd:		file descriptor associated with DMABUF (set by driver)
+ * @reserved:	drivers and applications must zero this array
+ *
+ * Contains data used for exporting a video buffer as DMABUF file descriptor.
+ * The buffer is identified by a 'cookie' returned by VIDIOC_QUERYBUF
+ * (identical to the cookie used to mmap() the buffer to userspace). All
+ * reserved fields must be set to zero. The field reserved0 is expected to
+ * become a structure 'type' allowing an alternative layout of the structure
+ * content. Therefore this field should not be used for any other extensions.
+  }
+{ enum v4l2_buf_type  }
+ in member_list *)
+(* error 
+};
+{
+ *	O V E R L A Y   P R E V I E W
+  }
+{ FIXME: in theory we should pass something like PCI device + memory
+ * region + offset instead of some physical address  }
+{ enum v4l2_field  }
+{ for padding, zero if unused  }
+{ enum v4l2_colorspace  }
+{ reserved field, set to 0  }
+ in member_list *)
+  Pv4l2_buffer = ^Tv4l2_buffer;
+  Tv4l2_buffer = record
+      index : Tu32;
+      _type : Tu32;
+      bytesused : Tu32;
+      flags : Tu32;
+      field : Tu32;
+      timestamp : Ttimeval;
+      timecode : Tv4l2_timecode;
+      sequence : Tu32;
+      memory : Tu32;
+      m : record
+          case longint of
+            0 : ( offset : Tu32 );
+            1 : ( userptr : dword );
+            2 : ( planes : Pv4l2_plane );
+            3 : ( fd : Ts32 );
+          end

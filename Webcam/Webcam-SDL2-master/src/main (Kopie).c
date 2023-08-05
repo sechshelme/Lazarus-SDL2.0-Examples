@@ -17,9 +17,22 @@ SDL_Renderer *sdlRenderer;
 SDL_Texture *sdlTexture;
 SDL_Rect sdlRect;
 
-int video_fildes;
 
-static void *v4l2_streaming() {
+struct streamHandler {
+  int fd;
+  void (*framehandler)(void *pframe, int length);
+};
+
+static void frame_handler(void *pframe, int length) {
+  SDL_UpdateTexture(sdlTexture, &sdlRect, pframe, IMAGE_WIDTH * 2);
+  //  SDL_UpdateYUVTexture
+  SDL_RenderClear(sdlRenderer);
+  SDL_RenderCopy(sdlRenderer, sdlTexture, NULL, &sdlRect);
+  SDL_RenderPresent(sdlRenderer);
+
+}
+
+static void *v4l2_streaming(void *arg) {
   // SDL2 begins
   memset(&sdlRect, 0, sizeof(sdlRect));
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER)) {
@@ -49,39 +62,40 @@ static void *v4l2_streaming() {
   sdlRect.w = IMAGE_WIDTH;
   sdlRect.h = IMAGE_HEIGHT;
 
+  int fd = ((struct streamHandler *)(arg))->fd;
+
+  void (*handlerXXX)(void *pframe, int length) = ((struct streamHandler *)(arg))->framehandler;
+
   fd_set fds;
   struct v4l2_buffer buf;
 
   while (1) {
+    int ret;
     FD_ZERO(&fds);
-    FD_SET(video_fildes, &fds);
+    FD_SET(fd, &fds);
     struct timeval tv = {.tv_sec = 1, .tv_usec = 0};
-    select(video_fildes + 1, &fds, NULL, NULL, &tv);
+    ret = select(fd + 1, &fds, NULL, NULL, &tv);
 
-//    if (FD_ISSET(video_fildes, &fds)) {
-//      memset(&buf, 0, sizeof(buf));
+    if (FD_ISSET(fd, &fds)) {
+      memset(&buf, 0, sizeof(buf));
       buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
       buf.memory = V4L2_MEMORY_MMAP;
-      ioctl(video_fildes, VIDIOC_DQBUF, &buf);
+      ioctl(fd, VIDIOC_DQBUF, &buf);
+
+        (*handlerXXX)(v4l2_ubuffers[buf.index].start, v4l2_ubuffers[buf.index].length);
 
       buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
       buf.memory = V4L2_MEMORY_MMAP;
-      ioctl(video_fildes, VIDIOC_QBUF, &buf);
-
-
-      SDL_UpdateTexture(sdlTexture, &sdlRect, v4l2_ubuffers[buf.index].start, IMAGE_WIDTH * 2);
-       //  SDL_UpdateYUVTexture
-      SDL_RenderClear(sdlRenderer);
-      SDL_RenderCopy(sdlRenderer, sdlTexture, NULL, &sdlRect);
-      SDL_RenderPresent(sdlRenderer);
-//    }
+      ioctl(fd, VIDIOC_QBUF, &buf);
+    }
   }
+  return NULL;
 }
 
 int main(int argc, char const *argv[]) {
   const char *device = "/dev/video0";
 
-  video_fildes = v4l2_open(device);
+  int video_fildes = v4l2_open(device);
   if (video_fildes == -1) {
     fprintf(stderr, "can't open %s\n", device);
     exit(-1);
@@ -119,9 +133,13 @@ printf("----- %d\n", V4L2_PIX_FMT_YUYV);
     goto exit_;
   }
 
- v4l2_streaming();
+  // create a thread that will update frame int the buffer
+  struct streamHandler sH = {video_fildes, frame_handler};
+
+ v4l2_streaming( (void *)(&sH));
 
   int quit = 0;
+  SDL_Event e;
   while (!quit) {
     usleep(250);
   }
