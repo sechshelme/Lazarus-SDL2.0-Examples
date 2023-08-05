@@ -20,6 +20,16 @@ var
   IMAGE_HEIGHT: longint; cvar;external;
 
   // ---- von /usr/include/linux/videodev2.h
+const
+  //  #define VIDIOC_QBUF    _IOWR('V', 15, struct v4l2_buffer)
+  //  #define VIDIOC_EXPBUF    _IOWR('V', 16, struct v4l2_exportbuffer)
+  //  #define VIDIOC_DQBUF    _IOWR('V', 17, struct v4l2_buffer)
+
+
+  VIDIOC_DQBUF = 3227014673;
+  VIDIOC_QBUF = 3227014671;
+  V4L2_PIX_FMT_YUYV = 1448695129;
+
 
 const
   V4L2_BUF_TYPE_VIDEO_CAPTURE = 1;
@@ -111,11 +121,9 @@ var
   v4l2_ubuffers: Pv4l2_ubuffer; cvar;external;
 
   { functions  }
-  (* Const before type ignored *)
 
 function v4l2_open(device: PChar): longint; cdecl; external;
 function v4l2_close(fd: longint): longint; cdecl; external;
-(* Const before type ignored *)
 function v4l2_querycap(fd: longint; device: PChar): longint; cdecl; external;
 function v4l2_sfmt(fd: longint; pfmt: uint32): longint; cdecl; external;
 function v4l2_gfmt(fd: longint): longint; cdecl; external;
@@ -124,9 +132,7 @@ function v4l2_munmap: longint; cdecl; external;
 function v4l2_sfps(fd: longint; fps: longint): longint; cdecl; external;
 function v4l2_streamon(fd: longint): longint; cdecl; external;
 function v4l2_streamoff(fd: longint): longint; cdecl; external;
-//{$endif}
 
 implementation
-
 
 end.

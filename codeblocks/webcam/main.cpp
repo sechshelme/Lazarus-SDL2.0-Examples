@@ -19,12 +19,12 @@ SDL_Rect sdlRect;
 
 int video_fildes;
 
-void v4l2_streaming() {
+static void *v4l2_streaming() {
   // SDL2 begins
   memset(&sdlRect, 0, sizeof(sdlRect));
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER)) {
     printf("Could not initialize SDL - %s\n", SDL_GetError());
-    exit(1);
+    return NULL;
   }
 
   sdlScreen = SDL_CreateWindow("Simple YUV Window", SDL_WINDOWPOS_UNDEFINED,
@@ -32,26 +32,25 @@ void v4l2_streaming() {
                                IMAGE_HEIGHT, SDL_WINDOW_SHOWN);
 
   if (!sdlScreen) {
-    fprintf(stderr, "SDL: could not create window - exiting:%s\n", SDL_GetError());
-    exit(1);
+    fprintf(stderr, "SDL: could not create window - exiting:%s\n",
+            SDL_GetError());
+    return NULL;
   }
 
   sdlRenderer = SDL_CreateRenderer(
       sdlScreen, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   if (sdlRenderer == NULL) {
     fprintf(stderr, "SDL_CreateRenderer Error\n");
-    exit(1);
+    return NULL;
   }
-
-  sdlTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_YUY2, SDL_TEXTUREACCESS_STREAMING, IMAGE_WIDTH, IMAGE_HEIGHT);
+  sdlTexture =
+      SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_YUY2,
+                        SDL_TEXTUREACCESS_STREAMING, IMAGE_WIDTH, IMAGE_HEIGHT);
   sdlRect.w = IMAGE_WIDTH;
   sdlRect.h = IMAGE_HEIGHT;
 
   fd_set fds;
   struct v4l2_buffer buf;
-
-printf("VIDIOC_DQBUF: %lu\n", VIDIOC_DQBUF);
-printf("VIDIOC_QBUF: %lu\n", VIDIOC_QBUF);
 
   while (1) {
     FD_ZERO(&fds);
@@ -90,22 +89,20 @@ int main(int argc, char const *argv[]) {
 
   if (v4l2_querycap(video_fildes, device) == -1) {
     perror("v4l2_querycap");
-    goto exit_;
+//    goto exit_;
   }
 
-printf("V4L2_PIX_FMT_YUYV: %d\n", V4L2_PIX_FMT_YUYV);
-printf("width  : %d\n", IMAGE_WIDTH);
-printf("height : %d\n", IMAGE_HEIGHT);
+printf("----- %d\n", V4L2_PIX_FMT_YUYV);
 
   // most of devices support YUYV422 packed.
   if (v4l2_sfmt(video_fildes, V4L2_PIX_FMT_YUYV) == -1) {
     perror("v4l2_sfmt");
-    goto exit_;
+  //  goto exit_;
   }
 
   if (v4l2_gfmt(video_fildes) == -1) {
     perror("v4l2_gfmt");
-    goto exit_;
+//    goto exit_;
   }
 
   if (v4l2_sfps(video_fildes, 30) == -1) { // no fatal error
@@ -114,12 +111,12 @@ printf("height : %d\n", IMAGE_HEIGHT);
 
   if (v4l2_mmap(video_fildes) == -1) {
     perror("v4l2_mmap");
-    goto exit_;
+  //  goto exit_;
   }
 
   if (v4l2_streamon(video_fildes) == -1) {
     perror("v4l2_streamon");
-    goto exit_;
+//    goto exit_;
   }
 
  v4l2_streaming();
@@ -132,15 +129,15 @@ printf("height : %d\n", IMAGE_HEIGHT);
 
   if (v4l2_streamoff(video_fildes) == -1) {
     perror("v4l2_streamoff");
-    goto exit_;
+//    goto exit_;
   }
 
   if (v4l2_munmap() == -1) {
     perror("v4l2_munmap");
-    goto exit_;
+//    goto exit_;
   }
 
-exit_:
+//exit_:
   if (v4l2_close(video_fildes) == -1) {
     perror("v4l2_close");
   };
