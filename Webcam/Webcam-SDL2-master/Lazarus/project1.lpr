@@ -49,27 +49,34 @@ begin
   //  Halt(1);
   //end;
 
-  WriteLn('-----------------------------------------------------------');
+  v4l2_sfmt(video_fildes, V4L2_PIX_FMT_YUYV)  ;
+My_v4l2.SetFormat(V4L2_PIX_FMT_YUYV);
+  //if v4l2_sfmt(video_fildes, V4L2_PIX_FMT_YUYV) = -1 then begin
+  //  WriteLn('v4l2_sfmt');
+  //  Halt(1);
+  //end;
 
-  if v4l2_sfmt(video_fildes, V4L2_PIX_FMT_YUYV) = -1 then begin
-    WriteLn('v4l2_sfmt');
-    Halt(1);
-  end;
+  WriteLn('--------------xxxxxxxxx---------------------------------------------');
 
-  if v4l2_gfmt(video_fildes) = -1 then begin
-    WriteLn('v4l2_gfmt');
-    Halt(1);
-  end;
+  My_v4l2.GetFormat;
+  //if v4l2_gfmt(video_fildes) = -1 then begin
+  //  WriteLn('v4l2_gfmt');
+  //  Halt(1);
+  //end;
 
-  if v4l2_sfps(video_fildes, 30) = -1 then begin
-    WriteLn('v4l2_sfmt()');
-    Halt(1);
-  end;
+  My_v4l2.SetFPS(30);
+  //if v4l2_sfps(video_fildes, 30) = -1 then begin
+  //  WriteLn('v4l2_sfmt()');
+  //  Halt(1);
+  //end;
 
-  if v4l2_mmap(video_fildes) = -1 then begin
-    WriteLn('v4l2_mmap()');
-    Halt(1);
-  end;
+  My_v4l2.MemoryMap;
+  v4l2_mmap(video_fildes);
+  //if v4l2_mmap(video_fildes) = -1 then begin
+
+  //  WriteLn('v4l2_mmap()');
+  //  Halt(1);
+  //end;
 
   if v4l2_streamon(video_fildes) = -1 then begin
     WriteLn('v4l2_streamon()');

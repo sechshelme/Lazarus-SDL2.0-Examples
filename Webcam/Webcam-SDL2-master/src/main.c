@@ -95,6 +95,18 @@ int main(int argc, char const *argv[]) {
 
 printf("VIDIOC_QUERYCAP: %lu\n", VIDIOC_QUERYCAP);
 printf("VIDIOC_ENUM_FMT: %lu\n", VIDIOC_ENUM_FMT);
+printf("VIDIOC_S_FMT: %lu\n", VIDIOC_S_FMT);
+printf("VIDIOC_G_FMT: %lu\n", VIDIOC_G_FMT);
+printf("VIDIOC_S_PARM: %lu\n", VIDIOC_S_PARM);
+printf("VIDIOC_REQBUFS: %lu\n", VIDIOC_REQBUFS);
+printf("VIDIOC_QUERYBUF: %lu\n", VIDIOC_QUERYBUF);
+printf("size:  __u8: %lu\n", sizeof(__u8));
+printf("size: __u16: %lu\n", sizeof(__u16));
+printf("size: __u32: %lu\n", sizeof(__u32));
+printf("size: __u64: %lu\n", sizeof(__u64));
+
+
+
 
 
 printf("V4L2_PIX_FMT_YUYV: %d\n", V4L2_PIX_FMT_YUYV);
