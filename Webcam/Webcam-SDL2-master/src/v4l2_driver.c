@@ -46,6 +46,7 @@ int v4l2_querycap(int fd, const char *device) {
     printf("version:\t%d\n", cap.version);
     printf("capabilities:\t%x\n", cap.capabilities);
 
+
     if ((cap.capabilities & V4L2_CAP_VIDEO_CAPTURE) == V4L2_CAP_VIDEO_CAPTURE) {
       printf("Device %s: supports capture.\n", device);
     }

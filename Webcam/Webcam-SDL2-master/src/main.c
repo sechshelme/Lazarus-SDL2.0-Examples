@@ -105,6 +105,14 @@ printf("size: __u16: %lu\n", sizeof(__u16));
 printf("size: __u32: %lu\n", sizeof(__u32));
 printf("size: __u64: %lu\n", sizeof(__u64));
 
+printf("size: v4l2_format fmt: %lu\n", sizeof(struct v4l2_format));
+
+struct v4l2_format fmt;
+printf("size: v4l2_format: %lu\n", sizeof(fmt));
+printf("size: v4l2_format.fmt.pix: %lu\n", sizeof(fmt.fmt.pix));
+
+
+
 
 
 

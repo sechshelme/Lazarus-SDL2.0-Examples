@@ -5,6 +5,8 @@ uses
   unixtype,
   SDL2,
   ctypes,
+  videodev2,
+
   v4l2_driver, v4l2;
 
   // https://github.com/chendotjs/Webcam-SDL2
@@ -30,6 +32,33 @@ var
 
   My_v4l2:Tv4l2;
 
+
+  function SetFormat(fHandle:cint; pfmt: uint32): cint;
+  var
+    fmt: Tv4l2_format;
+  begin
+    WriteLn(SizeOf(fmt));
+    WriteLn(SizeOf(fmt.fmt.pix));
+    FillChar(fmt, SizeOf(fmt), $00);
+    FillChar(fmt.fmt.pix, SizeOf(fmt.fmt.pix), $00);
+
+    fmt._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    fmt.fmt.pix.pixelformat := pfmt;
+    fmt.fmt.pix.Height := IMAGE_HEIGHT;
+    fmt.fmt.pix.Width := IMAGE_WIDTH;
+    fmt.fmt.pix.field := V4L2_FIELD_INTERLACED;
+
+    if IOCtl(fHandle, VIDIOC_S_FMT, @fmt) = -1 then begin
+      Result := -1;
+      WriteLn('Fehler: SetFormat()');
+      Exit;
+    end;
+
+    Result := 0;
+  end;
+
+
+
 begin
   My_v4l2:=Tv4l2.Create(device);
 
@@ -50,15 +79,12 @@ begin
   //end;
 
   v4l2_sfmt(video_fildes, V4L2_PIX_FMT_YUYV)  ;
-My_v4l2.SetFormat(V4L2_PIX_FMT_YUYV);
-  //if v4l2_sfmt(video_fildes, V4L2_PIX_FMT_YUYV) = -1 then begin
-  //  WriteLn('v4l2_sfmt');
-  //  Halt(1);
-  //end;
-
-  WriteLn('--------------xxxxxxxxx---------------------------------------------');
-
   My_v4l2.GetFormat;
+
+//  My_v4l2.SetFormat(V4L2_PIX_FMT_YUYV);
+  SetFormat(video_fildes, V4L2_PIX_FMT_YUYV);
+  My_v4l2.GetFormat;
+
   //if v4l2_gfmt(video_fildes) = -1 then begin
   //  WriteLn('v4l2_gfmt');
   //  Halt(1);
