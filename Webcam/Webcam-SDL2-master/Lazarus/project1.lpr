@@ -22,6 +22,11 @@ const
   VIDIOC_REQBUFS = 3222558216;
   VIDIOC_QUERYBUF = 3227014665;
 
+  VIDIOC_DQBUF = 3227014673;
+  VIDIOC_QBUF = 3227014671;
+  V4L2_PIX_FMT_YUYV = 1448695129;
+
+
 
 const
   device = '/dev/video0';
@@ -151,6 +156,7 @@ begin
         end;
       end;
     end;
+
 
     SDL_UpdateTexture(sdlTexture, @sdlRect, v4l2_ubuffers[buf.index].start, IMAGE_WIDTH * 2);
     //  SDL_UpdateYUVTexture
