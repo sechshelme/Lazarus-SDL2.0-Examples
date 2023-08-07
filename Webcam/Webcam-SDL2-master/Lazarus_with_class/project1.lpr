@@ -7,21 +7,9 @@ uses
   ctypes,
   videodev2,
 
-  v4l2_driver;
+  v4l2_driver, v4l2;
 
   // https://github.com/chendotjs/Webcam-SDL2
-
-  function ioctl(fd: cint; request: culong): cint; cdecl; varargs; external;
-
-const
-  VIDIOC_QUERYCAP = 2154321408;
-  VIDIOC_ENUM_FMT = 3225441794;
-  VIDIOC_S_FMT = 3234878981;
-  VIDIOC_G_FMT = 3234878980;
-  VIDIOC_S_PARM = 3234616854;
-  VIDIOC_REQBUFS = 3222558216;
-  VIDIOC_QUERYBUF = 3227014665;
-
 
 const
   device = '/dev/video0';
@@ -42,14 +30,17 @@ var
   tv: TTimeVal = (tv_sec: 1; tv_usec: 0);
   buf: Tv4l2_buffer;
 
-  function SetFormat(fHandle: cint; pfmt: uint32): cint;
+  My_v4l2:Tv4l2;
+
+
+  function SetFormat(fHandle:cint; pfmt: uint32): cint;
   var
     fmt: Tv4l2_format;
   begin
     WriteLn(SizeOf(fmt));
     WriteLn(SizeOf(fmt.fmt.pix));
-    //  FillChar(fmt, SizeOf(fmt), $00);
-    //  FillChar(fmt.fmt.pix, SizeOf(fmt.fmt.pix), $00);
+  //  FillChar(fmt, SizeOf(fmt), $00);
+   // FillChar(fmt.fmt.pix, SizeOf(fmt.fmt.pix), $00);
 
     fmt._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
     fmt.fmt.pix.pixelformat := pfmt;
@@ -66,45 +57,63 @@ var
     Result := 0;
   end;
 
-  function GetFormat(fHandle: cint): cint;
-  var
-    fmt: Tv4l2_format;
-  begin
-    FillChar(fmt, SizeOf(fmt), $00);
-    fmt.fmt.pix.Height := 122;
-    if IOCtl(fHandle, VIDIOC_G_FMT, @fmt) = -1 then begin
-      Result := -1;
-      WriteLn('Fehler: GetFormat()');
-      //  Exit;
-    end;
-    WriteLn(#27'[33mpix.pixelformatth: ',
-      char(fmt.fmt.pix.pixelformat and $FF),
-      char(fmt.fmt.pix.pixelformat shr 8 and $FF),
-      char(fmt.fmt.pix.pixelformat shr 16 and $FF),
-      char(fmt.fmt.pix.pixelformat shr 24 and $FF), #27'[0m');
 
-    WriteLn('pix.width:    ', fmt.fmt.pix.Width);
-    WriteLn('pix.height:   ', fmt.fmt.pix.Height);
-    WriteLn('pix.field:    ', fmt.fmt.pix.field);
-
-    Result := 0;
-  end;
 
 begin
-  video_fildes := v4l2_open(device);
-  v4l2_querycap(video_fildes, device);
+  My_v4l2:=Tv4l2.Create(device);
 
-  v4l2_sfmt(video_fildes, V4L2_PIX_FMT_YUYV);
+
+//  video_fildes := v4l2_open(device);
+  video_fildes:=My_v4l2.getHandler;
+
+  //if video_fildes = -1 then begin
+  //  WriteLn('Kann Gerät "', device, '" nicht öffnen');
+  //  Halt(1);
+  //end;
+  //
+
+  My_v4l2.QueryCap;
+  //if v4l2_querycap(video_fildes, nil) = -1 then begin
+  //  WriteLn('Fehler: "v4l2_querycap"');
+  //  Halt(1);
+  //end;
+  My_v4l2.GetFormat;
+
   SetFormat(video_fildes, V4L2_PIX_FMT_YUYV);
+  My_v4l2.GetFormat;
 
-  WriteLn(#10#27'[0m--- C ---');
-  v4l2_gfmt(video_fildes);
-  WriteLn(#10#27'[0m--- Pascal ---');
-  GetFormat(video_fildes);
+  v4l2_sfmt(video_fildes, V4L2_PIX_FMT_YUYV)  ;
+  My_v4l2.GetFormat;
 
-  v4l2_sfps(video_fildes, 30);
+  My_v4l2.SetFormat(V4L2_PIX_FMT_YUYV);
+   My_v4l2.GetFormat;
+
+   SetFormat(video_fildes, V4L2_PIX_FMT_YUYV);
+  My_v4l2.GetFormat;
+
+  //if v4l2_gfmt(video_fildes) = -1 then begin
+  //  WriteLn('v4l2_gfmt');
+  //  Halt(1);
+  //end;
+
+  My_v4l2.SetFPS(30);
+  //if v4l2_sfps(video_fildes, 30) = -1 then begin
+  //  WriteLn('v4l2_sfmt()');
+  //  Halt(1);
+  //end;
+
+  My_v4l2.MemoryMap;
   v4l2_mmap(video_fildes);
-  v4l2_streamon(video_fildes);
+  //if v4l2_mmap(video_fildes) = -1 then begin
+
+  //  WriteLn('v4l2_mmap()');
+  //  Halt(1);
+  //end;
+
+  if v4l2_streamon(video_fildes) = -1 then begin
+    WriteLn('v4l2_streamon()');
+    Halt(1);
+  end;
 
   SDL_Init(SDL_INIT_VIDEO or SDL_INIT_TIMER);
 
@@ -161,11 +170,11 @@ begin
 
   v4l2_streamoff(video_fildes);
   v4l2_munmap;
-  v4l2_close(video_fildes);
+    v4l2_close(video_fildes);
 
-  SDL_Quit();
+    SDL_Quit();
 
-  //    My_v4l2.Free;
+    My_v4l2.Free;
 
   WriteLn('ende.');
 end.

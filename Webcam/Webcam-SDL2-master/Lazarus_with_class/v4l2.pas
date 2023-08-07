@@ -68,6 +68,7 @@ var
   st: stat;
 begin
   fDevice := device;
+  FillChar(st,SizeOf(st),0);
   if FpStat(device, st) = -1 then begin
     WriteLn('Kann Device nicht öffnen !');
     Halt(1);
@@ -148,6 +149,7 @@ function Tv4l2.GetFormat: cint;
 var
   fmt: Tv4l2_format;
 begin
+ // FillChar(fmt, SizeOf(fmt), $00);
   fmt.fmt.pix.Height := 122;
   if IOCtl(fHandle, VIDIOC_G_FMT, @fmt) = -1 then begin
     Result := -1;
