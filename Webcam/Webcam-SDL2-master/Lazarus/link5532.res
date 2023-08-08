@@ -151,13 +151,16 @@ INPUT(
 /home/tux/fpcupdeluxe_trunk/fpc/units/x86_64-linux/rtl/exeinfo.o
 /home/tux/fpcupdeluxe_trunk/fpc/units/x86_64-linux/rtl/strings.o
 /home/tux/fpcupdeluxe_trunk/fpc/units/x86_64-linux/rtl/objpas.o
+/home/tux/fpcupdeluxe_trunk/fpc/units/x86_64-linux/rtl/baseunix.o
+/home/tux/fpcupdeluxe_trunk/fpc/units/x86_64-linux/rtl/unixtype.o
 /n4800/DATEN/Programmierung/mit_GIT/Lazarus/Tutorial/SDL-2/SDL_Packages/units/lib/x86_64-linux/sdl2.o
 /home/tux/fpcupdeluxe_trunk/fpc/units/x86_64-linux/rtl/ctypes.o
+/n4800/DATEN/Programmierung/mit_GIT/Lazarus/Tutorial/SDL-2/Webcam/Webcam-SDL2-master/Lazarus/lib/x86_64-linux/videodev2.o
 /n4800/DATEN/Programmierung/mit_GIT/Lazarus/Tutorial/SDL-2/Webcam/Webcam-SDL2-master/Lazarus/lib/x86_64-linux/v4l2_driver.o
 /n4800/DATEN/Programmierung/mit_GIT/Lazarus/Tutorial/SDL-2/Webcam/Webcam-SDL2-master/Lazarus/v4l2_driver.o
-/home/tux/fpcupdeluxe_trunk/fpc/units/x86_64-linux/rtl/unixtype.o
 /home/tux/fpcupdeluxe_trunk/fpc/units/x86_64-linux/x11/x.o
 /home/tux/fpcupdeluxe_trunk/fpc/units/x86_64-linux/x11/xlib.o
+/n4800/DATEN/Programmierung/mit_GIT/Lazarus/Tutorial/SDL-2/Webcam/Webcam-SDL2-master/Lazarus/lib/x86_64-linux/v4l2_controls.o
 )
 INPUT(
 -lSDL2

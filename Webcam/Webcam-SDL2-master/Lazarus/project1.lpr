@@ -11,25 +11,28 @@ uses
 
   // https://github.com/chendotjs/Webcam-SDL2
 
-  function ioctl(fd: cint; request: culong): cint; cdecl; varargs; external;
-
-const
-  VIDIOC_QUERYCAP = 2154321408;
-  VIDIOC_ENUM_FMT = 3225441794;
-  VIDIOC_S_FMT = 3234878981;
-  VIDIOC_G_FMT = 3234878980;
-  VIDIOC_S_PARM = 3234616854;
-  VIDIOC_REQBUFS = 3222558216;
-  VIDIOC_QUERYBUF = 3227014665;
-
-  VIDIOC_DQBUF = 3227014673;
-  VIDIOC_QBUF = 3227014671;
-  V4L2_PIX_FMT_YUYV = 1448695129;
-
-
+  function ioctl(fd: cint; request: int32): cint; cdecl; varargs; external;
 
 const
   device = '/dev/video0';
+
+const
+  //VIDIOC_QUERYCAP = 2154321408;
+  //VIDIOC_ENUM_FMT = 3225441794;
+  //VIDIOC_S_FMT = 3234878981;
+  //VIDIOC_G_FMT = 3234878980;
+  //VIDIOC_S_PARM = 3234616854;
+  //VIDIOC_REQBUFS = 3222558216;
+  //VIDIOC_QUERYBUF = 3227014665;
+  //
+  //VIDIOC_DQBUF = 3227014673;
+  //VIDIOC_QBUF = 3227014671;
+  //V4L2_PIX_FMT_YUYV = 1448695129;
+
+  VIDIOC_S_FMT2 = 3234878981;
+  VIDIOC_G_FMT2 = 3234878980;
+
+
 
 
 var
@@ -95,7 +98,25 @@ var
     Result := 0;
   end;
 
+
+const
+  VIDIOC_S_FMTint64 = int64(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (5 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_format) shl _IOC_SIZESHIFT));
+  VIDIOC_S_FMTuint64 = uint64(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (5 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_format) shl _IOC_SIZESHIFT));
+  VIDIOC_S_FMTculong = culong(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (5 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_format) shl _IOC_SIZESHIFT));
+
+
 begin
+  WriteLn(VIDIOC_S_FMT);
+  WriteLn(VIDIOC_G_FMT);
+  WriteLn(VIDIOC_S_FMT2);
+  WriteLn(VIDIOC_S_FMTuint64);
+  WriteLn(VIDIOC_S_FMTint64);
+  WriteLn(VIDIOC_S_FMTculong);
+
+
+  WriteLn(culong( VIDIOC_S_FMT));
+  WriteLn(cslong( VIDIOC_S_FMT));
+
   video_fildes := v4l2_open(device);
   v4l2_querycap(video_fildes, device);
 
@@ -156,7 +177,6 @@ begin
         end;
       end;
     end;
-
 
     SDL_UpdateTexture(sdlTexture, @sdlRect, v4l2_ubuffers[buf.index].start, IMAGE_WIDTH * 2);
     //  SDL_UpdateYUVTexture
