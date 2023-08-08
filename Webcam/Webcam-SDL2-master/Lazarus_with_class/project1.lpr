@@ -45,8 +45,8 @@ begin
   My_v4l2.MemoryMap;
   My_v4l2.StreamOn;
 
-//  My_v4l2.SetFormat(V4L2_PIX_FMT_YUYV);
-//  My_v4l2.GetFormat;
+  My_v4l2.SetFormat(V4L2_PIX_FMT_YUYV);
+  My_v4l2.GetFormat;
 
   SDL_Init(SDL_INIT_VIDEO or SDL_INIT_TIMER);
 

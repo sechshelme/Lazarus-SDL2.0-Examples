@@ -14,7 +14,7 @@ uses
   ctypes, BaseUnix, Classes, SysUtils, videodev2;
 
 
-  //function ioctl(fd: cint; request: culong): cint; cdecl; varargs; external;
+function ioctl(fd: cint; request: culong): cint; cdecl; varargs; external;
 
   //extern int ioctl (int __fd, unsigned long int __request, ...) __THROW;
 
@@ -152,7 +152,7 @@ begin
   fmt.fmt.pix.Width := IMAGE_WIDTH;
   fmt.fmt.pix.field := V4L2_FIELD_INTERLACED;
 
-  if fpIOCtl(fHandle, VIDIOC_S_FMT, @fmt) = -1 then begin
+  if ioctl(fHandle, VIDIOC_S_FMT, @fmt) = -1 then begin
     Result := -1;
     WriteLn('Fehler: SetFormat()');
     Exit;
@@ -167,7 +167,7 @@ var
 begin
   // FillChar(fmt, SizeOf(fmt), $00);
   fmt.fmt.pix.Height := 122;
-  if fpIOCtl(fHandle, VIDIOC_G_FMT, @fmt) = -1 then begin
+  if IOCtl(fHandle, VIDIOC_G_FMT, @fmt) = -1 then begin
     Result := -1;
     WriteLn('Fehler: GetFormat()');
     //    Exit;
