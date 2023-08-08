@@ -7,7 +7,7 @@ uses
   ctypes,
   videodev2,
 
-  v4l2_driver, v4l2;
+  v4l2;
 
   // https://github.com/chendotjs/Webcam-SDL2
 
@@ -30,90 +30,23 @@ var
   tv: TTimeVal = (tv_sec: 1; tv_usec: 0);
   buf: Tv4l2_buffer;
 
-  My_v4l2:Tv4l2;
-
-
-  function SetFormat(fHandle:cint; pfmt: uint32): cint;
-  var
-    fmt: Tv4l2_format;
-  begin
-    WriteLn(SizeOf(fmt));
-    WriteLn(SizeOf(fmt.fmt.pix));
-  //  FillChar(fmt, SizeOf(fmt), $00);
-   // FillChar(fmt.fmt.pix, SizeOf(fmt.fmt.pix), $00);
-
-    fmt._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    fmt.fmt.pix.pixelformat := pfmt;
-    fmt.fmt.pix.Height := IMAGE_HEIGHT;
-    fmt.fmt.pix.Width := IMAGE_WIDTH;
-    fmt.fmt.pix.field := V4L2_FIELD_INTERLACED;
-
-    if IOCtl(fHandle, VIDIOC_S_FMT, @fmt) = -1 then begin
-      Result := -1;
-      WriteLn('Fehler: SetFormat()');
-      Exit;
-    end;
-
-    Result := 0;
-  end;
-
+  My_v4l2: Tv4l2;
 
 
 begin
-  My_v4l2:=Tv4l2.Create(device);
+  My_v4l2 := Tv4l2.Create(device);
 
-
-//  video_fildes := v4l2_open(device);
-  video_fildes:=My_v4l2.getHandler;
-
-  //if video_fildes = -1 then begin
-  //  WriteLn('Kann Gerät "', device, '" nicht öffnen');
-  //  Halt(1);
-  //end;
-  //
+  video_fildes := My_v4l2.getHandler;
 
   My_v4l2.QueryCap;
-  //if v4l2_querycap(video_fildes, nil) = -1 then begin
-  //  WriteLn('Fehler: "v4l2_querycap"');
-  //  Halt(1);
-  //end;
-  My_v4l2.GetFormat;
-
-  SetFormat(video_fildes, V4L2_PIX_FMT_YUYV);
-  My_v4l2.GetFormat;
-
-  v4l2_sfmt(video_fildes, V4L2_PIX_FMT_YUYV)  ;
-  My_v4l2.GetFormat;
-
-  My_v4l2.SetFormat(V4L2_PIX_FMT_YUYV);
-   My_v4l2.GetFormat;
-
-   SetFormat(video_fildes, V4L2_PIX_FMT_YUYV);
-  My_v4l2.GetFormat;
-
-  //if v4l2_gfmt(video_fildes) = -1 then begin
-  //  WriteLn('v4l2_gfmt');
-  //  Halt(1);
-  //end;
 
   My_v4l2.SetFPS(30);
-  //if v4l2_sfps(video_fildes, 30) = -1 then begin
-  //  WriteLn('v4l2_sfmt()');
-  //  Halt(1);
-  //end;
 
   My_v4l2.MemoryMap;
-  v4l2_mmap(video_fildes);
-  //if v4l2_mmap(video_fildes) = -1 then begin
+  My_v4l2.StreamOn;
 
-  //  WriteLn('v4l2_mmap()');
-  //  Halt(1);
-  //end;
-
-  if v4l2_streamon(video_fildes) = -1 then begin
-    WriteLn('v4l2_streamon()');
-    Halt(1);
-  end;
+//  My_v4l2.SetFormat(V4L2_PIX_FMT_YUYV);
+//  My_v4l2.GetFormat;
 
   SDL_Init(SDL_INIT_VIDEO or SDL_INIT_TIMER);
 
@@ -161,20 +94,19 @@ begin
       end;
     end;
 
-    SDL_UpdateTexture(sdlTexture, @sdlRect, v4l2_ubuffers[buf.index].start, IMAGE_WIDTH * 2);
+    SDL_UpdateTexture(sdlTexture, @sdlRect, My_v4l2.getBuffer[buf.index].start, IMAGE_WIDTH * 2);
     //  SDL_UpdateYUVTexture
     SDL_RenderClear(sdlRenderer);
     SDL_RenderCopy(sdlRenderer, sdlTexture, nil, @sdlRect);
     SDL_RenderPresent(sdlRenderer);
   until quit;
 
-  v4l2_streamoff(video_fildes);
-  v4l2_munmap;
-    v4l2_close(video_fildes);
 
-    SDL_Quit();
+  My_v4l2.StreamOff;
+  My_v4l2.MemoryUnMap;
+  My_v4l2.Free;
 
-    My_v4l2.Free;
+  SDL_Quit();
 
   WriteLn('ende.');
 end.

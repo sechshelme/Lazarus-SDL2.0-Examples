@@ -11,64 +11,74 @@ unit v4l2;
 interface
 
 uses
-  ctypes, BaseUnix, Classes, SysUtils, videodev2, v4l2_driver;
+  ctypes, BaseUnix, Classes, SysUtils, videodev2;
 
 
-function ioctl(fd: cint; request: culong): cint; cdecl; varargs; external;
+  //function ioctl(fd: cint; request: culong): cint; cdecl; varargs; external;
 
-//extern int ioctl (int __fd, unsigned long int __request, ...) __THROW;
+  //extern int ioctl (int __fd, unsigned long int __request, ...) __THROW;
 
 const
   IMAGE_WIDTH = 640;
   IMAGE_HEIGHT = 480;
+//  IMAGE_WIDTH = 800;
+  //IMAGE_HEIGHT = 600;
+
+  BUF_NUM = 4;
 
   // /usr/include/asm-generic/ioctl.h
 
-  VIDIOC_QUERYCAP = 2154321408;
-  VIDIOC_ENUM_FMT = 3225441794;
-  VIDIOC_S_FMT = 3234878981;
-  VIDIOC_G_FMT = 3234878980;
-  VIDIOC_S_PARM = 3234616854;
-  VIDIOC_REQBUFS = 3222558216;
-  VIDIOC_QUERYBUF = 3227014665;
-
+  //VIDIOC_QUERYCAP = 2154321408;
+  //VIDIOC_ENUM_FMT = 3225441794;
+  //VIDIOC_S_FMT = 3234878981;
+  //VIDIOC_G_FMT = 3234878980;
+  //VIDIOC_S_PARM = 3234616854;
+  //VIDIOC_REQBUFS = 3222558216;
+  //VIDIOC_QUERYBUF = 3227014665;
 
 type
-  Pv4l2_ubuffers = ^Tv4l2_ubuffers;
+  Pv4l2_ubuffer = ^Tv4l2_ubuffer;
 
-  Tv4l2_ubuffers = record
-    start: Pointer;
-    length: cuint;
+  Tv4l2_ubuffer = record
+    start: pointer;
+    length: dword;
   end;
 
-  //    var v4l2_ubuffers:Pv4l2_ubuffers;
-
 type
+
+  { Tv4l2 }
+
   Tv4l2 = class(TObject)
   private
     fDevice: string;
     fHandle: cint;
+    v4l2_ubuffers: Pv4l2_ubuffer;
   public
     constructor Create(const device: string);
+    destructor Destroy; override;
     function QueryCap: cint;
     function SetFormat(pfmt: uint32): cint;
     function GetFormat: cint;
     function SetFPS(fps: cint): cint;
     function MemoryMap: cint;
+    function MemoryUnMap: cint;
+    function StreamOn: cint;
+    function StreamOff: cint;
 
     function getHandler: cint;
+    function getBuffer:Pv4l2_ubuffer;
   end;
 
 implementation
-
-{ Tv4l2 }
 
 constructor Tv4l2.Create(const device: string);
 var
   st: stat;
 begin
+  inherited Create;
+
   fDevice := device;
-  FillChar(st,SizeOf(st),0);
+  FillChar(st, SizeOf(st), 0);
   if FpStat(device, st) = -1 then begin
     WriteLn('Kann Device nicht öffnen !');
     Halt(1);
@@ -86,12 +96,18 @@ begin
   end;
 end;
 
+destructor Tv4l2.Destroy;
+begin
+  FpClose(fHandle);
+  inherited Destroy;
+end;
+
 function Tv4l2.QueryCap: cint;
 var
   cap: Tv4l2_capability;
   fmdesc: Tv4l2_fmtdesc;
 begin
-  if IOCtl(fHandle, VIDIOC_QUERYCAP, @cap) = -1 then begin
+  if FpIOCtl(fHandle, VIDIOC_QUERYCAP, @cap) = -1 then begin
     WriteLn('Kann QueryCap nicht öffnen');
     Result := -1;
   end else begin
@@ -113,7 +129,7 @@ begin
   fmdesc._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
   WriteLn(#27'[31mSupport format: '#10#27'[0m');
 
-  while IOCtl(fHandle, VIDIOC_ENUM_FMT, @fmdesc) <> -1 do begin
+  while fpIOCtl(fHandle, VIDIOC_ENUM_FMT, @fmdesc) <> -1 do begin
     WriteLn(#27'[31m       ', fmdesc.index + 1, '.', fmdesc.description, #27'[0m');
     Inc(fmdesc.index);
   end;
@@ -125,10 +141,10 @@ function Tv4l2.SetFormat(pfmt: uint32): cint;
 var
   fmt: Tv4l2_format;
 begin
-  WriteLn(SizeOf(fmt));
-  WriteLn(SizeOf(fmt.fmt.pix));
-  FillChar(fmt, SizeOf(fmt), $00);
-  FillChar(fmt.fmt.pix, SizeOf(fmt.fmt.pix), $00);
+  //WriteLn(SizeOf(fmt));
+  //WriteLn(SizeOf(fmt.fmt.pix));
+  //FillChar(fmt, SizeOf(fmt), $00);
+  //FillChar(fmt.fmt.pix, SizeOf(fmt.fmt.pix), $00);
 
   fmt._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
   fmt.fmt.pix.pixelformat := pfmt;
@@ -136,7 +152,7 @@ begin
   fmt.fmt.pix.Width := IMAGE_WIDTH;
   fmt.fmt.pix.field := V4L2_FIELD_INTERLACED;
 
-  if IOCtl(fHandle, VIDIOC_S_FMT, @fmt) = -1 then begin
+  if fpIOCtl(fHandle, VIDIOC_S_FMT, @fmt) = -1 then begin
     Result := -1;
     WriteLn('Fehler: SetFormat()');
     Exit;
@@ -149,9 +165,9 @@ function Tv4l2.GetFormat: cint;
 var
   fmt: Tv4l2_format;
 begin
- // FillChar(fmt, SizeOf(fmt), $00);
+  // FillChar(fmt, SizeOf(fmt), $00);
   fmt.fmt.pix.Height := 122;
-  if IOCtl(fHandle, VIDIOC_G_FMT, @fmt) = -1 then begin
+  if fpIOCtl(fHandle, VIDIOC_G_FMT, @fmt) = -1 then begin
     Result := -1;
     WriteLn('Fehler: GetFormat()');
     //    Exit;
@@ -174,10 +190,10 @@ var
   sfps: Tv4l2_streamparm;
 begin
   FillChar(sfps, SizeOf(setfps), 0);
-  sfps._type := V4L2_BUF_TYPE_VBI_CAPTURE;
+  sfps._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
   sfps.parm.capture.timeperframe.numerator := 1;
   sfps.parm.capture.timeperframe.denominator := fps;
-  if IOCtl(fHandle, VIDIOC_S_PARM, @sfps) = -1 then begin
+  if fpIOCtl(fHandle, VIDIOC_S_PARM, @sfps) = -1 then begin
     Result := -1;
     WriteLn('Fehler: SetFPS()');
     //    Exit;
@@ -193,20 +209,18 @@ var
 const
   BUF_NUM = 4;
 begin
-  req.capabilities := BUF_NUM;
-  req._type := V4L2_BUF_TYPE_META_CAPTURE;
+  req.Count := BUF_NUM;
+  req._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
   req.memory := V4L2_MEMORY_MMAP;
   if FpIOCtl(fHandle, VIDIOC_REQBUFS, @req) = -1 then begin
     Result := -1;
     WriteLn('Fehler: mmap()');
-    //    Exit;
   end;
 
-  Getmem(v4l2_ubuffers, SizeOf(Tv4l2_ubuffers) * req.Count);
+  Getmem(v4l2_ubuffers, SizeOf(Tv4l2_ubuffer) * req.Count);
   if v4l2_ubuffers = nil then begin
     WriteLn('Speicherüberlauf');
     Result := -1;
-    Exit;
   end;
 
   for i := 0 to req.Count - 1 do begin
@@ -215,8 +229,7 @@ begin
     buf.index := i;
     if FpIOCtl(fHandle, VIDIOC_QUERYBUF, @buf) = -1 then begin
       Result := -1;
-      //   WriteLn('Fehler: mmap()');
-      //    Exit;
+      WriteLn('Fehler: mmap()');
     end;
 
     v4l2_ubuffers[i].length := buf.length;
@@ -225,7 +238,7 @@ begin
     // WriteLn('buffer offset:', buf.m.offset, '   length:', buf.length);
 
     if v4l2_ubuffers[i].start = MAP_FAILED then begin
-      //      WriteLn( 'buffer map error ', i);
+      WriteLn('buffer map error ', i);
       Result := -1;
     end;
 
@@ -234,9 +247,65 @@ begin
   Result := 0;
 end;
 
+function Tv4l2.MemoryUnMap: cint;
+var
+  i: Integer;
+begin
+  for i := 0 to BUF_NUM - 1 do begin
+    if Fpmunmap(v4l2_ubuffers[i].start, v4l2_ubuffers[i].length) = -1 then begin
+      WriteLn('buffer unmap error ', i);
+      Result := -1;
+    end;
+  end;
+end;
+
+function Tv4l2.StreamOn: cint;
+var
+  buf: Tv4l2_buffer;
+  typ: Tv4l2_buf_type;
+  i: integer;
+begin
+  buf._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  buf.memory := V4L2_MEMORY_MMAP;
+  for i := 0 to BUF_NUM - 1 do begin
+    buf.index := i;
+    if FpIOCtl(fHandle, VIDIOC_QBUF, @buf) = -1 then begin
+      Result := -1;
+      WriteLn('Fehler: StreamOn 1()');
+      Exit;
+    end;
+
+    typ := V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    if FpIOCtl(fHandle, VIDIOC_STREAMON, @typ) = -1 then begin
+      Result := -1;
+      WriteLn('Fehler: StreamOn 2()');
+      Exit;
+    end;
+  end;
+
+  Result := 0;
+end;
+
+function Tv4l2.StreamOff: cint;
+var
+  typ: Tv4l2_buf_type;
+begin
+  typ := V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  if FpIOCtl(fHandle, VIDIOC_STREAMOFF, @typ) = -1 then begin
+    Result := -1;
+    WriteLn('Fehler: StreamOff()');
+    Exit;
+  end;
+end;
+
 function Tv4l2.getHandler: cint;
 begin
   Result := fHandle;
+end;
+
+function Tv4l2.getBuffer: Pv4l2_ubuffer;
+begin
+  Result:=v4l2_ubuffers;
 end;
 
 end.
