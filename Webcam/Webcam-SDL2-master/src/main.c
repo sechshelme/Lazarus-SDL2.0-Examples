@@ -113,10 +113,6 @@ printf("size: v4l2_format.fmt.pix: %lu\n", sizeof(fmt.fmt.pix));
 
 
 
-
-
-
-
 printf("V4L2_PIX_FMT_YUYV: %d\n", V4L2_PIX_FMT_YUYV);
 printf("width  : %d\n", IMAGE_WIDTH);
 printf("height : %d\n", IMAGE_HEIGHT);

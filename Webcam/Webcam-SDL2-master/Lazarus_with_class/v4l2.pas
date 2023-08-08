@@ -2,27 +2,30 @@ unit v4l2;
 
 {$mode ObjFPC}{$H+}
 
+interface
+
+{$L mini_v4l2_driver.o}
+{$LinkLib c}
+
 {$IFDEF FPC}
 {$PACKRECORDS C}
 {$ENDIF}
 
-
-
-interface
-
 uses
   ctypes, BaseUnix, Classes, SysUtils, videodev2;
 
+//function v4l2_sfmt(fd: longint; pfmt: uint32): longint; cdecl; external;
+//function v4l2_gfmt(fd: longint): longint; cdecl; external;
 
-function ioctl(fd: cint; request: culong): cint; cdecl; varargs; external;
+//function ioctl(fd: cint; request: culong): cint; cdecl; varargs; external;
 
   //extern int ioctl (int __fd, unsigned long int __request, ...) __THROW;
 
 const
   IMAGE_WIDTH = 640;
   IMAGE_HEIGHT = 480;
-//  IMAGE_WIDTH = 800;
-  //IMAGE_HEIGHT = 600;
+//  IMAGE_WIDTH = 320;
+//  IMAGE_HEIGHT = 200;
 
   BUF_NUM = 4;
 
@@ -43,6 +46,9 @@ type
     start: pointer;
     length: dword;
   end;
+
+var    buf: Tv4l2_buffer;
+
 
 type
 
@@ -65,8 +71,7 @@ type
     function StreamOn: cint;
     function StreamOff: cint;
 
-    function getHandler: cint;
-    function getBuffer:Pv4l2_ubuffer;
+    function GetVideoBuffer:Pointer;
   end;
 
 implementation
@@ -141,6 +146,9 @@ function Tv4l2.SetFormat(pfmt: uint32): cint;
 var
   fmt: Tv4l2_format;
 begin
+  //v4l2_sfmt(fHandle,pfmt);
+//  exit;
+
   //WriteLn(SizeOf(fmt));
   //WriteLn(SizeOf(fmt.fmt.pix));
   //FillChar(fmt, SizeOf(fmt), $00);
@@ -152,7 +160,7 @@ begin
   fmt.fmt.pix.Width := IMAGE_WIDTH;
   fmt.fmt.pix.field := V4L2_FIELD_INTERLACED;
 
-  if ioctl(fHandle, VIDIOC_S_FMT, @fmt) = -1 then begin
+  if FpIOCtl(fHandle, VIDIOC_S_FMT, @fmt) = -1 then begin
     Result := -1;
     WriteLn('Fehler: SetFormat()');
     Exit;
@@ -165,9 +173,12 @@ function Tv4l2.GetFormat: cint;
 var
   fmt: Tv4l2_format;
 begin
+  //v4l2_gfmt(fHandle);
+//  exit;
+
   // FillChar(fmt, SizeOf(fmt), $00);
   fmt.fmt.pix.Height := 122;
-  if IOCtl(fHandle, VIDIOC_G_FMT, @fmt) = -1 then begin
+  if FpIOCtl(fHandle, VIDIOC_G_FMT, @fmt) = -1 then begin
     Result := -1;
     WriteLn('Fehler: GetFormat()');
     //    Exit;
@@ -261,15 +272,15 @@ end;
 
 function Tv4l2.StreamOn: cint;
 var
-  buf: Tv4l2_buffer;
+  buffer: Tv4l2_buffer;
   typ: Tv4l2_buf_type;
   i: integer;
 begin
-  buf._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
-  buf.memory := V4L2_MEMORY_MMAP;
+  buffer._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  buffer.memory := V4L2_MEMORY_MMAP;
   for i := 0 to BUF_NUM - 1 do begin
-    buf.index := i;
-    if FpIOCtl(fHandle, VIDIOC_QBUF, @buf) = -1 then begin
+    buffer.index := i;
+    if FpIOCtl(fHandle, VIDIOC_QBUF, @buffer) = -1 then begin
       Result := -1;
       WriteLn('Fehler: StreamOn 1()');
       Exit;
@@ -298,14 +309,26 @@ begin
   end;
 end;
 
-function Tv4l2.getHandler: cint;
+function Tv4l2.GetVideoBuffer: Pointer;
+var
+    fds: TFDSet;
+  tv: TTimeVal = (tv_sec: 1; tv_usec: 0);
 begin
-  Result := fHandle;
-end;
+  fpFD_ZERO(fds);
+  fpFD_SET(fHandle, fds);
 
-function Tv4l2.getBuffer: Pv4l2_ubuffer;
-begin
-  Result:=v4l2_ubuffers;
+  fpSelect(fHandle + 1, @fds, nil, nil, @tv);
+
+  buf._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  buf.memory := V4L2_MEMORY_MMAP;
+  FpIOCtl(fHandle, VIDIOC_DQBUF, @buf);
+
+  buf._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  buf.memory := V4L2_MEMORY_MMAP;
+  FpIOCtl(fHandle, VIDIOC_QBUF, @buf);
+
+  Result:=       v4l2_ubuffers[buf.index].start;;
+
 end;
 
 end.
