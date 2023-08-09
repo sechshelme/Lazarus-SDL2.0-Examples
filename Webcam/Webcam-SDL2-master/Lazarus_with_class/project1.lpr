@@ -23,7 +23,6 @@ var
   e: TSDL_Event;
 
   quit: boolean = False;
-
   My_v4l2: Tv4l2;
 
 
@@ -85,6 +84,4 @@ begin
   My_v4l2.Free;
 
   SDL_Quit();
-
-  WriteLn('ende.');
 end.
