@@ -14,7 +14,6 @@ uses
 const
   device = '/dev/video0';
 
-
 var
   sdlTexture: PSDL_Texture;
   sdlRenderer: PSDL_Renderer;
@@ -27,26 +26,15 @@ var
 
 
 begin
-  My_v4l2 := Tv4l2.Create(device);
+  My_v4l2 := Tv4l2.Create(device,640,480);
 
   My_v4l2.QueryCap;
-
-//  My_v4l2.IMAGE_WIDTH:=1280;
-//  My_v4l2.IMAGE_HEIGHT:=720;
-
-  My_v4l2.SetFormat(V4L2_PIX_FMT_YUYV);
   My_v4l2.GetFormat;
-
-//  My_v4l2.SetFPS(5);
-  My_v4l2.SetFPS(30);
-
-  My_v4l2.MemoryMap;
   My_v4l2.StreamOn;
-
 
   SDL_Init(SDL_INIT_VIDEO or SDL_INIT_TIMER);
 
-  sdlScreen := SDL_CreateWindow('webcam', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, My_v4l2.IMAGE_WIDTH, My_v4l2.IMAGE_HEIGHT, SDL_WINDOW_SHOWN);
+  sdlScreen := SDL_CreateWindow('webcam', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, My_v4l2.Width, My_v4l2.Height, SDL_WINDOW_SHOWN);
   if sdlScreen = nil then begin
     WriteLn('Kann SDL nicht öffnen');
   end;
@@ -56,13 +44,13 @@ begin
     Write('Kann Renderer nicht öffnen');
   end;
 
-  sdlTexture := SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_YUY2, SDL_TEXTUREACCESS_STREAMING, My_v4l2.IMAGE_WIDTH, My_v4l2.IMAGE_HEIGHT);
+  sdlTexture := SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_YUY2, SDL_TEXTUREACCESS_STREAMING, My_v4l2.Width, My_v4l2.Height);
   if sdlTexture = nil then begin
     Write('Kann Textur nicht öffnen');
   end;
 
-  sdlRect.w := My_v4l2.IMAGE_WIDTH;
-  sdlRect.h := My_v4l2.IMAGE_HEIGHT;
+  sdlRect.w := My_v4l2.Width;
+  sdlRect.h := My_v4l2.Height;
 
   repeat
     while SDL_PollEvent(@e) <> 0 do begin
@@ -80,14 +68,13 @@ begin
       end;
     end;
 
-    SDL_UpdateTexture(sdlTexture, @sdlRect, My_v4l2.GetVideoBuffer, My_v4l2.IMAGE_WIDTH * 2);
+    SDL_UpdateTexture(sdlTexture, @sdlRect, My_v4l2.GetVideoBuffer, My_v4l2.Width * 2);
     SDL_RenderClear(sdlRenderer);
     SDL_RenderCopy(sdlRenderer, sdlTexture, nil, @sdlRect);
     SDL_RenderPresent(sdlRenderer);
   until quit;
 
   My_v4l2.StreamOff;
-  My_v4l2.MemoryUnMap;
   My_v4l2.Free;
 
   SDL_Quit();

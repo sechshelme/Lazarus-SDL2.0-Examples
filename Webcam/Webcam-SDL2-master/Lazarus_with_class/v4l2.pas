@@ -16,14 +16,14 @@ uses
 
 
 const
-//  IMAGE_WIDTH = 640;
-//  IMAGE_HEIGHT = 480;
-//  IMAGE_WIDTH = 1920;
-//  IMAGE_HEIGHT = 1080;
+  //  IMAGE_WIDTH = 640;
+  //  IMAGE_HEIGHT = 480;
+  //  IMAGE_WIDTH = 1920;
+  //  IMAGE_HEIGHT = 1080;
   //  IMAGE_WIDTH = 320;
   //  IMAGE_HEIGHT = 200;
-//  IMAGE_WIDTH = 1280;
-//  IMAGE_HEIGHT = 720;
+  //  IMAGE_WIDTH = 1280;
+  //  IMAGE_HEIGHT = 720;
 
   BUF_NUM = 4;
 
@@ -34,21 +34,26 @@ type
   end;
 
 type
+
+  { Tv4l2 }
+
   Tv4l2 = class(TObject)
   private
     fDevice: string;
+    fwidth, fheight, ffps: cuint;
     fHandle: cint;
     v4l2_ubuffers: array of Tv4l2_ubuffer;
-  public
-    IMAGE_WIDTH,    IMAGE_HEIGHT :cint;
-    constructor Create(const device: string);
-    destructor Destroy; override;
-    function QueryCap: cint;
     function SetFormat(pfmt: uint32): cint;
-    function GetFormat: cint;
     function SetFPS(fps: cint): cint;
     function MemoryMap: cint;
     function MemoryUnMap: cint;
+  public
+    property Width: cuint read fwidth;
+    property Height: cuint read fheight;
+    constructor Create(const device: string; AWidth: cuint = 640; AHeight: cuint = 480; Afps: cuint = 30);
+    destructor Destroy; override;
+    function QueryCap: cint;
+    function GetFormat: cint;
     function StreamOn: cint;
     function StreamOff: cint;
 
@@ -57,12 +62,13 @@ type
 
 implementation
 
-constructor Tv4l2.Create(const device: string);
+constructor Tv4l2.Create(const device: string; AWidth: cuint; AHeight: cuint; Afps: cuint);
 var
   st: stat;
 begin
-  IMAGE_WIDTH:=640;
-  IMAGE_HEIGHT:=480;
+  fwidth := AWidth;
+  fheight := AHeight;
+  ffps := Afps;
 
   inherited Create;
   v4l2_ubuffers := nil;
@@ -84,10 +90,15 @@ begin
     WriteLn('Konnte Device nicht öffnen');
     Halt(1);
   end;
+
+  SetFormat(V4L2_PIX_FMT_YUYV);
+  SetFPS(ffps);
+  MemoryMap;
 end;
 
 destructor Tv4l2.Destroy;
 begin
+  MemoryUnMap;
   FpClose(fHandle);
   inherited Destroy;
 end;
@@ -131,18 +142,11 @@ function Tv4l2.SetFormat(pfmt: uint32): cint;
 var
   fmt: Tv4l2_format;
 begin
-  //v4l2_sfmt(fHandle,pfmt);
-  //  exit;
-
-  //WriteLn(SizeOf(fmt));
-  //WriteLn(SizeOf(fmt.fmt.pix));
   FillChar(fmt, SizeOf(fmt), $00);
-  //FillChar(fmt.fmt.pix, SizeOf(fmt.fmt.pix), $00);
-
   fmt._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
   fmt.fmt.pix.pixelformat := pfmt;
-  fmt.fmt.pix.Height := IMAGE_HEIGHT;
-  fmt.fmt.pix.Width := IMAGE_WIDTH;
+  fmt.fmt.pix.Height := fheight;
+  fmt.fmt.pix.Width := fwidth;
   fmt.fmt.pix.field := V4L2_FIELD_INTERLACED;
 
   if FpIOCtl(fHandle, VIDIOC_S_FMT, @fmt) = -1 then begin
@@ -158,7 +162,7 @@ function Tv4l2.GetFormat: cint;
 var
   fmt: Tv4l2_format;
 begin
-   fmt._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  fmt._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
 
   if FpIOCtl(fHandle, VIDIOC_G_FMT, @fmt) = -1 then begin
     Result := -1;
@@ -223,13 +227,12 @@ begin
     v4l2_ubuffers[i].length := buf.length;
     v4l2_ubuffers[i].start := Fpmmap(nil, buf.length, PROT_READ or PROT_WRITE, MAP_SHARED, fHandle, buf.m.offset);
 
-     WriteLn('buffer offset:', buf.m.offset, '   length:', buf.length);
+    WriteLn('buffer offset:', buf.m.offset, '   length:', buf.length);
 
     if v4l2_ubuffers[i].start = MAP_FAILED then begin
       WriteLn('buffer map error ', i);
       Result := -1;
     end;
-
   end;
 
   Result := 0;
