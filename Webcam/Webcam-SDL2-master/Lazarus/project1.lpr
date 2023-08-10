@@ -6,7 +6,6 @@ uses
   SDL2,
   ctypes,
   videodev2,
-
   v4l2_driver;
 
   // https://github.com/chendotjs/Webcam-SDL2
@@ -50,83 +49,67 @@ var
   tv: TTimeVal = (tv_sec: 1; tv_usec: 0);
   buf: Tv4l2_buffer;
 
-  //function SetFormat(fHandle: cint; pfmt: uint32): cint;
-  //var
-  //  fmt: Tv4l2_format;
-  //begin
-  //  WriteLn(SizeOf(fmt));
-  //  WriteLn(SizeOf(fmt.fmt.pix));
-  //  //  FillChar(fmt, SizeOf(fmt), $00);
-  //  //  FillChar(fmt.fmt.pix, SizeOf(fmt.fmt.pix), $00);
-  //
-  //  fmt._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
-  //  fmt.fmt.pix.pixelformat := pfmt;
-  //  fmt.fmt.pix.Height := IMAGE_HEIGHT;
-  //  fmt.fmt.pix.Width := IMAGE_WIDTH;
-  //  fmt.fmt.pix.field := V4L2_FIELD_INTERLACED;
-  //
-  //  if IOCtl(fHandle, VIDIOC_S_FMT, @fmt) = -1 then begin
-  //    Result := -1;
-  //    WriteLn('Fehler: SetFormat()');
-  //    Exit;
-  //  end;
-  //
-  //  Result := 0;
-  //end;
-  //
-  //function GetFormat(fHandle: cint): cint;
-  //var
-  //  fmt: Tv4l2_format;
-  //begin
-  //  FillChar(fmt, SizeOf(fmt), $00);
-  //  fmt.fmt.pix.Height := 122;
-  //  if IOCtl(fHandle, VIDIOC_G_FMT, @fmt) = -1 then begin
-  //    Result := -1;
-  //    WriteLn('Fehler: GetFormat()');
-  //    //  Exit;
-  //  end;
-  //  WriteLn(#27'[33mpix.pixelformatth: ',
-  //    char(fmt.fmt.pix.pixelformat and $FF),
-  //    char(fmt.fmt.pix.pixelformat shr 8 and $FF),
-  //    char(fmt.fmt.pix.pixelformat shr 16 and $FF),
-  //    char(fmt.fmt.pix.pixelformat shr 24 and $FF), #27'[0m');
-  //
-  //  WriteLn('pix.width:    ', fmt.fmt.pix.Width);
-  //  WriteLn('pix.height:   ', fmt.fmt.pix.Height);
-  //  WriteLn('pix.field:    ', fmt.fmt.pix.field);
-  //
-  //  Result := 0;
-  //end;
-  //
+  function SetFormat(fHandle: cint; pfmt: uint32): cint;
+  var
+    fmt: Tv4l2_format;
+  begin
+    WriteLn(SizeOf(fmt));
+    WriteLn(SizeOf(fmt.fmt.pix));
+    //  FillChar(fmt, SizeOf(fmt), $00);
+    //  FillChar(fmt.fmt.pix, SizeOf(fmt.fmt.pix), $00);
 
-const
-  VIDIOC_S_FMTint64 = int64(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (5 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_format) shl _IOC_SIZESHIFT));
-  VIDIOC_S_FMTuint64 = uint64(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (5 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_format) shl _IOC_SIZESHIFT));
-  VIDIOC_S_FMTculong = culong(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (5 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_format) shl _IOC_SIZESHIFT));
+    fmt._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    fmt.fmt.pix.pixelformat := pfmt;
+    fmt.fmt.pix.Height := IMAGE_HEIGHT;
+    fmt.fmt.pix.Width := IMAGE_WIDTH;
+    fmt.fmt.pix.field := V4L2_FIELD_INTERLACED;
+
+    if IOCtl(fHandle, VIDIOC_S_FMT, @fmt) = -1 then begin
+      Result := -1;
+      WriteLn('Fehler: SetFormat()');
+      Exit;
+    end;
+
+    Result := 0;
+  end;
+
+  function GetFormat(fHandle: cint): cint;
+  var
+    fmt: Tv4l2_format;
+  begin
+    FillChar(fmt, SizeOf(fmt), $00);
+    fmt._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    fmt.fmt.pix.Height := 122;
+    if IOCtl(fHandle, VIDIOC_G_FMT, @fmt) = -1 then begin
+      Result := -1;
+      WriteLn('Fehler: GetFormat()');
+      //  Exit;
+    end;
+    WriteLn(#27'[33mpix.pixelformatth: ',
+      char(fmt.fmt.pix.pixelformat and $FF),
+      char(fmt.fmt.pix.pixelformat shr 8 and $FF),
+      char(fmt.fmt.pix.pixelformat shr 16 and $FF),
+      char(fmt.fmt.pix.pixelformat shr 24 and $FF), #27'[0m');
+
+    WriteLn('pix.width:    ', fmt.fmt.pix.Width);
+    WriteLn('pix.height:   ', fmt.fmt.pix.Height);
+    WriteLn('pix.field:    ', fmt.fmt.pix.field);
+
+    Result := 0;
+  end;
 
 
 begin
-  WriteLn(VIDIOC_S_FMT);
-  WriteLn(VIDIOC_G_FMT);
-  WriteLn(VIDIOC_S_FMT2);
-  WriteLn(VIDIOC_S_FMTuint64);
-  WriteLn(VIDIOC_S_FMTint64);
-  WriteLn(VIDIOC_S_FMTculong);
-
-
-  WriteLn(culong( VIDIOC_S_FMT));
-  WriteLn(cslong( VIDIOC_S_FMT));
-
   video_fildes := v4l2_open(device);
   v4l2_querycap(video_fildes, device);
 
-  v4l2_sfmt(video_fildes, V4L2_PIX_FMT_YUYV);
-//  SetFormat(video_fildes, V4L2_PIX_FMT_YUYV);
+//  v4l2_sfmt(video_fildes, V4L2_PIX_FMT_YUYV);
+  SetFormat(video_fildes, V4L2_PIX_FMT_YUYV);
 
   WriteLn(#10#27'[0m--- C ---');
-  v4l2_gfmt(video_fildes);
+//  v4l2_gfmt(video_fildes);
   WriteLn(#10#27'[0m--- Pascal ---');
-//  GetFormat(video_fildes);
+  GetFormat(video_fildes);
 
   v4l2_sfps(video_fildes, 30);
   v4l2_mmap(video_fildes);
