@@ -91,7 +91,11 @@ int v4l2_gfmt(int fd) {
 
   struct v4l2_format fmt;
 //  memset(&fmt, 0, sizeof(fmt));
+  printf("1. fmt.pix: %lu\n", fmt.fmt.pix.height);
+  printf("1. fmt.type: %lu\n", fmt.type);
   fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  printf("1. fmt.pix: %lu\n", fmt.fmt.pix.height);
+  printf("1. fmt.type: %lu\n", fmt.type);
 
   //int i=12345;
 //  printf("test\t\t%d\n", i);

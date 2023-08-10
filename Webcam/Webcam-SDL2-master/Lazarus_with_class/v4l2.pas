@@ -9,32 +9,23 @@ interface
 {$ENDIF}
 
 uses
-  ctypes, BaseUnix, Classes, SysUtils, videodev2;
+  BaseUnix, Classes, SysUtils, videodev2;
 
-  //function v4l2_sfmt(fd: longint; pfmt: uint32): longint; cdecl; external;
-  //function v4l2_gfmt(fd: longint): longint; cdecl; external;
+  // v4l2-ctl --list-formats-ext
+  // ffmpeg -f v4l2 -list_formats all -i /dev/video0
+
 
 const
-  IMAGE_WIDTH = 640;
-  IMAGE_HEIGHT = 480;
+//  IMAGE_WIDTH = 640;
+//  IMAGE_HEIGHT = 480;
 //  IMAGE_WIDTH = 1920;
 //  IMAGE_HEIGHT = 1080;
-//  IMAGE_WIDTH = 320;
-//  IMAGE_HEIGHT = 200;
+  //  IMAGE_WIDTH = 320;
+  //  IMAGE_HEIGHT = 200;
 //  IMAGE_WIDTH = 1280;
 //  IMAGE_HEIGHT = 720;
 
-  BUF_NUM = 1;
-
-  // /usr/include/asm-generic/ioctl.h
-
-  //VIDIOC_QUERYCAP = 2154321408;
-  //VIDIOC_ENUM_FMT = 3225441794;
-  //VIDIOC_S_FMT = 3234878981;
-  //VIDIOC_G_FMT = 3234878980;
-  //VIDIOC_S_PARM = 3234616854;
-  //VIDIOC_REQBUFS = 3222558216;
-  //VIDIOC_QUERYBUF = 3227014665;
+  BUF_NUM = 4;
 
 type
   Tv4l2_ubuffer = record
@@ -49,6 +40,7 @@ type
     fHandle: cint;
     v4l2_ubuffers: array of Tv4l2_ubuffer;
   public
+    IMAGE_WIDTH,    IMAGE_HEIGHT :cint;
     constructor Create(const device: string);
     destructor Destroy; override;
     function QueryCap: cint;
@@ -69,6 +61,9 @@ constructor Tv4l2.Create(const device: string);
 var
   st: stat;
 begin
+  IMAGE_WIDTH:=640;
+  IMAGE_HEIGHT:=480;
+
   inherited Create;
   v4l2_ubuffers := nil;
 
@@ -165,7 +160,7 @@ var
 begin
    fmt._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
 
-  if FpIOCtl(fHandle, VIDIOC_g_FMT, @fmt) = -1 then begin
+  if FpIOCtl(fHandle, VIDIOC_G_FMT, @fmt) = -1 then begin
     Result := -1;
     WriteLn('Fehler: GetFormat()');
     //    Exit;
