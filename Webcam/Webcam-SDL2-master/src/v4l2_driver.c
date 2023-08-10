@@ -88,18 +88,26 @@ int v4l2_sfmt(int fd, uint32_t pfmt) {
 // get format
 int v4l2_gfmt(int fd) {
   // set fmt
+
   struct v4l2_format fmt;
+//  memset(&fmt, 0, sizeof(fmt));
+  fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+
+  //int i=12345;
+//  printf("test\t\t%d\n", i);
+
   if (ioctl(fd, VIDIOC_G_FMT, &fmt) == -1) {
     fprintf(stderr, "Unable to get format\n");
-    return -1;
+//    return -1;
   }
   printf("\033[33mpix.pixelformat:\t%c%c%c%c\n\033[0m",
          fmt.fmt.pix.pixelformat & 0xFF, (fmt.fmt.pix.pixelformat >> 8) & 0xFF,
          (fmt.fmt.pix.pixelformat >> 16) & 0xFF,
          (fmt.fmt.pix.pixelformat >> 24) & 0xFF);
-  printf("pix.height:\t\t%d\n", fmt.fmt.pix.height);
   printf("pix.width:\t\t%d\n", fmt.fmt.pix.width);
+  printf("pix.height:\t\t%d\n", fmt.fmt.pix.height);
   printf("pix.field:\t\t%d\n", fmt.fmt.pix.field);
+  printf("pix.sizeimage:\t\t%d\n", fmt.fmt.pix.sizeimage);
   return 0;
 }
 

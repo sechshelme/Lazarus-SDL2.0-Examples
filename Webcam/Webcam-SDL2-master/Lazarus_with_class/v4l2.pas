@@ -17,10 +17,14 @@ uses
 const
   IMAGE_WIDTH = 640;
   IMAGE_HEIGHT = 480;
-  //  IMAGE_WIDTH = 320;
-  //  IMAGE_HEIGHT = 200;
+//  IMAGE_WIDTH = 1920;
+//  IMAGE_HEIGHT = 1080;
+//  IMAGE_WIDTH = 320;
+//  IMAGE_HEIGHT = 200;
+//  IMAGE_WIDTH = 1280;
+//  IMAGE_HEIGHT = 720;
 
-  BUF_NUM = 4;
+  BUF_NUM = 1;
 
   // /usr/include/asm-generic/ioctl.h
 
@@ -137,7 +141,7 @@ begin
 
   //WriteLn(SizeOf(fmt));
   //WriteLn(SizeOf(fmt.fmt.pix));
-  //FillChar(fmt, SizeOf(fmt), $00);
+  FillChar(fmt, SizeOf(fmt), $00);
   //FillChar(fmt.fmt.pix, SizeOf(fmt.fmt.pix), $00);
 
   fmt._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -159,12 +163,9 @@ function Tv4l2.GetFormat: cint;
 var
   fmt: Tv4l2_format;
 begin
-  //v4l2_gfmt(fHandle);
-  //  exit;
+   fmt._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
 
-  // FillChar(fmt, SizeOf(fmt), $00);
-  fmt.fmt.pix.Height := 122;
-  if FpIOCtl(fHandle, VIDIOC_G_FMT, @fmt) = -1 then begin
+  if FpIOCtl(fHandle, VIDIOC_g_FMT, @fmt) = -1 then begin
     Result := -1;
     WriteLn('Fehler: GetFormat()');
     //    Exit;
@@ -175,9 +176,10 @@ begin
     char(fmt.fmt.pix.pixelformat shr 16 and $FF),
     char(fmt.fmt.pix.pixelformat shr 24 and $FF), #27'[0m');
 
-  WriteLn('pix.width:    ', fmt.fmt.pix.Width);
-  WriteLn('pix.height:   ', fmt.fmt.pix.Height);
-  WriteLn('pix.field:    ', fmt.fmt.pix.field);
+  WriteLn('pix.width:     ', fmt.fmt.pix.Width);
+  WriteLn('pix.height:    ', fmt.fmt.pix.Height);
+  WriteLn('pix.field:     ', fmt.fmt.pix.field);
+  WriteLn('pix.sizeimage: ', fmt.fmt.pix.sizeimage);
 
   Result := 0;
 end;

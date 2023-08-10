@@ -53,6 +53,9 @@ begin
   end;
 
   sdlTexture := SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_YUY2, SDL_TEXTUREACCESS_STREAMING, IMAGE_WIDTH, IMAGE_HEIGHT);
+  if sdlTexture = nil then begin
+    Write('Kann Textur nicht öffnen');
+  end;
 
   sdlRect.w := IMAGE_WIDTH;
   sdlRect.h := IMAGE_HEIGHT;
@@ -73,7 +76,7 @@ begin
       end;
     end;
 
-    SDL_UpdateTexture(sdlTexture, @sdlRect,My_v4l2.GetVideoBuffer, IMAGE_WIDTH * 2);
+    SDL_UpdateTexture(sdlTexture, @sdlRect, My_v4l2.GetVideoBuffer, IMAGE_WIDTH * 2);
     SDL_RenderClear(sdlRenderer);
     SDL_RenderCopy(sdlRenderer, sdlTexture, nil, @sdlRect);
     SDL_RenderPresent(sdlRenderer);

@@ -144,6 +144,16 @@ printf("height : %d\n", IMAGE_HEIGHT);
     goto exit_;
   }
 
+
+  if (v4l2_gfmt(video_fildes) == -1) {
+    perror("v4l2_gfmt");
+    goto exit_;
+  }
+
+
+
+
+
  v4l2_streaming();
 
   int quit = 0;
