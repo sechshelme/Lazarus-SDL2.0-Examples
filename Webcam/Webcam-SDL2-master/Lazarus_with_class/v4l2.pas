@@ -13,6 +13,8 @@ uses
 
   // v4l2-ctl --list-formats-ext
   // ffmpeg -f v4l2 -list_formats all -i /dev/video0
+  // ffmpeg -i /dev/video0 -vf format=yuv420p -f sdl test
+
 
 
 const
@@ -32,6 +34,8 @@ type
     start: pointer;
     length: dword;
   end;
+
+  Tbytes=array of Byte;
 
 type
 
@@ -58,6 +62,9 @@ type
     function StreamOff: cint;
 
     function GetVideoBuffer: Pointer;
+
+    // https://gist.github.com/wlhe/fcad2999ceb4a826bd811e9fdb6fe652
+    function yuyv_to_rgb(yuyv: pbyte): Tbytes;
   end;
 
 implementation
@@ -198,8 +205,6 @@ begin
   Result := 0;
 end;
 
-// https://www.freepascal.org/docs-html/rtl/baseunix/fpmmap.html
-
 function Tv4l2.MemoryMap: cint;
 var
   req: Tv4l2_requestbuffers;
@@ -309,6 +314,20 @@ begin
   FpIOCtl(fHandle, VIDIOC_QBUF, @buf);
 
   Result := v4l2_ubuffers[buf.index].start;
+end;
+
+function Tv4l2.yuyv_to_rgb(yuyv: pbyte): Tbytes;
+var
+  temp: byte = 0;
+  yuv_size, rgb_size: clong;
+begin
+  Result:=nil;
+  yuv_size := fheight * fwidth * 2;
+  rgb_size := fheight * fwidth * 3;
+  if yuyv = nil then begin
+    Exit(Result);
+  end;
+
 end;
 
 end.

@@ -103,11 +103,9 @@ begin
   video_fildes := v4l2_open(device);
   v4l2_querycap(video_fildes, device);
 
-//  v4l2_sfmt(video_fildes, V4L2_PIX_FMT_YUYV);
   SetFormat(video_fildes, V4L2_PIX_FMT_YUYV);
 
   WriteLn(#10#27'[0m--- C ---');
-//  v4l2_gfmt(video_fildes);
   WriteLn(#10#27'[0m--- Pascal ---');
   GetFormat(video_fildes);
 
