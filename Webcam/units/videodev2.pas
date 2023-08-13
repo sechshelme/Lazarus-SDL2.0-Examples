@@ -68,25 +68,25 @@ uses
  *    et al.
   }
 
-    const
-     _IOC_NRBITS = 8;
-     _IOC_TYPEBITS = 8;
-     _IOC_SIZEBITS = 14;
-     _IOC_DIRBITS = 2;
-     _IOC_NRMASK = (1 shl _IOC_NRBITS)-1;
-     _IOC_TYPEMASK = (1 shl _IOC_TYPEBITS)-1;
-     _IOC_SIZEMASK = (1 shl _IOC_SIZEBITS)-1;
-     _IOC_DIRMASK = (1 shl _IOC_DIRBITS)-1;
-     _IOC_NRSHIFT = 0;
-     _IOC_TYPESHIFT = _IOC_NRSHIFT+_IOC_NRBITS;
-     _IOC_SIZESHIFT = _IOC_TYPESHIFT+_IOC_TYPEBITS;
-     _IOC_DIRSHIFT = _IOC_SIZESHIFT+_IOC_SIZEBITS;
+const
+  _IOC_NRBITS = 8;
+  _IOC_TYPEBITS = 8;
+  _IOC_SIZEBITS = 14;
+  _IOC_DIRBITS = 2;
+  _IOC_NRMASK = (1 shl _IOC_NRBITS) - 1;
+  _IOC_TYPEMASK = (1 shl _IOC_TYPEBITS) - 1;
+  _IOC_SIZEMASK = (1 shl _IOC_SIZEBITS) - 1;
+  _IOC_DIRMASK = (1 shl _IOC_DIRBITS) - 1;
+  _IOC_NRSHIFT = 0;
+  _IOC_TYPESHIFT = _IOC_NRSHIFT + _IOC_NRBITS;
+  _IOC_SIZESHIFT = _IOC_TYPESHIFT + _IOC_TYPEBITS;
+  _IOC_DIRSHIFT = _IOC_SIZESHIFT + _IOC_SIZEBITS;
   {
    * Direction bits.
     }
-     _IOC_NONE = 0;
-     _IOC_WRITE = 1;
-     _IOC_READ = 2;
+  _IOC_NONE = 0;
+  _IOC_WRITE = 1;
+  _IOC_READ = 2;
 
 const
   VIDEO_MAX_FRAME = 32;
@@ -158,7 +158,7 @@ const
   // }
 
 
-{ Deprecated, do not use  }
+  { Deprecated, do not use  }
 type
   Tv4l2_buf_type = longint;
 
@@ -180,16 +180,16 @@ const
   V4L2_BUF_TYPE_PRIVATE = $80;
 
   {
-  #define V4L2_TYPE_IS_MULTIPLANAR(type)			\
-  	((type) == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE	\
-  	 || (type) == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE)
-  #define V4L2_TYPE_IS_OUTPUT(type)				\
-  	((type) == V4L2_BUF_TYPE_VIDEO_OUTPUT			\
-  	 || (type) == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE		\
-  	 || (type) == V4L2_BUF_TYPE_VIDEO_OVERLAY		\
-  	 || (type) == V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY	\
-  	 || (type) == V4L2_BUF_TYPE_VBI_OUTPUT			\
-  	 || (type) == V4L2_BUF_TYPE_SLICED_VBI_OUTPUT)
+  #define V4L2_TYPE_IS_MULTIPLANAR(type)      \
+    ((type) == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE  \
+     || (type) == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE)
+  #define V4L2_TYPE_IS_OUTPUT(type)        \
+    ((type) == V4L2_BUF_TYPE_VIDEO_OUTPUT      \
+     || (type) == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE    \
+     || (type) == V4L2_BUF_TYPE_VIDEO_OVERLAY    \
+     || (type) == V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY  \
+     || (type) == V4L2_BUF_TYPE_VBI_OUTPUT      \
+     || (type) == V4L2_BUF_TYPE_SLICED_VBI_OUTPUT)
    }
 
 type
@@ -2672,109 +2672,109 @@ type
  *
   }
 const
-  VIDIOC_QUERYCAP          = LongInt((_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (0 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_capability) shl _IOC_SIZESHIFT));
-  VIDIOC_RESERVED           = LongInt((_IOC_NONE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (1 shl _IOC_NRSHIFT) or (0 shl _IOC_SIZESHIFT));
-  VIDIOC_ENUM_FMT         = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (2 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_fmtdesc) shl _IOC_SIZESHIFT));
-  VIDIOC_G_FMT            = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (4 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_format) shl _IOC_SIZESHIFT));
-  VIDIOC_S_FMT            = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (5 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_format) shl _IOC_SIZESHIFT));
-  VIDIOC_REQBUFS          = (((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (8 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_requestbuffers) shl _IOC_SIZESHIFT));
-  VIDIOC_QUERYBUF         = (((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (9 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_buffer) shl _IOC_SIZESHIFT));
-  VIDIOC_G_FBUF            = LongInt((_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (10 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_framebuffer) shl _IOC_SIZESHIFT));
-  VIDIOC_S_FBUF            = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (11 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_framebuffer) shl _IOC_SIZESHIFT));
-  VIDIOC_OVERLAY           = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (14 shl _IOC_NRSHIFT) or (SizeOf(LongInt) shl _IOC_SIZESHIFT));
-  VIDIOC_QBUF             = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (15 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_buffer) shl _IOC_SIZESHIFT));
-  VIDIOC_EXPBUF           = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (16 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_exportbuffer) shl _IOC_SIZESHIFT));
-  VIDIOC_DQBUF            = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (17 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_buffer) shl _IOC_SIZESHIFT));
-  VIDIOC_STREAMON          = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (18 shl _IOC_NRSHIFT) or (SizeOf(LongInt) shl _IOC_SIZESHIFT));
-  VIDIOC_STREAMOFF         = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (19 shl _IOC_NRSHIFT) or (SizeOf(LongInt) shl _IOC_SIZESHIFT));
-  VIDIOC_G_PARM           = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (21 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_streamparm) shl _IOC_SIZESHIFT));
-  VIDIOC_S_PARM           = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (22 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_streamparm) shl _IOC_SIZESHIFT));
-  VIDIOC_G_STD             = LongInt((_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (23 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_std_id) shl _IOC_SIZESHIFT));
-  VIDIOC_S_STD             = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (24 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_std_id) shl _IOC_SIZESHIFT));
-  VIDIOC_ENUMSTD          = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (25 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_standard) shl _IOC_SIZESHIFT));
-  VIDIOC_ENUMINPUT        = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (26 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_input) shl _IOC_SIZESHIFT));
-  VIDIOC_G_CTRL           = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (27 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_control) shl _IOC_SIZESHIFT));
-  VIDIOC_S_CTRL           = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (28 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_control) shl _IOC_SIZESHIFT));
-  VIDIOC_G_TUNER          = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (29 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_tuner) shl _IOC_SIZESHIFT));
-  VIDIOC_S_TUNER           = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (30 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_tuner) shl _IOC_SIZESHIFT));
-  VIDIOC_G_AUDIO           = LongInt((_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (33 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_audio) shl _IOC_SIZESHIFT));
-  VIDIOC_S_AUDIO           = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (34 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_audio) shl _IOC_SIZESHIFT));
-  VIDIOC_QUERYCTRL        = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (36 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_queryctrl) shl _IOC_SIZESHIFT));
-  VIDIOC_QUERYMENU        = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (37 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_querymenu) shl _IOC_SIZESHIFT));
-  VIDIOC_G_INPUT           = LongInt((_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (38 shl _IOC_NRSHIFT) or (SizeOf(LongInt) shl _IOC_SIZESHIFT));
-  VIDIOC_S_INPUT          = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (39 shl _IOC_NRSHIFT) or (SizeOf(LongInt) shl _IOC_SIZESHIFT));
-  VIDIOC_G_OUTPUT          = LongInt((_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (46 shl _IOC_NRSHIFT) or (SizeOf(LongInt) shl _IOC_SIZESHIFT));
-  VIDIOC_S_OUTPUT         = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (47 shl _IOC_NRSHIFT) or (SizeOf(LongInt) shl _IOC_SIZESHIFT));
-  VIDIOC_ENUMOUTPUT       = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (48 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_output) shl _IOC_SIZESHIFT));
-  VIDIOC_G_AUDOUT          = LongInt((_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (49 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_audioout) shl _IOC_SIZESHIFT));
-  VIDIOC_S_AUDOUT          = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (50 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_audioout) shl _IOC_SIZESHIFT));
-  VIDIOC_G_MODULATOR      = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (54 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_modulator) shl _IOC_SIZESHIFT));
-  VIDIOC_S_MODULATOR       = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (55 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_modulator) shl _IOC_SIZESHIFT));
-  VIDIOC_G_FREQUENCY      = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (56 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_frequency) shl _IOC_SIZESHIFT));
-  VIDIOC_S_FREQUENCY       = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (57 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_frequency) shl _IOC_SIZESHIFT));
-  VIDIOC_CROPCAP          = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (58 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_cropcap) shl _IOC_SIZESHIFT));
-  VIDIOC_G_CROP           = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (59 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_crop) shl _IOC_SIZESHIFT));
-  VIDIOC_S_CROP            = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (60 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_crop) shl _IOC_SIZESHIFT));
-  VIDIOC_G_JPEGCOMP        = LongInt((_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (61 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_jpegcompression) shl _IOC_SIZESHIFT));
-  VIDIOC_S_JPEGCOMP        = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (62 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_jpegcompression) shl _IOC_SIZESHIFT));
-  VIDIOC_QUERYSTD          = LongInt((_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (63 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_std_id) shl _IOC_SIZESHIFT));
-  VIDIOC_TRY_FMT          = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (64 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_format) shl _IOC_SIZESHIFT));
-  VIDIOC_ENUMAUDIO        = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (65 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_audio) shl _IOC_SIZESHIFT));
-  VIDIOC_ENUMAUDOUT       = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (66 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_audioout) shl _IOC_SIZESHIFT));
-  VIDIOC_G_PRIORITY        = LongInt((_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (67 shl _IOC_NRSHIFT) or (SizeOf(uint32) shl _IOC_SIZESHIFT)); { enum Tv4l2_priority *}
-  VIDIOC_S_PRIORITY        = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (68 shl _IOC_NRSHIFT) or (SizeOf(uint32) shl _IOC_SIZESHIFT)); { enum Tv4l2_priority *}
-  VIDIOC_G_SLICED_VBI_CAP = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (69 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_sliced_vbi_cap) shl _IOC_SIZESHIFT));
-  VIDIOC_LOG_STATUS         = LongInt((_IOC_NONE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (70 shl _IOC_NRSHIFT) or (0 shl _IOC_SIZESHIFT));
-  VIDIOC_G_EXT_CTRLS      = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (71 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_ext_controls) shl _IOC_SIZESHIFT));
-  VIDIOC_S_EXT_CTRLS      = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (72 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_ext_controls) shl _IOC_SIZESHIFT));
-  VIDIOC_TRY_EXT_CTRLS    = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (73 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_ext_controls) shl _IOC_SIZESHIFT));
-  VIDIOC_ENUM_FRAMESIZES  = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (74 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_frmsizeenum) shl _IOC_SIZESHIFT));
-  VIDIOC_ENUM_FRAMEINTERVALS = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (75 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_frmivalenum) shl _IOC_SIZESHIFT));
-  VIDIOC_G_ENC_INDEX       = LongInt((_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (76 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_enc_idx) shl _IOC_SIZESHIFT));
-  VIDIOC_ENCODER_CMD      = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (77 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_encoder_cmd) shl _IOC_SIZESHIFT));
-  VIDIOC_TRY_ENCODER_CMD  = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (78 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_encoder_cmd) shl _IOC_SIZESHIFT));
+  VIDIOC_QUERYCAP = (_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (0 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_capability) shl _IOC_SIZESHIFT);
+  VIDIOC_RESERVED = (_IOC_NONE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (1 shl _IOC_NRSHIFT) or (0 shl _IOC_SIZESHIFT);
+  VIDIOC_ENUM_FMT = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (2 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_fmtdesc) shl _IOC_SIZESHIFT);
+  VIDIOC_G_FMT = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (4 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_format) shl _IOC_SIZESHIFT);
+  VIDIOC_S_FMT = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (5 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_format) shl _IOC_SIZESHIFT);
+  VIDIOC_REQBUFS = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (8 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_requestbuffers) shl _IOC_SIZESHIFT);
+  VIDIOC_QUERYBUF = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (9 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_buffer) shl _IOC_SIZESHIFT);
+  VIDIOC_G_FBUF = (_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (10 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_framebuffer) shl _IOC_SIZESHIFT);
+  VIDIOC_S_FBUF = (_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (11 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_framebuffer) shl _IOC_SIZESHIFT);
+  VIDIOC_OVERLAY = (_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (14 shl _IOC_NRSHIFT) or (SizeOf(longint) shl _IOC_SIZESHIFT);
+  VIDIOC_QBUF = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (15 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_buffer) shl _IOC_SIZESHIFT);
+  VIDIOC_EXPBUF = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (16 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_exportbuffer) shl _IOC_SIZESHIFT);
+  VIDIOC_DQBUF = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (17 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_buffer) shl _IOC_SIZESHIFT);
+  VIDIOC_STREAMON = (_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (18 shl _IOC_NRSHIFT) or (SizeOf(longint) shl _IOC_SIZESHIFT);
+  VIDIOC_STREAMOFF = (_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (19 shl _IOC_NRSHIFT) or (SizeOf(longint) shl _IOC_SIZESHIFT);
+  VIDIOC_G_PARM = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (21 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_streamparm) shl _IOC_SIZESHIFT);
+  VIDIOC_S_PARM = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (22 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_streamparm) shl _IOC_SIZESHIFT);
+  VIDIOC_G_STD = (_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (23 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_std_id) shl _IOC_SIZESHIFT);
+  VIDIOC_S_STD = (_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (24 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_std_id) shl _IOC_SIZESHIFT);
+  VIDIOC_ENUMSTD = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (25 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_standard) shl _IOC_SIZESHIFT);
+  VIDIOC_ENUMINPUT = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (26 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_input) shl _IOC_SIZESHIFT);
+  VIDIOC_G_CTRL = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (27 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_control) shl _IOC_SIZESHIFT);
+  VIDIOC_S_CTRL = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (28 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_control) shl _IOC_SIZESHIFT);
+  VIDIOC_G_TUNER = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (29 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_tuner) shl _IOC_SIZESHIFT);
+  VIDIOC_S_TUNER = (_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (30 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_tuner) shl _IOC_SIZESHIFT);
+  VIDIOC_G_AUDIO = (_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (33 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_audio) shl _IOC_SIZESHIFT);
+  VIDIOC_S_AUDIO = (_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (34 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_audio) shl _IOC_SIZESHIFT);
+  VIDIOC_QUERYCTRL = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (36 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_queryctrl) shl _IOC_SIZESHIFT);
+  VIDIOC_QUERYMENU = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (37 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_querymenu) shl _IOC_SIZESHIFT);
+  VIDIOC_G_INPUT = (_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (38 shl _IOC_NRSHIFT) or (SizeOf(longint) shl _IOC_SIZESHIFT);
+  VIDIOC_S_INPUT = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (39 shl _IOC_NRSHIFT) or (SizeOf(longint) shl _IOC_SIZESHIFT);
+  VIDIOC_G_OUTPUT = (_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (46 shl _IOC_NRSHIFT) or (SizeOf(longint) shl _IOC_SIZESHIFT);
+  VIDIOC_S_OUTPUT = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (47 shl _IOC_NRSHIFT) or (SizeOf(longint) shl _IOC_SIZESHIFT);
+  VIDIOC_ENUMOUTPUT = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (48 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_output) shl _IOC_SIZESHIFT);
+  VIDIOC_G_AUDOUT = (_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (49 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_audioout) shl _IOC_SIZESHIFT);
+  VIDIOC_S_AUDOUT = (_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (50 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_audioout) shl _IOC_SIZESHIFT);
+  VIDIOC_G_MODULATOR = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (54 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_modulator) shl _IOC_SIZESHIFT);
+  VIDIOC_S_MODULATOR = (_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (55 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_modulator) shl _IOC_SIZESHIFT);
+  VIDIOC_G_FREQUENCY = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (56 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_frequency) shl _IOC_SIZESHIFT);
+  VIDIOC_S_FREQUENCY = (_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (57 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_frequency) shl _IOC_SIZESHIFT);
+  VIDIOC_CROPCAP = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (58 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_cropcap) shl _IOC_SIZESHIFT);
+  VIDIOC_G_CROP = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (59 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_crop) shl _IOC_SIZESHIFT);
+  VIDIOC_S_CROP = (_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (60 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_crop) shl _IOC_SIZESHIFT);
+  VIDIOC_G_JPEGCOMP = (_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (61 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_jpegcompression) shl _IOC_SIZESHIFT);
+  VIDIOC_S_JPEGCOMP = (_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (62 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_jpegcompression) shl _IOC_SIZESHIFT);
+  VIDIOC_QUERYSTD = (_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (63 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_std_id) shl _IOC_SIZESHIFT);
+  VIDIOC_TRY_FMT = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (64 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_format) shl _IOC_SIZESHIFT);
+  VIDIOC_ENUMAUDIO = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (65 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_audio) shl _IOC_SIZESHIFT);
+  VIDIOC_ENUMAUDOUT = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (66 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_audioout) shl _IOC_SIZESHIFT);
+  VIDIOC_G_PRIORITY = (_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (67 shl _IOC_NRSHIFT) or (SizeOf(uint32) shl _IOC_SIZESHIFT); { enum Tv4l2_priority *}
+  VIDIOC_S_PRIORITY = (_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (68 shl _IOC_NRSHIFT) or (SizeOf(uint32) shl _IOC_SIZESHIFT); { enum Tv4l2_priority *}
+  VIDIOC_G_SLICED_VBI_CAP = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (69 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_sliced_vbi_cap) shl _IOC_SIZESHIFT);
+  VIDIOC_LOG_STATUS = (_IOC_NONE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (70 shl _IOC_NRSHIFT) or (0 shl _IOC_SIZESHIFT);
+  VIDIOC_G_EXT_CTRLS = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (71 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_ext_controls) shl _IOC_SIZESHIFT);
+  VIDIOC_S_EXT_CTRLS = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (72 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_ext_controls) shl _IOC_SIZESHIFT);
+  VIDIOC_TRY_EXT_CTRLS = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (73 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_ext_controls) shl _IOC_SIZESHIFT);
+  VIDIOC_ENUM_FRAMESIZES = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (74 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_frmsizeenum) shl _IOC_SIZESHIFT);
+  VIDIOC_ENUM_FRAMEINTERVALS = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (75 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_frmivalenum) shl _IOC_SIZESHIFT);
+  VIDIOC_G_ENC_INDEX = (_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (76 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_enc_idx) shl _IOC_SIZESHIFT);
+  VIDIOC_ENCODER_CMD = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (77 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_encoder_cmd) shl _IOC_SIZESHIFT);
+  VIDIOC_TRY_ENCODER_CMD = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (78 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_encoder_cmd) shl _IOC_SIZESHIFT);
 
 { Experimental, meant for debugging, testing and internal use.
    Only implemented if CONFIG_VIDEO_ADV_DEBUG is defined.
    You must be root to use these ioctls. Never use these in applications! }
-  VIDIOC_DBG_S_REGISTER    = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (79 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_dbg_register) shl _IOC_SIZESHIFT));
-  VIDIOC_DBG_G_REGISTER   = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (80 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_dbg_register) shl _IOC_SIZESHIFT));
+  VIDIOC_DBG_S_REGISTER = (_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (79 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_dbg_register) shl _IOC_SIZESHIFT);
+  VIDIOC_DBG_G_REGISTER = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (80 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_dbg_register) shl _IOC_SIZESHIFT);
 
-  VIDIOC_S_HW_FREQ_SEEK    = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (82 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_hw_freq_seek) shl _IOC_SIZESHIFT));
+  VIDIOC_S_HW_FREQ_SEEK = (_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (82 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_hw_freq_seek) shl _IOC_SIZESHIFT);
 
-  VIDIOC_S_DV_TIMINGS     = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (87 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_dv_timings) shl _IOC_SIZESHIFT));
-  VIDIOC_G_DV_TIMINGS     = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (88 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_dv_timings) shl _IOC_SIZESHIFT));
-  VIDIOC_DQEVENT           = LongInt((_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (89 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_event) shl _IOC_SIZESHIFT));
-  VIDIOC_SUBSCRIBE_EVENT   = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (90 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_event_subscription) shl _IOC_SIZESHIFT));
-  VIDIOC_UNSUBSCRIBE_EVENT = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (91 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_event_subscription) shl _IOC_SIZESHIFT));
+  VIDIOC_S_DV_TIMINGS = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (87 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_dv_timings) shl _IOC_SIZESHIFT);
+  VIDIOC_G_DV_TIMINGS = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (88 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_dv_timings) shl _IOC_SIZESHIFT);
+  VIDIOC_DQEVENT = (_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (89 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_event) shl _IOC_SIZESHIFT);
+  VIDIOC_SUBSCRIBE_EVENT = (_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (90 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_event_subscription) shl _IOC_SIZESHIFT);
+  VIDIOC_UNSUBSCRIBE_EVENT = (_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (91 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_event_subscription) shl _IOC_SIZESHIFT);
 
 { Experimental, the below two ioctls may change over the next couple of kernel
    versions }
-  VIDIOC_CREATE_BUFS      = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (92 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_create_buffers) shl _IOC_SIZESHIFT));
-  VIDIOC_PREPARE_BUF      = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (93 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_buffer) shl _IOC_SIZESHIFT));
+  VIDIOC_CREATE_BUFS = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (92 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_create_buffers) shl _IOC_SIZESHIFT);
+  VIDIOC_PREPARE_BUF = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (93 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_buffer) shl _IOC_SIZESHIFT);
 
-{ Experimental selection API }
-  VIDIOC_G_SELECTION      = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (94 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_selection) shl _IOC_SIZESHIFT));
-  VIDIOC_S_SELECTION      = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (95 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_selection) shl _IOC_SIZESHIFT));
+  { Experimental selection API }
+  VIDIOC_G_SELECTION = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (94 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_selection) shl _IOC_SIZESHIFT);
+  VIDIOC_S_SELECTION = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (95 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_selection) shl _IOC_SIZESHIFT);
 
 { Experimental, these two ioctls may change over the next couple of kernel
    versions. }
-  VIDIOC_DECODER_CMD      = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (96 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_decoder_cmd) shl _IOC_SIZESHIFT));
-  VIDIOC_TRY_DECODER_CMD  = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (97 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_decoder_cmd) shl _IOC_SIZESHIFT));
+  VIDIOC_DECODER_CMD = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (96 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_decoder_cmd) shl _IOC_SIZESHIFT);
+  VIDIOC_TRY_DECODER_CMD = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (97 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_decoder_cmd) shl _IOC_SIZESHIFT);
 
 { Experimental, these three ioctls may change over the next couple of kernel
    versions. }
-  VIDIOC_ENUM_DV_TIMINGS  = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (98 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_enum_dv_timings) shl _IOC_SIZESHIFT));
-  VIDIOC_QUERY_DV_TIMINGS  = LongInt((_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (99 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_dv_timings) shl _IOC_SIZESHIFT));
-  VIDIOC_DV_TIMINGS_CAP   = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (100 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_dv_timings_cap) shl _IOC_SIZESHIFT));
+  VIDIOC_ENUM_DV_TIMINGS = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (98 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_enum_dv_timings) shl _IOC_SIZESHIFT);
+  VIDIOC_QUERY_DV_TIMINGS = (_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (99 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_dv_timings) shl _IOC_SIZESHIFT);
+  VIDIOC_DV_TIMINGS_CAP = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (100 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_dv_timings_cap) shl _IOC_SIZESHIFT);
 
 { Experimental, this ioctl may change over the next couple of kernel
    versions. }
-  VIDIOC_ENUM_FREQ_BANDS  = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (101 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_frequency_band) shl _IOC_SIZESHIFT));
+  VIDIOC_ENUM_FREQ_BANDS = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (101 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_frequency_band) shl _IOC_SIZESHIFT);
 
 { Experimental, meant for debugging, testing and internal use.
    Never use these in applications! }
-  VIDIOC_DBG_G_CHIP_INFO  = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (102 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_dbg_chip_info) shl _IOC_SIZESHIFT));
+  VIDIOC_DBG_G_CHIP_INFO = ((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (102 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_dbg_chip_info) shl _IOC_SIZESHIFT);
 
 { Reminder: when adding new ioctls please add support for them to
    drivers/media/video/v4l2-compat-ioctl32.c as well! }

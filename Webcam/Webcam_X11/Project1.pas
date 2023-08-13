@@ -1,0 +1,177 @@
+program Project1;
+
+uses
+  BaseUnix,
+  unixtype,
+  ctypes,
+  xlib,
+  xutil,
+  keysym,
+  x,
+  v4l2,
+  sdl2
+  ;
+
+type
+  TxbmMask = record
+    Width, Height: cuint;
+    bits: array of byte;
+  end;
+
+  // https://stackoverflow.com/questions/64521652/create-xlib-window-with-a-frame-buffer-i-can-draw-directly-and-use-xputimage
+
+type
+  TBitMapData = record
+    Width, Height: integer;
+    Data: packed array of record
+      b, g, r, a: byte;
+      end;
+  end;
+
+var
+  dis: PDisplay;
+  win, rootWin: TWindow;
+  Event: TXEvent;
+  scr: cint;
+  gc: TGC;
+  i: integer;
+  bit_cub: TPixmap;
+
+  BitmapData: TBitMapData;
+
+
+type
+
+  TSprite = record
+    x, y, stepx, stepy: integer;
+  end;
+  TSprites = array of TSprite;
+var
+  image: PXImage;
+var
+  My_v4l2: Tv4l2;
+
+const
+  EventMask = KeyPressMask or ExposureMask or PointerMotionMask or ButtonPressMask;
+
+  procedure wait;
+  var
+    rem, Req: timespec;
+  begin
+    Req.tv_nsec := 30000000;
+    Req.tv_sec := 0;
+    fpNanoSleep(@Req, @rem);
+  end;
+
+  procedure Create_V4L2;
+  const
+    device = '/dev/video0';
+  begin
+    My_v4l2 := Tv4l2.Create(device, 640, 480);
+
+    My_v4l2.QueryCap;
+    My_v4l2.GetFormat;
+    My_v4l2.StreamOn;
+  end;
+
+
+  procedure Create_MainWin;
+  var
+    visual: PVisual;
+    x, y: integer;
+  begin
+
+    // Erstellt die Verbindung zum Server
+    dis := XOpenDisplay(nil);
+    if dis = nil then begin
+      WriteLn('Kann nicht das Display öffnen');
+      Halt(1);
+    end;
+    scr := DefaultScreen(dis);
+    gc := DefaultGC(dis, scr);
+    win := XCreateSimpleWindow(dis, RootWindow(dis, scr), 10, 10, 640, 480, 1, BlackPixel(dis, scr), WhitePixel(dis, scr));
+
+    XSelectInput(dis, win, KeyPressMask or ExposureMask);
+    XMapWindow(dis, win);
+
+
+    with BitmapData do begin
+      Width := 640;
+      Height := 480;
+
+      SetLength(Data, Height * Height);
+      for y := 0 to Height - 1 do begin
+        for x := 0 to Width - 1 do begin
+          Data[y * Width + x].b := x * y;
+          Data[y * Width + x].g := y;
+          Data[y * Width + x].r := x;
+          Data[y * Width + x].a := $00;
+        end;
+      end;
+    end;
+
+    //My_v4l2.GetYUYVBuffer;
+
+
+
+    image := XCreateImage(dis, nil, DefaultDepth(dis, scr), ZPixmap, 0, pansichar(BitmapData.Data), 640, 480, 32, 0);
+    //      image := XCreateImage(dis, visual, DefaultDepth(dis, scr), ZPixmap, 0,PAnsiChar( My_v4l2.GetRGBBuffer), Width*2, Height*2, 32, 0);
+
+  end;
+
+begin
+  dis := XOpenDisplay(nil);
+  if dis = nil then begin
+    WriteLn('Kann nicht das Display öffnen');
+    Halt(1);
+  end;
+  scr := DefaultScreen(dis);
+  rootWin := RootWindow(dis, scr);
+
+ Create_V4L2;
+  Create_MainWin;
+
+  gc := XCreateGC(dis, win, 0, nil);
+
+  XStoreName(dis, win, 'Transparentes-Fenster');
+
+  while (True) do begin
+
+    if XPending(dis) > 0 then begin
+
+      XNextEvent(dis, @Event);
+      case Event._type of
+        Expose: begin
+          BitmapData.Data[random(1000)].r := $FF;
+          BitmapData.Data[random(1000)].g := $FF;
+          BitmapData.Data[random(1000)].b := $FF;
+        end;
+        ButtonPress: begin
+          XRaiseWindow(dis, Event.xbutton.window);
+        end;
+
+        KeyPress: begin
+          if XLookupKeysym(@Event.xkey, 0) = XK_Escape then begin
+            Break;
+          end;
+        end;
+      end;
+    end else begin
+      //  wait;
+
+      //      XClearWindow(dis, win);
+
+
+      //  My_v4l2.GetRGBBuffer;
+      XPutImage(dis, win, gc, image, 0, 0, 100, 100, BitmapData.Width, BitmapData.Height);
+    end;
+
+  end;
+
+  XDestroyImage(image);
+
+  XDestroyWindow(dis, win);
+
+
+  XCloseDisplay(dis);
+end.

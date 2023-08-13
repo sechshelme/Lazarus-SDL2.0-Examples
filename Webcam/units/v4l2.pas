@@ -15,19 +15,8 @@ uses
   // ffmpeg -f v4l2 -list_formats all -i /dev/video0
   // ffmpeg -i /dev/video0 -vf format=yuv420p -f sdl test
 
-
-
 const
-  //  IMAGE_WIDTH = 640;
-  //  IMAGE_HEIGHT = 480;
-  //  IMAGE_WIDTH = 1920;
-  //  IMAGE_HEIGHT = 1080;
-  //  IMAGE_WIDTH = 320;
-  //  IMAGE_HEIGHT = 200;
-  //  IMAGE_WIDTH = 1280;
-  //  IMAGE_HEIGHT = 720;
-
-  BUF_NUM = 4;
+  BUF_NUM = 1;
 
 type
   Tv4l2_ubuffer = record
@@ -47,13 +36,11 @@ type
     fwidth, fheight, ffps: cuint;
     fHandle: cint;
     v4l2_ubuffers: array of Tv4l2_ubuffer;
-    BufferPointer:Pointer;
+    BufferPointer: Pointer;
     function SetFormat(pfmt: uint32): cint;
     function SetFPS(fps: cint): cint;
     function MemoryMap: cint;
     function MemoryUnMap: cint;
-
-    procedure yuyv_to_rgb_pixel(yuyv: pbyte; rgb: pbyte);
   public
     property Width: cuint read fwidth;
     property Height: cuint read fheight;
@@ -64,10 +51,9 @@ type
     function StreamOn: cint;
     function StreamOff: cint;
 
-    function GetVideoBuffer: Pointer;
-
     // https://gist.github.com/wlhe/fcad2999ceb4a826bd811e9fdb6fe652
-    function yuyv_to_rgb: Tbytes;
+    function GetYUYVBuffer: Pointer;
+    function GetRGBBuffer: Tbytes;
   end;
 
 implementation
@@ -297,7 +283,7 @@ begin
   end;
 end;
 
-function Tv4l2.GetVideoBuffer: Pointer;
+function Tv4l2.GetYUYVBuffer: Pointer;
 var
   fds: TFDSet;
   tv: TTimeVal = (tv_sec: 1; tv_usec: 0);
@@ -316,97 +302,48 @@ begin
   buf.memory := V4L2_MEMORY_MMAP;
   FpIOCtl(fHandle, VIDIOC_QBUF, @buf);
 
-  BufferPointer:=v4l2_ubuffers[buf.index].start;
-  Result :=BufferPointer;
+  BufferPointer := v4l2_ubuffers[buf.index].start;
+  Result := BufferPointer;
 end;
 
-procedure Tv4l2.yuyv_to_rgb_pixel(yuyv: pbyte; rgb: pbyte);
+function Tv4l2.GetRGBBuffer: Tbytes;
+
+  procedure yuyv_to_rgb_pixel(yuyv: pbyte; rgb: pbyte);
+
+    function EnsureRange(f: cfloat): byte; inline;
+    begin
+      if f < 0 then begin
+        Result := 0;
+      end else if f > 255 then begin
+        Result := 255;
+      end else begin
+        Result := Round(f);
+      end;
+    end;
+
+  begin
+    rgb[0] := EnsureRange(yuyv[0] + 1.4065 * (yuyv[3] - 128));
+    rgb[1] := EnsureRange(yuyv[0] - 0.3455 * (yuyv[1] - 128) - 0.7169 * (yuyv[3] - 128));
+    rgb[2] := EnsureRange(yuyv[0] + 1.1790 * (yuyv[1] - 128));
+
+    rgb[3] := EnsureRange(yuyv[2] + 1.4065 * (yuyv[3] - 128));
+    rgb[4] := EnsureRange(yuyv[2] - 0.3455 * (yuyv[1] - 128) - 0.7169 * (yuyv[3] - 128));
+    rgb[5] := EnsureRange(yuyv[2] + 1.1790 * (yuyv[1] - 128));
+  end;
+
 var
-  y, v, u: cint;
-  r, g, b: cfloat;
+  rgb_size: clong;
+  i: integer = 0;
+  j: integer = 0;
 begin
-  // --- 0 ---
-
-  y := yuyv[0];
-  u := yuyv[1];
-  v := yuyv[3];
-
-  r := y + 1.4065 * (v - 128);
-  g := y - 0.3455 * (u - 128) - 0.7169 * (v - 128);
-  b := y + 1.1790 * (u - 128);
-
-  if r < 0 then begin
-    r := 0;
-  end else if r > 255 then begin
-    r := 255;
-  end;
-
-  if g < 0 then begin
-    g := 0;
-  end else if g > 255 then begin
-    g := 255;
-  end;
-
-  if b < 0 then begin
-    b := 0;
-  end else if b > 255 then begin
-    b := 255;
-  end;
-
-  rgb[0] := byte(Round(r));
-  rgb[1] := byte(Round(g));
-  rgb[2] := byte(Round(b));
-
-  // --- 1 ---
-
-  u := yuyv[1];
-  y := yuyv[2];
-  v := yuyv[3];
-
-  r := y + 1.4065 * (v - 128);
-  g := y - 0.3455 * (u - 128) - 0.7169 * (v - 128);
-  b := y + 1.1790 * (u - 128);
-
-  if r < 0 then begin
-    r := 0;
-  end else if r > 255 then begin
-    r := 255;
-  end;
-
-  if g < 0 then begin
-    g := 0;
-  end else if g > 255 then begin
-    g := 255;
-  end;
-
-  if b < 0 then begin
-    b := 0;
-  end else if b > 255 then begin
-    b := 255;
-  end;
-
-  rgb[3] := byte(Round(r));
-  rgb[4] := byte(Round(g));
-  rgb[5] := byte(Round(b));
-end;
-
-function Tv4l2.yuyv_to_rgb: Tbytes;
-var
-  yuv_size, rgb_size: clong;
-  i, j: integer;
-begin
-  GetVideoBuffer;
+  GetYUYVBuffer;
 
   Result := nil;
-  yuv_size := fheight * fwidth * 2;
   rgb_size := fheight * fwidth * 3;
   SetLength(Result, rgb_size);
 
-  i := 0;
-  j := 0;
-
-  while (i < rgb_size) and (j < yuv_size) do begin
-    yuyv_to_rgb_pixel(@PByte( BufferPointer)[j], @Result[i]);
+  while i < rgb_size do begin
+    yuyv_to_rgb_pixel(@pbyte(BufferPointer)[j], @Result[i]);
     Inc(i, 6);
     Inc(j, 4);
   end;

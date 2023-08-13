@@ -24,8 +24,6 @@ var
 
   quit: boolean = False;
   My_v4l2: Tv4l2;
-  rgb_buf: Tbytes;
-
 
 begin
   My_v4l2 := Tv4l2.Create(device,640,480);
@@ -71,11 +69,9 @@ sdlTexture := SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_RGB24, SDL_TEXTUREA
       end;
     end;
 
-//    My_v4l2.GetVideoBuffer;
-rgb_buf:=    My_v4l2.yuyv_to_rgb;
-    SDL_UpdateTexture(sdlTexture, @sdlRect,PByte( rgb_buf), My_v4l2.Width * 3);
+    SDL_UpdateTexture(sdlTexture, @sdlRect,PByte( My_v4l2.GetRGBBuffer), My_v4l2.Width * 3);
 
-//    SDL_UpdateTexture(sdlTexture, @sdlRect, My_v4l2.GetVideoBuffer, My_v4l2.Width * 2);
+//    SDL_UpdateTexture(sdlTexture, @sdlRect, My_v4l2.GetYUYVBuffer, My_v4l2.Width * 2);
     SDL_RenderClear(sdlRenderer);
     SDL_RenderCopy(sdlRenderer, sdlTexture, nil, @sdlRect);
     SDL_RenderPresent(sdlRenderer);
