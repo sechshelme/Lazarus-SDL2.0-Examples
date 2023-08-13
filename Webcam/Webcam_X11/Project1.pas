@@ -34,21 +34,10 @@ var
   Event: TXEvent;
   scr: cint;
   gc: TGC;
-  i: integer;
-  bit_cub: TPixmap;
 
   BitmapData: TBitMapData;
 
-
-type
-
-  TSprite = record
-    x, y, stepx, stepy: integer;
-  end;
-  TSprites = array of TSprite;
-var
   image: PXImage;
-var
   My_v4l2: Tv4l2;
 
 const
@@ -99,7 +88,7 @@ const
       Width := 640;
       Height := 480;
 
-      SetLength(Data, Height * Height);
+      SetLength(Data, Width * Height);
       for y := 0 to Height - 1 do begin
         for x := 0 to Width - 1 do begin
           Data[y * Width + x].b := x * y;
@@ -108,16 +97,20 @@ const
           Data[y * Width + x].a := $00;
         end;
       end;
+
+      visual := DefaultVisual(dis, scr);
+
+  //  image := XCreateImage(dis, visual, DefaultDepth(dis, scr), ZPixmap, 0, pansichar(BitmapData.Data), 640, 480, 32, 0);
+//  image := XCreateImage(dis, visual, DefaultDepth(dis, scr), ZPixmap, 0,PAnsiChar( My_v4l2.GetRGB32Buffer), Width, Height, 32, 0);
+  image := XCreateImage(dis, visual, DefaultDepth(dis, scr), ZPixmap, 0,PAnsiChar( My_v4l2.GetRGB24Buffer), Width, Height, 32, 0);
     end;
 
-    //My_v4l2.GetYUYVBuffer;
-
-
-
-    image := XCreateImage(dis, nil, DefaultDepth(dis, scr), ZPixmap, 0, pansichar(BitmapData.Data), 640, 480, 32, 0);
-    //      image := XCreateImage(dis, visual, DefaultDepth(dis, scr), ZPixmap, 0,PAnsiChar( My_v4l2.GetRGBBuffer), Width*2, Height*2, 32, 0);
-
   end;
+
+function NewHandle(para1: PDisplay; para2: PXErrorEvent): cint; cdecl;
+begin
+
+end;
 
 begin
   dis := XOpenDisplay(nil);
@@ -130,6 +123,8 @@ begin
 
  Create_V4L2;
   Create_MainWin;
+
+  XSetErrorHandler(@NewHandle);
 
   gc := XCreateGC(dis, win, 0, nil);
 
@@ -162,8 +157,9 @@ begin
       //      XClearWindow(dis, win);
 
 
-      //  My_v4l2.GetRGBBuffer;
-      XPutImage(dis, win, gc, image, 0, 0, 100, 100, BitmapData.Width, BitmapData.Height);
+      My_v4l2.GetRGB24Buffer;
+      //      XPutImage(dis, win, gc, image, 0, 0, 10, 10, BitmapData.Width, BitmapData.Height);
+            XPutImage(dis, win, gc, image, 0, 0, 10, 10, BitmapData.Width, BitmapData.Height);
     end;
 
   end;

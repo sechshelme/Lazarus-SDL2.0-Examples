@@ -53,7 +53,8 @@ type
 
     // https://gist.github.com/wlhe/fcad2999ceb4a826bd811e9fdb6fe652
     function GetYUYVBuffer: Pointer;
-    function GetRGBBuffer: Tbytes;
+    function GetRGB24Buffer: Tbytes;
+    function GetRGB32Buffer: Tbytes;
   end;
 
 implementation
@@ -264,7 +265,6 @@ begin
     if FpIOCtl(fHandle, VIDIOC_STREAMON, @typ) = -1 then begin
       Result := -1;
       WriteLn('Fehler: StreamOn 2()');
-      Exit;
     end;
   end;
 
@@ -279,7 +279,6 @@ begin
   if FpIOCtl(fHandle, VIDIOC_STREAMOFF, @typ) = -1 then begin
     Result := -1;
     WriteLn('Fehler: StreamOff()');
-    Exit;
   end;
 end;
 
@@ -306,7 +305,7 @@ begin
   Result := BufferPointer;
 end;
 
-function Tv4l2.GetRGBBuffer: Tbytes;
+function Tv4l2.GetRGB24Buffer: Tbytes;
 
   procedure yuyv_to_rgb_pixel(yuyv: pbyte; rgb: pbyte);
 
@@ -345,6 +344,51 @@ begin
   while i < rgb_size do begin
     yuyv_to_rgb_pixel(@pbyte(BufferPointer)[j], @Result[i]);
     Inc(i, 6);
+    Inc(j, 4);
+  end;
+end;
+
+function Tv4l2.GetRGB32Buffer: Tbytes;
+
+  procedure yuyv_to_rgb_pixel(yuyv: pbyte; rgb: pbyte);
+
+    function EnsureRange(f: cfloat): byte; inline;
+    begin
+      if f < 0 then begin
+        Result := 0;
+      end else if f > 255 then begin
+        Result := 255;
+      end else begin
+        Result := Round(f);
+      end;
+    end;
+
+  begin
+    rgb[0] := EnsureRange(yuyv[0] + 1.4065 * (yuyv[3] - 128));
+    rgb[1] := EnsureRange(yuyv[0] - 0.3455 * (yuyv[1] - 128) - 0.7169 * (yuyv[3] - 128));
+    rgb[2] := EnsureRange(yuyv[0] + 1.1790 * (yuyv[1] - 128));
+    rgb[3] :=$FF;
+
+    rgb[4] := EnsureRange(yuyv[2] + 1.4065 * (yuyv[3] - 128));
+    rgb[5] := EnsureRange(yuyv[2] - 0.3455 * (yuyv[1] - 128) - 0.7169 * (yuyv[3] - 128));
+    rgb[6] := EnsureRange(yuyv[2] + 1.1790 * (yuyv[1] - 128));
+    rgb[7] :=$FF;
+  end;
+
+var
+  rgb_size: clong;
+  i: integer = 0;
+  j: integer = 0;
+begin
+  GetYUYVBuffer;
+
+  Result := nil;
+  rgb_size := fheight * fwidth * 4;
+  SetLength(Result, rgb_size);
+
+  while i < rgb_size do begin
+    yuyv_to_rgb_pixel(@pbyte(BufferPointer)[j], @Result[i]);
+    Inc(i, 8);
     Inc(j, 4);
   end;
 end;
