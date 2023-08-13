@@ -1,26 +1,13 @@
-#include "v4l2_driver.h"
-#include <errno.h>
-#include <fcntl.h>
-#include <inttypes.h>
 #include <linux/videodev2.h>
-#include <pthread.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <sys/ioctl.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
 
 int IMAGE_WIDTH = 640;
 int IMAGE_HEIGHT = 480;
 
 #define BUF_NUM 4
 
-// set format
-int v4l2_sfmt(int fd, uint32_t pfmt) {
-  // set fmt
+int v4l2_sfmt(int fd, int pfmt) {
   struct v4l2_format fmt;
   fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
   fmt.fmt.pix.pixelformat = pfmt;
@@ -35,9 +22,7 @@ int v4l2_sfmt(int fd, uint32_t pfmt) {
   return 0;
 }
 
-// get format
 int v4l2_gfmt(int fd) {
-  // set fmt
   struct v4l2_format fmt;
   if (ioctl(fd, VIDIOC_G_FMT, &fmt) == -1) {
     fprintf(stderr, "Unable to get format\n");

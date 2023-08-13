@@ -2677,8 +2677,8 @@ const
   VIDIOC_ENUM_FMT         = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (2 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_fmtdesc) shl _IOC_SIZESHIFT));
   VIDIOC_G_FMT            = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (4 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_format) shl _IOC_SIZESHIFT));
   VIDIOC_S_FMT            = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (5 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_format) shl _IOC_SIZESHIFT));
-  VIDIOC_REQBUFS          = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (8 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_requestbuffers) shl _IOC_SIZESHIFT));
-  VIDIOC_QUERYBUF         = LongInt(((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (9 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_buffer) shl _IOC_SIZESHIFT));
+  VIDIOC_REQBUFS          = (((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (8 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_requestbuffers) shl _IOC_SIZESHIFT));
+  VIDIOC_QUERYBUF         = (((_IOC_READ or _IOC_WRITE) shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (9 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_buffer) shl _IOC_SIZESHIFT));
   VIDIOC_G_FBUF            = LongInt((_IOC_READ shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (10 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_framebuffer) shl _IOC_SIZESHIFT));
   VIDIOC_S_FBUF            = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (11 shl _IOC_NRSHIFT) or (SizeOf(Tv4l2_framebuffer) shl _IOC_SIZESHIFT));
   VIDIOC_OVERLAY           = LongInt((_IOC_WRITE shl _IOC_DIRSHIFT) or (Ord('V') shl _IOC_TYPESHIFT) or (14 shl _IOC_NRSHIFT) or (SizeOf(LongInt) shl _IOC_SIZESHIFT));
