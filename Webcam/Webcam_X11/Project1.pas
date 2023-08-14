@@ -11,8 +11,6 @@ uses
   v4l2,
   sdl2;
 
-  // https://stackoverflow.com/questions/64521652/create-xlib-window-with-a-frame-buffer-i-can-draw-directly-and-use-xputimage
-
 var
   dis: PDisplay;
   win, rootWin: TWindow;
@@ -76,7 +74,7 @@ begin
 
   gc := XCreateGC(dis, win, 0, nil);
 
-  XStoreName(dis, win, 'Transparentes-Fenster');
+  XStoreName(dis, win, 'Webcam-Fenster');
 
   while (True) do begin
     if XPending(dis) > 0 then begin

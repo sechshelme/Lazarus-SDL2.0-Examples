@@ -37,7 +37,7 @@ type
     fHandle: cint;
     v4l2_ubuffers: array of Tv4l2_ubuffer;
     BufferPointer: Pointer;
-    procedure CalculateRGB(yuyv0, yuyv1, yuyv2: byte; var r, g, b, a: byte);
+    procedure CalculateRGB(y, u, v: byte; var r, g, b, a: byte);
     function EnsureRange(f: cfloat): byte;
     function SetFormat(pfmt: uint32): cint;
     function SetFPS(fps: cint): cint;
@@ -170,16 +170,24 @@ begin
     WriteLn('Fehler: GetFormat()');
     //    Exit;
   end;
-  WriteLn(#27'[33mpix.pixelformatth: ',
+  WriteLn(#27'[32mpix.Width:         ', fmt.fmt.pix.Width);
+  WriteLn('pix.Height:        ', fmt.fmt.pix.Height, #27'[0m');
+
+  WriteLn('pix.pixelformat:   ', fmt.fmt.pix.pixelformat);
+  WriteLn(#27'[33mpix.pixelformat:   ',
     char(fmt.fmt.pix.pixelformat and $FF),
     char(fmt.fmt.pix.pixelformat shr 8 and $FF),
     char(fmt.fmt.pix.pixelformat shr 16 and $FF),
     char(fmt.fmt.pix.pixelformat shr 24 and $FF), #27'[0m');
 
-  WriteLn('pix.width:     ', fmt.fmt.pix.Width);
-  WriteLn('pix.height:    ', fmt.fmt.pix.Height);
-  WriteLn('pix.field:     ', fmt.fmt.pix.field);
-  WriteLn('pix.sizeimage: ', fmt.fmt.pix.sizeimage);
+  WriteLn('pix.bytesperline:  ', fmt.fmt.pix.bytesperline);
+  WriteLn('pix.field:         ', fmt.fmt.pix.field);
+  WriteLn('pix.sizeimage:     ', fmt.fmt.pix.sizeimage);
+  WriteLn('pix.colorspace:    ', fmt.fmt.pix.colorspace);
+  WriteLn('pix.priv:          ', fmt.fmt.pix.priv);
+  WriteLn('pix.flags:         ', fmt.fmt.pix.flags);
+  WriteLn('pix.quantization:  ', fmt.fmt.pix.quantization);
+  WriteLn('pix.xfer_func:     ', fmt.fmt.pix.xfer_func);
 
   Result := 0;
 end;
@@ -320,11 +328,11 @@ begin
   end;
 end;
 
-procedure Tv4l2.CalculateRGB(yuyv0, yuyv1, yuyv2: byte; var r, g, b, a: byte); inline;
+procedure Tv4l2.CalculateRGB(y, u, v: byte; var r, g, b, a: byte); inline;
 begin
-  r := EnsureRange(yuyv0 + 1.4065 * (yuyv2 - 128));
-  g := EnsureRange(yuyv0 - 0.3455 * (yuyv1 - 128) - 0.7169 * (yuyv2 - 128));
-  b := EnsureRange(yuyv0 + 1.1790 * (yuyv1 - 128));
+  r := EnsureRange(y + 1.4065 * (v - 128));
+  g := EnsureRange(y - 0.3455 * (u - 128) - 0.7169 * (v - 128));
+  b := EnsureRange(y + 1.1790 * (u - 128));
   a := $FF;
 end;
 
