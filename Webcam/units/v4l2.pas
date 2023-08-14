@@ -16,7 +16,7 @@ uses
   // ffmpeg -i /dev/video0 -vf format=yuv420p -f sdl test
 
 const
-  BUF_NUM = 1;
+  BUF_NUM = 4;
 
 type
   Tv4l2_ubuffer = record
@@ -37,6 +37,8 @@ type
     fHandle: cint;
     v4l2_ubuffers: array of Tv4l2_ubuffer;
     BufferPointer: Pointer;
+    procedure CalculateRGB(yuyv0, yuyv1, yuyv2: byte; var r, g, b, a: byte);
+    function EnsureRange(f: cfloat): byte;
     function SetFormat(pfmt: uint32): cint;
     function SetFPS(fps: cint): cint;
     function MemoryMap: cint;
@@ -53,8 +55,10 @@ type
 
     // https://gist.github.com/wlhe/fcad2999ceb4a826bd811e9fdb6fe652
     function GetYUYVBuffer: Pointer;
-    function GetRGB24Buffer: Tbytes;
-    function GetRGB32Buffer: Tbytes;
+    function Get_RGB_Buffer: Tbytes;
+    function Get_BGR_Buffer: Tbytes;
+    function Get_RGBA_Buffer: Tbytes;
+    function Get_BGRA_Buffer: Tbytes;
   end;
 
 implementation
@@ -305,29 +309,33 @@ begin
   Result := BufferPointer;
 end;
 
-function Tv4l2.GetRGB24Buffer: Tbytes;
+function Tv4l2.EnsureRange(f: cfloat): byte; inline;
+begin
+  if f < 0 then begin
+    Result := 0;
+  end else if f > 255 then begin
+    Result := 255;
+  end else begin
+    Result := Round(f);
+  end;
+end;
 
-  procedure yuyv_to_rgb_pixel(yuyv: pbyte; rgb: pbyte);
+procedure Tv4l2.CalculateRGB(yuyv0, yuyv1, yuyv2: byte; var r, g, b, a: byte); inline;
+begin
+  r := EnsureRange(yuyv0 + 1.4065 * (yuyv2 - 128));
+  g := EnsureRange(yuyv0 - 0.3455 * (yuyv1 - 128) - 0.7169 * (yuyv2 - 128));
+  b := EnsureRange(yuyv0 + 1.1790 * (yuyv1 - 128));
+  a := $FF;
+end;
 
-    function EnsureRange(f: cfloat): byte; inline;
-    begin
-      if f < 0 then begin
-        Result := 0;
-      end else if f > 255 then begin
-        Result := 255;
-      end else begin
-        Result := Round(f);
-      end;
-    end;
+function Tv4l2.Get_RGB_Buffer: Tbytes;
 
+  procedure yuyv_to_rgb_pixel(yuyv: pbyte; rgb: pbyte); inline;
+  var
+    dummy: byte;
   begin
-    rgb[0] := EnsureRange(yuyv[0] + 1.4065 * (yuyv[3] - 128));
-    rgb[1] := EnsureRange(yuyv[0] - 0.3455 * (yuyv[1] - 128) - 0.7169 * (yuyv[3] - 128));
-    rgb[2] := EnsureRange(yuyv[0] + 1.1790 * (yuyv[1] - 128));
-
-    rgb[3] := EnsureRange(yuyv[2] + 1.4065 * (yuyv[3] - 128));
-    rgb[4] := EnsureRange(yuyv[2] - 0.3455 * (yuyv[1] - 128) - 0.7169 * (yuyv[3] - 128));
-    rgb[5] := EnsureRange(yuyv[2] + 1.1790 * (yuyv[1] - 128));
+    CalculateRGB(yuyv[0], yuyv[1], yuyv[3], rgb[0], rgb[1], rgb[2], dummy);
+    CalculateRGB(yuyv[2], yuyv[1], yuyv[3], rgb[3], rgb[4], rgb[5], dummy);
   end;
 
 var
@@ -348,31 +356,66 @@ begin
   end;
 end;
 
-function Tv4l2.GetRGB32Buffer: Tbytes;
+function Tv4l2.Get_BGR_Buffer: Tbytes;
 
-  procedure yuyv_to_rgb_pixel(yuyv: pbyte; rgb: pbyte);
-
-    function EnsureRange(f: cfloat): byte; inline;
-    begin
-      if f < 0 then begin
-        Result := 0;
-      end else if f > 255 then begin
-        Result := 255;
-      end else begin
-        Result := Round(f);
-      end;
-    end;
-
+  procedure yuyv_to_rgb_pixel(yuyv: pbyte; rgb: pbyte); inline;
+  var
+    dummy: byte;
   begin
-    rgb[0] := EnsureRange(yuyv[0] + 1.4065 * (yuyv[3] - 128));
-    rgb[1] := EnsureRange(yuyv[0] - 0.3455 * (yuyv[1] - 128) - 0.7169 * (yuyv[3] - 128));
-    rgb[2] := EnsureRange(yuyv[0] + 1.1790 * (yuyv[1] - 128));
-    rgb[3] :=$FF;
+    CalculateRGB(yuyv[0], yuyv[1], yuyv[3], rgb[2], rgb[1], rgb[0], dummy);
+    CalculateRGB(yuyv[2], yuyv[1], yuyv[3], rgb[5], rgb[4], rgb[3], dummy);
+  end;
 
-    rgb[4] := EnsureRange(yuyv[2] + 1.4065 * (yuyv[3] - 128));
-    rgb[5] := EnsureRange(yuyv[2] - 0.3455 * (yuyv[1] - 128) - 0.7169 * (yuyv[3] - 128));
-    rgb[6] := EnsureRange(yuyv[2] + 1.1790 * (yuyv[1] - 128));
-    rgb[7] :=$FF;
+var
+  rgb_size: clong;
+  i: integer = 0;
+  j: integer = 0;
+begin
+  GetYUYVBuffer;
+
+  Result := nil;
+  rgb_size := fheight * fwidth * 3;
+  SetLength(Result, rgb_size);
+
+  while i < rgb_size do begin
+    yuyv_to_rgb_pixel(@pbyte(BufferPointer)[j], @Result[i]);
+    Inc(i, 6);
+    Inc(j, 4);
+  end;
+end;
+
+function Tv4l2.Get_RGBA_Buffer: Tbytes;
+
+  procedure yuyv_to_rgb_pixel(yuyv: pbyte; rgb: pbyte); inline;
+  begin
+    CalculateRGB(yuyv[0], yuyv[1], yuyv[3], rgb[0], rgb[1], rgb[2], rgb[3]);
+    CalculateRGB(yuyv[2], yuyv[1], yuyv[3], rgb[4], rgb[5], rgb[6], rgb[7]);
+  end;
+
+var
+  rgb_size: clong;
+  i: integer = 0;
+  j: integer = 0;
+begin
+  GetYUYVBuffer;
+
+  Result := nil;
+  rgb_size := fheight * fwidth * 4;
+  SetLength(Result, rgb_size);
+
+  while i < rgb_size do begin
+    yuyv_to_rgb_pixel(@pbyte(BufferPointer)[j], @Result[i]);
+    Inc(i, 8);
+    Inc(j, 4);
+  end;
+end;
+
+function Tv4l2.Get_BGRA_Buffer: Tbytes;
+
+  procedure yuyv_to_rgb_pixel(yuyv: pbyte; rgb: pbyte); inline;
+  begin
+    CalculateRGB(yuyv[0], yuyv[1], yuyv[3], rgb[2], rgb[1], rgb[0], rgb[3]);
+    CalculateRGB(yuyv[2], yuyv[1], yuyv[3], rgb[6], rgb[5], rgb[4], rgb[7]);
   end;
 
 var

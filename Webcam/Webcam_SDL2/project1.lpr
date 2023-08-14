@@ -45,7 +45,8 @@ begin
   end;
 
 //  sdlTexture := SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_YUY2, SDL_TEXTUREACCESS_STREAMING, My_v4l2.Width, My_v4l2.Height);
-sdlTexture := SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_RGB24, SDL_TEXTUREACCESS_STREAMING, My_v4l2.Width, My_v4l2.Height);
+//sdlTexture := SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_RGB24, SDL_TEXTUREACCESS_STREAMING, My_v4l2.Width, My_v4l2.Height);
+sdlTexture := SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, My_v4l2.Width, My_v4l2.Height);
   if sdlTexture = nil then begin
     Write('Kann Textur nicht öffnen');
   end;
@@ -69,7 +70,7 @@ sdlTexture := SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_RGB24, SDL_TEXTUREA
       end;
     end;
 
-    SDL_UpdateTexture(sdlTexture, @sdlRect,PByte( My_v4l2.GetRGBBuffer), My_v4l2.Width * 3);
+    SDL_UpdateTexture(sdlTexture, @sdlRect,PByte( My_v4l2.Get_RGBA_Buffer), My_v4l2.Width * 4);
 
 //    SDL_UpdateTexture(sdlTexture, @sdlRect, My_v4l2.GetYUYVBuffer, My_v4l2.Width * 2);
     SDL_RenderClear(sdlRenderer);
