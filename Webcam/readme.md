@@ -1,5 +1,12 @@
 https://wiki.ubuntuusers.de/Videograbbing/
 
+Testprogramm:
+
+```bash
+qv4l2 
+```
+
+Tools:
 ```bash
 sudo apt-get install qv4l2 
 

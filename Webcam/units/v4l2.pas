@@ -269,14 +269,13 @@ begin
     buf.index := i;
     if FpIOCtl(fHandle, VIDIOC_QBUF, @buf) = -1 then begin
       Result := -1;
-      WriteLn('Fehler: StreamOn 1()');
-      Exit;
+      WriteLn('Fehler: StreamOn (VIDIOC_QBUF)  ',fDevice);
     end;
 
     typ := V4L2_BUF_TYPE_VIDEO_CAPTURE;
     if FpIOCtl(fHandle, VIDIOC_STREAMON, @typ) = -1 then begin
       Result := -1;
-      WriteLn('Fehler: StreamOn 2()');
+      WriteLn('Fehler: StreamOn (VIDIOC_STREAMON)  ',fDevice);
     end;
   end;
 
