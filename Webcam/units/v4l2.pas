@@ -93,6 +93,7 @@ begin
   end;
 
   SetFormat(V4L2_PIX_FMT_YUYV);
+//  SetFormat(V4L2_PIX_FMT_MJPEG);
   SetFPS(ffps);
   MemoryMap;
 end;

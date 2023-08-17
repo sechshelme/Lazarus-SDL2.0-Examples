@@ -90,8 +90,8 @@ var
 begin
   SDL_Init(SDL_INIT_VIDEO or SDL_INIT_TIMER);
 
-  win1 := TSDLWindow.Create('/dev/video0');
-  win2 := TSDLWindow.Create('/dev/video2');
+  win1 := TSDLWindow.Create('/dev/video2');
+//  win2 := TSDLWindow.Create('/dev/video2');
 
   repeat
     while SDL_PollEvent(@e) <> 0 do begin

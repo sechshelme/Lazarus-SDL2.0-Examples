@@ -4,6 +4,8 @@ Testprogramm:
 
 ```bash
 qv4l2 
+cheese
+vlc
 ```
 
 Tools:
