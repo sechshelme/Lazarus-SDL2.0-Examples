@@ -22,7 +22,7 @@ const
     Width, Height: TJDIMENSION;
     pixel_size, row_stride: longint;
     bmp_buffer: array of Char=nil;
-    buf: array[0..1023] of char;
+    s:String;
 
     buffer_array: array[0..0] of pbyte;
   begin
@@ -88,11 +88,10 @@ const
 
     fd := FpOpen('test.ppm', O_CREAT or O_WRONLY, &666);
 
-    rc := sprintf(buf, 'P6 %d %d 255'#10, Width, Height);
+    WriteStr(s,'P6 ',Width,' ',Height,' 255'#10);
+    WriteLn(s);
 
-    WriteLn(buf);
-    WriteLn(rc);
-    FpWrite(fd, buf, rc);
+    FpWrite(fd, PChar(s), Length(s));
     FpWrite(fd,PChar( bmp_buffer), Length(bmp_buffer));
     FpClose(fd);
 
