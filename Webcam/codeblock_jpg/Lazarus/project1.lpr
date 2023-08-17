@@ -5,31 +5,27 @@ uses
   jpeglib,
   jmorecfg;
 
+  // https://stackoverflow.com/questions/59632172/how-to-decode-an-mjpeg-to-raw-rgb-or-yuv-data
+  // https://gist.github.com/PhirePhly/3080633
+
 const
   path = 'bild.jpg';
-
-  function sprintf(restrict: PChar; fornat: PChar): cint; varargs cdecl; external 'c';
-
 
   function main: cint;
   var
     file_info: stat;
     i, rc, fd: cint;
     jpg_size: int64;
-    jpg_buffer: array of Byte=nil;
+    jpg_buffer: array of byte = nil;
     cinfo: Tjpeg_decompress_struct;
     jerr: Tjpeg_error_mgr;
     Width, Height: TJDIMENSION;
     pixel_size, row_stride: longint;
-    bmp_buffer: array of Char=nil;
-    s:String;
+    bmp_buffer: array of char = nil;
+    s: string;
+    buffer_array: PChar;
 
-    buffer_array: array[0..0] of pbyte;
   begin
-
-    WriteLn('------  ', SizeOf(TJ_COLOR_SPACE));
-    WriteLn('------  ', SizeOf(Tjpeg_decompress_struct));
-
     rc := FpStat(path, file_info);
     if rc <> 0 then begin
       WriteLn('Kann JPG nicht öffnen');
@@ -54,8 +50,7 @@ const
 
 
     WriteLn('Proc: Set memory buffer as source');
-    jpeg_mem_src(@cinfo,PByte( jpg_buffer), jpg_size);
-
+    jpeg_mem_src(@cinfo, pbyte(jpg_buffer), jpg_size);
 
     WriteLn('Proc: Read the JPEG header');
     rc := jpeg_read_header(@cinfo, 1);
@@ -76,10 +71,9 @@ const
     row_stride := Width * pixel_size;
 
     WriteLn('Proc: Start reading scanlines');
-
     while cinfo.output_scanline < cinfo.output_height do begin
-      buffer_array[0] := pbyte(bmp_buffer) + cinfo.output_scanline * row_stride;
-      jpeg_read_scanlines(@cinfo, buffer_array, 1);
+      buffer_array := @bmp_buffer[ cinfo.output_scanline * row_stride] ;
+      jpeg_read_scanlines(@cinfo, @buffer_array, 1);
     end;
 
     WriteLn('Proc: Done reading scanlines');
@@ -88,16 +82,15 @@ const
 
     fd := FpOpen('test.ppm', O_CREAT or O_WRONLY, &666);
 
-    WriteStr(s,'P6 ',Width,' ',Height,' 255'#10);
+    WriteStr(s, 'P6 ', Width, ' ', Height, ' 255'#10);
     WriteLn(s);
 
     FpWrite(fd, PChar(s), Length(s));
-    FpWrite(fd,PChar( bmp_buffer), Length(bmp_buffer));
+    FpWrite(fd, PChar(bmp_buffer), Length(bmp_buffer));
     FpClose(fd);
 
     WriteLn('End of decompression');
   end;
-
 
 begin
   main;
