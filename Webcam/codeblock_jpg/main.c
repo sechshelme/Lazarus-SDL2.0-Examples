@@ -28,6 +28,11 @@
 
 
 int main (int argc, char *argv[]) {
+
+printf("%d\n",sizeof( J_COLOR_SPACE));
+printf("%d\n",(size_t)sizeof(struct jpeg_decompress_struct));
+//printf("%d\n",sizeof(jpeg_decompress_struct.jpeg_color_space));
+
 	int rc, i, j;
 
 	char *syslog_prefix = (char*) malloc(1024);

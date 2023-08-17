@@ -2,14 +2,16 @@ unit jpeglib;
 
 interface
 
-uses  ctypes, BaseUnix, jmorecfg;
+uses  ctypes, BaseUnix, jmorecfg, jconfig;
+
+  {$LinkLib jpeg}
 
   {$IFDEF FPC}
   {$PACKRECORDS C}
   {$ENDIF}
 
 type
-  Tboolean = boolean;
+  Tboolean = cint;
   Tdouble = cdouble;
   PFILE = Pointer;
 
@@ -665,6 +667,7 @@ type
     client_data: pointer;
     is_decompressor: Tboolean;
     global_state: longint;
+
     src: Pjpeg_source_mgr;
     image_width: TJDIMENSION;
     image_height: TJDIMENSION;
@@ -673,7 +676,7 @@ type
     out_color_space: TJ_COLOR_SPACE;
     scale_num: dword;
     scale_denom: dword;
-    output_gamma: Tdouble;
+    output_gamma: cdouble;
     buffered_image: Tboolean;
     raw_data_out: Tboolean;
     dct_method: TJ_DCT_METHOD;
@@ -698,13 +701,13 @@ type
     input_iMCU_row: TJDIMENSION;
     output_scan_number: longint;
     output_iMCU_row: TJDIMENSION;
-    coef_bits: tcoef_bits;
+    coef_bits: Pcoef_bits;
     quant_tbl_ptrs: array[0..(NUM_QUANT_TBLS) - 1] of PJQUANT_TBL;
     dc_huff_tbl_ptrs: array[0..(NUM_HUFF_TBLS) - 1] of PJHUFF_TBL;
     ac_huff_tbl_ptrs: array[0..(NUM_HUFF_TBLS) - 1] of PJHUFF_TBL;
     data_precision: longint;
     comp_info: Pjpeg_component_info;
-    is_baseline: Tboolean;
+//    is_baseline: Tboolean;
     progressive_mode: Tboolean;
     arith_code: Tboolean;
     arith_dc_L: array[0..(NUM_ARITH_TBLS) - 1] of TUINT8;
@@ -725,7 +728,7 @@ type
     max_v_samp_factor: longint;
     min_DCT_h_scaled_size: longint;
     min_DCT_v_scaled_size: longint;
-    min_DCT_scaled_size: longint;
+//    min_DCT_scaled_size: longint;
     total_iMCU_rows: TJDIMENSION;
     sample_range_limit: PJSAMPLE;
     comps_in_scan: longint;
@@ -742,6 +745,7 @@ type
     natural_order: Plongint;
     lim_Se: longint;
     unread_marker: longint;
+
     master: Pjpeg_decomp_master;
     main: Pjpeg_d_main_controller;
     coef: Pjpeg_d_coef_controller;
@@ -819,12 +823,15 @@ function jpeg_std_error(err: Pjpeg_error_mgr): Pjpeg_error_mgr; cdecl; external;
  * passed for version mismatch checking.
  * NB: you must set up the error-manager BEFORE calling jpeg_create_xxx.
   }
-{#define jpeg_create_compress(cinfo) \ }
-{  jpeg_CreateCompress((cinfo), JPEG_LIB_VERSION, \ }
-{                      (size_t)sizeof(struct jpeg_compress_struct)) }
-{#define jpeg_create_decompress(cinfo) \ }
-{  jpeg_CreateDecompress((cinfo), JPEG_LIB_VERSION, \ }
-{                        (size_t)sizeof(struct jpeg_decompress_struct)) }
+
+// --- neu
+procedure jpeg_create_compress(cinfo: Tj_compress_ptr);
+procedure jpeg_create_decompress(cinfo: Tj_decompress_ptr);
+
+{#define jpeg_create_compress(cinfo) jpeg_CreateCompress((cinfo), JPEG_LIB_VERSION, (size_t)sizeof(struct jpeg_compress_struct)) }
+{#define jpeg_create_decompress(cinfo) jpeg_CreateDecompress((cinfo), JPEG_LIB_VERSION, (size_t)sizeof(struct jpeg_decompress_struct)) }
+// ---
+
 procedure jpeg_CreateCompress(cinfo: Tj_compress_ptr; version: longint; structsize: Tsize_t); cdecl; external;
 procedure jpeg_CreateDecompress(cinfo: Tj_decompress_ptr; version: longint; structsize: Tsize_t); cdecl; external;
 { Destruction of JPEG compression objects  }
@@ -964,11 +971,6 @@ const
  * for structure definitions that are never filled in, keep it quiet by
  * supplying dummy definitions for the various substructures.
   }
-  {$ifdef INCOMPLETE_TYPES_BROKEN}
-  {$ifndef JPEG_INTERNALS          /* will be defined in jpegint.h */}
-  {$endif}
-  { JPEG_INTERNALS  }
-  {$endif}
   { INCOMPLETE_TYPES_BROKEN  }
 {
  * The JPEG library modules define JPEG_INTERNALS before including this file.
@@ -976,11 +978,6 @@ const
  * Applications using the library should not include jpegint.h, but may wish
  * to include jerror.h.
   }
-  {$ifdef JPEG_INTERNALS}
-  {$include "jpegint.h"            /* fetch private declarations */}
-  {$include "jerror.h"             /* fetch error codes too */}
-  {$endif}
-  { JPEGLIB_H  }
 
 implementation
 
@@ -990,6 +987,20 @@ implementation
 function JPP(arglist: longint): longint;
 begin
   JPP := arglist;
+end;
+
+{#define jpeg_create_compress(cinfo) jpeg_CreateCompress((cinfo), JPEG_LIB_VERSION, (size_t)sizeof(struct jpeg_compress_struct)) }
+{#define jpeg_create_decompress(cinfo) jpeg_CreateDecompress((cinfo), JPEG_LIB_VERSION, (size_t)sizeof(struct jpeg_decompress_struct)) }
+
+
+procedure jpeg_create_compress(cinfo: Tj_compress_ptr);
+begin
+  jpeg_CreateCompress(cinfo, JPEG_LIB_VERSION, SizeOf(Tjpeg_compress_struct));
+end;
+
+procedure jpeg_create_decompress(cinfo: Tj_decompress_ptr);
+begin
+  jpeg_CreateDecompress(cinfo, JPEG_LIB_VERSION, SizeOf(Tjpeg_decompress_struct));
 end;
 
 end.

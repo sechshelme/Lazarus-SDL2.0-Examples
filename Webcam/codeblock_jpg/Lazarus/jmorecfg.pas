@@ -48,30 +48,30 @@ const
   //{$if BITS_IN_JSAMPLE == 8}
   //{ JSAMPLE should be the smallest type that will hold the values 0..255.
   //  }
-  //type
-  //  PJSAMPLE = ^TJSAMPLE;
-  //  TJSAMPLE = byte;
+  type
+    PJSAMPLE = ^TJSAMPLE;
+    TJSAMPLE = byte;
   //{ was #define dname(params) para_def_expr }
   //{ argument types are unknown }
   //
   //function GETJSAMPLE(value : longint) : longint;
   //
-  //const
-  //  MAXJSAMPLE = 255;
-  //  CENTERJSAMPLE = 128;
+  const
+    MAXJSAMPLE = 255;
+    CENTERJSAMPLE = 128;
   //{$endif}
   //{ BITS_IN_JSAMPLE == 8  }
   //{$if BITS_IN_JSAMPLE == 12}
 { JSAMPLE should be the smallest type that will hold the values 0..4095.
  * On nearly all machines "short" will do nicely.
   }
-type
-  PJSAMPLE = ^TJSAMPLE;
-  TJSAMPLE = smallint;
-
-const
-  MAXJSAMPLE = 4095;
-  CENTERJSAMPLE = 2048;
+//type
+//  PJSAMPLE = ^TJSAMPLE;
+//  TJSAMPLE = smallint;
+//
+//const
+//  MAXJSAMPLE = 4095;
+//  CENTERJSAMPLE = 2048;
   //{$endif}
   { BITS_IN_JSAMPLE == 12  }
 { Representation of a DCT frequency coefficient.
