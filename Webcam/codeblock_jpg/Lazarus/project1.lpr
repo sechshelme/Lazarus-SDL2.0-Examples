@@ -8,7 +8,7 @@ uses
 const
   path = 'bild.jpg';
 
-  function sprintf(restrict:PChar; fornat:PChar): cint;varargs cdecl; external 'c';
+  function sprintf(restrict: PChar; fornat: PChar): cint; varargs cdecl; external 'c';
 
 
   function main: cint;
@@ -16,15 +16,15 @@ const
     file_info: stat;
     i, rc, fd: cint;
     jpg_size: int64;
-    jpg_buffer: pbyte;
+    jpg_buffer: array of Byte=nil;
     cinfo: Tjpeg_decompress_struct;
     jerr: Tjpeg_error_mgr;
     Width, Height: TJDIMENSION;
-    pixel_size, bmp_size, row_stride: longint;
-    bmp_buffer:PChar;
-    buf:array[0..1023]of Char;
+    pixel_size, row_stride: longint;
+    bmp_buffer: array of Char=nil;
+    buf: array[0..1023] of char;
 
-    buffer_array:array[0..0]of PByte;
+    buffer_array: array[0..0] of pbyte;
   begin
 
     WriteLn('------  ', SizeOf(TJ_COLOR_SPACE));
@@ -37,7 +37,7 @@ const
     end;
 
     jpg_size := file_info.st_size;
-    Getmem(jpg_buffer, jpg_size + 100);
+    SetLength(jpg_buffer, jpg_size + 100);
 
     fd := FpOpen(path, O_RDONLY);
     i := 0;
@@ -54,7 +54,7 @@ const
 
 
     WriteLn('Proc: Set memory buffer as source');
-    jpeg_mem_src(@cinfo, jpg_buffer, jpg_size);
+    jpeg_mem_src(@cinfo,PByte( jpg_buffer), jpg_size);
 
 
     WriteLn('Proc: Read the JPEG header');
@@ -71,33 +71,30 @@ const
 
     WriteLn('Proc: Image is ', Width, ' by ', Height, ' with ', pixel_size, ' components');
 
-    bmp_size:=Width*Height*pixel_size;
-  Getmem( bmp_buffer,bmp_size);
+    SetLength(bmp_buffer, Width * Height * pixel_size);
 
-  row_stride:=Width*pixel_size;
+    row_stride := Width * pixel_size;
 
-  WriteLn('Proc: Start reading scanlines');
+    WriteLn('Proc: Start reading scanlines');
 
-  while cinfo.output_scanline<cinfo.output_height do begin
-    buffer_array[0]:=PByte( bmp_buffer)+cinfo.output_scanline*row_stride;
-    jpeg_read_scanlines(@cinfo,buffer_array,1);
+    while cinfo.output_scanline < cinfo.output_height do begin
+      buffer_array[0] := pbyte(bmp_buffer) + cinfo.output_scanline * row_stride;
+      jpeg_read_scanlines(@cinfo, buffer_array, 1);
     end;
 
-  WriteLn('Proc: Done reading scanlines');
-  jpeg_finish_decompress(@cinfo);
-  jpeg_destroy_decompress(@cinfo);
-  Freemem(jpg_buffer);
+    WriteLn('Proc: Done reading scanlines');
+    jpeg_finish_decompress(@cinfo);
+    jpeg_destroy_decompress(@cinfo);
 
-  fd:=FpOpen('test.ppm',O_CREAT or O_WRONLY, &666);
+    fd := FpOpen('test.ppm', O_CREAT or O_WRONLY, &666);
 
-  rc:=  sprintf(buf, 'P6 %d %d 255'#10, width, height);
+    rc := sprintf(buf, 'P6 %d %d 255'#10, Width, Height);
 
-  WriteLn(buf);
-  WriteLn(rc);
-    FpWrite(fd,buf,rc);
-    FpWrite(fd,bmp_buffer,bmp_size);
+    WriteLn(buf);
+    WriteLn(rc);
+    FpWrite(fd, buf, rc);
+    FpWrite(fd,PChar( bmp_buffer), Length(bmp_buffer));
     FpClose(fd);
-    Freemem(bmp_buffer);
 
     WriteLn('End of decompression');
   end;
