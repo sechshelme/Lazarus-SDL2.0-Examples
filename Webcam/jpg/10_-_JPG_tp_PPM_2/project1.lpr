@@ -83,12 +83,13 @@ var
   begin
     WriteLn('Proc: Create Decompress struct');
     cinfo.err := jpeg_std_error(@jerr);
+
     jpeg_create_decompress(@cinfo);
 
 
     WriteLn('Proc: Set memory buffer as source');
     WriteLn('----------', jpg_size);
-      jpg_size := 2000000000;
+    //      jpg_size := 2000000000;
     jpeg_mem_src(@cinfo, jpg_buf, jpg_size);
 
     WriteLn('Proc: Read the JPEG header');
@@ -105,9 +106,10 @@ var
 
     WriteLn('Proc: Image is ', w, ' by ', h, ' with ', pixel_size, ' components');
 
-    Getmem(rgb_Buf, w * h * pixel_size);
-    row_stride := w * pixel_size;
+    Getmem(rgb_Buf, w * h * 4);
+    row_stride := w * 4;
 
+    cinfo.out_color_space := JCS_EXT_BGRA;
     WriteLn('Proc: Start reading scanlines');
     while cinfo.output_scanline < cinfo.output_height do begin
       buffer_array := @rgb_Buf[cinfo.output_scanline * row_stride];
@@ -143,43 +145,16 @@ var
     image := XCreateImage(dis, visual, 24, ZPixmap, 0, nil, Width, Height, 32, 0);
   end;
 
-  procedure rgb24_to_rgb32(data24: PChar; var data32: PChar; w, h: DWord);
-  var
-    i: integer = 0;
-    j: integer = 0;
-    rgb_size: DWord;
-  begin
-    rgb_size := w * h * 3;
-    while i < rgb_size do begin
-      data32[i] := data24[j + 2];
-      Inc(i, 1);
-      Inc(j, 1);
-      data32[i] := data24[j];
-      Inc(i, 1);
-      Inc(j, 1);
-      data32[i] := data24[j - 2];
-      Inc(i, 1);
-      Inc(j, 1);
-      data32[i] := #$FF;
-      Inc(i, 1);
-    end;
-  end;
-
-
   function main: cint;
   var
     jpg_size: int64 = 0;
     jpg_buffer: pbyte = nil;
-    bmp_buffer_24: PChar = nil;
-    bmp_buffer_32: PChar = nil;
+    bmp_buffer: PChar = nil;
 
   begin
     ReadJPG(path, jpg_buffer, jpg_size);
-    JPG_To_RGB(jpg_buffer, jpg_size, bmp_buffer_24, Width, Height);
-    Write_PPM(Width, Height, 3, PChar(bmp_buffer_24));
-
-    Getmem(bmp_buffer_32, Width * Height * 4);
-    rgb24_to_rgb32(bmp_buffer_24, bmp_buffer_32, Width, Height);
+    JPG_To_RGB(jpg_buffer, jpg_size, bmp_buffer, Width, Height);
+    Write_PPM(Width, Height, 3, PChar(bmp_buffer));
 
     Create_MainWin;
 
@@ -200,14 +175,13 @@ var
         end;
       end else begin
         //        image^.Data := PChar(My_v4l2.Get_BGRA_Buffer);
-        image^.Data := bmp_buffer_32;
+        image^.Data := bmp_buffer;
         XPutImage(dis, win, gc, image, 0, 0, 0, 0, Width, Height);
       end;
     end;
 
     Freemem(jpg_buffer);
-    Freemem(bmp_buffer_24);
-    Freemem(bmp_buffer_32);
+    Freemem(bmp_buffer);
     Result := 0;
   end;
 
