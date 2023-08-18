@@ -39,8 +39,6 @@ type
     BufferPointer: Pointer;
     procedure CalculateRGB(y, u, v: byte; var r, g, b, a: byte);
     function EnsureRange(f: cfloat): byte;
-    function SetFormat(pfmt: uint32): cint;
-    function SetFPS(fps: cint): cint;
     function MemoryMap: cint;
     function MemoryUnMap: cint;
   public
@@ -48,8 +46,12 @@ type
     property Height: cuint read fheight;
     constructor Create(const device: string; AWidth: cuint = 640; AHeight: cuint = 480; Afps: cuint = 30);
     destructor Destroy; override;
-    function QueryCap: cint;
+
+    function SetFormat(pfmt: uint32): cint;
+    function SetFPS(fps: cint): cint;
     function GetFormat: cint;
+
+    function QueryCap: cint;
     function StreamOn: cint;
     function StreamOff: cint;
 
@@ -93,7 +95,8 @@ begin
   end;
 
   SetFormat(V4L2_PIX_FMT_YUYV);
-//  SetFormat(V4L2_PIX_FMT_MJPEG);
+//SetFormat(V4L2_PIX_FMT_MJPEG);
+//SetFormat(V4L2_PIX_FMT_JPEG);
   SetFPS(ffps);
   MemoryMap;
 end;
