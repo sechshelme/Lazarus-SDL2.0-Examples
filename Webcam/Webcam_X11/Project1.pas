@@ -50,31 +50,22 @@ const
     end;
     scr := DefaultScreen(dis);
     gc := DefaultGC(dis, scr);
+    rootWin := RootWindow(dis, scr);
     win := XCreateSimpleWindow(dis, rootWin, 10, 10, 640, 480, 1, BlackPixel(dis, scr), WhitePixel(dis, scr));
-
+    XStoreName(dis, win, 'Webcam-Fenster');
     XSelectInput(dis, win, EventMask);
     XMapWindow(dis, win);
 
-    visual := DefaultVisual(dis, scr);
+    gc := XCreateGC(dis, win, 0, nil);
 
+    visual := DefaultVisual(dis, scr);
     image := XCreateImage(dis, visual, 24, ZPixmap, 0, nil, Width, Height, 32, 0);
   end;
 
 begin
-  dis := XOpenDisplay(nil);
-  if dis = nil then begin
-    WriteLn('Kann nicht das Display öffnen');
-    Halt(1);
-  end;
-  scr := DefaultScreen(dis);
-  rootWin := RootWindow(dis, scr);
 
   Create_V4L2;
   Create_MainWin;
-
-  gc := XCreateGC(dis, win, 0, nil);
-
-  XStoreName(dis, win, 'Webcam-Fenster');
 
   while (True) do begin
     if XPending(dis) > 0 then begin
