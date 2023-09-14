@@ -4,6 +4,8 @@ program Project1;
 
 uses
   dglOpenGL,
+  oglVector,
+  oglMatrix,
   Shader,
   SDL2;
 
@@ -11,178 +13,190 @@ const
   Screen_Widht = 640;
   Screen_Height = 480;
 
-type
-  TKeyPressesSurface = (KEY_PRESS_SURFACE_DEFAULT, KEY_PRESS_SURFACE_UP, KEY_PRESS_SURFACE_DOWN, KEY_PRESS_SURFACE_LEFT, KEY_PRESS_SURFACE_RIGHT, KEY_PRESS_SURFACE_TOTAL);
-
 var
   gWindow: PSDL_Window;
-  gCurrentSurface: PSDL_Surface;
-  gContext: TSDL_GLContext;
 
   quit: boolean = False;
   e: TSDL_Event;
 
-  gKeyPressSurfaces: array [TKeyPressesSurface] of PSDL_Surface;
+var
+  MyShader: TShader;
 
-  function InitGL:Boolean;
-  var
-    MyShader: TShader;
-  begin
-    MyShader:=TShader.Create([FileToStr('Vertexshader.glsl'),FileToStr( 'Fragmentshader.glsl')]);
-    MyShader.UseProgram;
+const
+  Triangle: array of Tmat3x3 =
+    (((-0.4, 0.1, 0.0), (0.4, 0.1, 0.0), (0.0, 0.7, 0.0)));
+  Quad: array of Tmat3x3 =
+    (((-0.2, -0.6, 0.0), (-0.2, -0.1, 0.0), (0.2, -0.1, 0.0)),
+    ((-0.2, -0.6, 0.0), (0.2, -0.1, 0.0), (0.2, -0.6, 0.0)));
 
-          Result:=True;
+type
+  TVB = record
+    VAO,
+    VBO: GLuint;
   end;
 
-  function init: boolean;
-  var
-    sucess: boolean = True;
+var
+  VBTriangle, VBQuad: TVB;
+
+  MeshPos: TVector2f = (0, 0);
+  MeshPos_ID: GLint;
+
+  procedure Init_SDL_and_OpenGL;
   begin
-    sucess := True;
+    // --- OpenGL inizialisieren
+    if not InitOpenGL then begin
+      WriteLn('OpenGL-Fehler');
+      Halt(1);
+    end;
+    ReadExtensions;
+    ReadImplementationProperties;
+
+    // --- SDL inizialisieren
     if SDL_Init(SDL_INIT_VIDEO) < 0 then begin
       WriteLn('SDL could not initialize! SDL_Error: ', SDL_GetError);
-      sucess := False;
-    end else begin
-      SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-      SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-      SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
-      gWindow := SDL_CreateWindow('SDL Tuorial', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Screen_Widht, Screen_Height, SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN);
-      if gWindow = nil then begin
-        WriteLn('Window could not be created! SDL_Error: ', SDL_GetError);
-        sucess := False;
-      end else begin
-        gContext := SDL_GL_CreateContext(gWindow);
-        if gContext = nil then begin
-          Writeln('OpenGL context could not be created! SDL Error: ', SDL_GetError);
-          sucess := False;
-        end else begin
-          if SDL_GL_SetSwapInterval(1) < 0 then begin
-            WriteLn('Warning: Unable to set VSync! SDL Error: ', SDL_GetError);
-          end;
-
-          if not InitOpenGL then begin
-            WriteLn('OpenGL-Fehler');
-            sucess := False;
-          end;
-          //          MakeCurrent;
-          ReadExtensions;
-          ReadImplementationProperties;
-
-if           InitGL then WriteLn('OpenGL io.');
-        end;
-
-      end;
+      Halt(1);
     end;
-    Result := sucess;
 
+    // --- Context für OpenGL erzeugen
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
+    gWindow := SDL_CreateWindow('SDL Tuorial', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Screen_Widht, Screen_Height, SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN);
+    if SDL_GL_CreateContext(gWindow) = nil then begin
+      Writeln('OpenGL context could not be created! SDL Error: ', SDL_GetError);
+      Halt(1);
+    end;
+
+    if SDL_GL_SetSwapInterval(1) < 0 then begin
+      WriteLn('Warning: Unable to set VSync! SDL Error: ', SDL_GetError);
+    end;
   end;
 
-  function loadSurface(path: string): PSDL_Surface;
-  var
-    loadedSurface: PSDL_Surface;
+  procedure CreateScene;
   begin
-    loadedSurface := SDL_LoadBMP(PChar(path));
-    if loadedSurface = nil then  begin
-      WriteLn('Unable to load image ' + path + '! SDL Error: ', SDL_GetError());
-    end;
-    Result := loadedSurface;
+    MyShader := TShader.Create([FileToStr('Vertexshader.glsl'), FileToStr('Fragmentshader.glsl')]);
+    MyShader.UseProgram;
+
+    MeshPos_ID := MyShader.UniformLocation('MeshPos');
+
+    glGenVertexArrays(1, @VBTriangle.VAO);
+    glGenVertexArrays(1, @VBQuad.VAO);
+
+    glGenBuffers(1, @VBTriangle.VBO);
+    glGenBuffers(1, @VBQuad.VBO);
+
+    glClearColor(0.6, 0.6, 0.4, 1.0); // Hintergrundfarbe
+
+    // Daten für Dreieck
+    glBindVertexArray(VBTriangle.VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBTriangle.VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Tmat3x3) * Length(Triangle), Pmat3x3(Triangle), GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, False, 0, nil);
+
+    // Daten für Quadrat
+    glBindVertexArray(VBQuad.VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBQuad.VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Tmat3x3) * Length(Quad), Pmat3x3(Quad), GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, False, 0, nil);
   end;
 
-  function loadMedia: boolean;
-  var
-    sucess: boolean = True;
+
+  procedure DrawScene;
   begin
-    gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFAULT] := loadSurface('press.bmp');
-    if gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFAULT] = nil then begin
-      WriteLn('Failed to load default image !');
-      sucess := False;
-    end;
+    glClear(GL_COLOR_BUFFER_BIT);
 
-    gKeyPressSurfaces[KEY_PRESS_SURFACE_UP] := loadSurface('up.bmp');
-    if gKeyPressSurfaces[KEY_PRESS_SURFACE_UP] = nil then begin
-      WriteLn('Failed to load up image !');
-      sucess := False;
-    end;
+    MyShader.UseProgram;
 
-    gKeyPressSurfaces[KEY_PRESS_SURFACE_DOWN] := loadSurface('down.bmp');
-    if gKeyPressSurfaces[KEY_PRESS_SURFACE_DOWN] = nil then begin
-      WriteLn('Failed to load down image !');
-      sucess := False;
-    end;
+    MeshPos.Uniform(MeshPos_ID);
 
-    gKeyPressSurfaces[KEY_PRESS_SURFACE_LEFT] := loadSurface('left.bmp');
-    if gKeyPressSurfaces[KEY_PRESS_SURFACE_LEFT] = nil then begin
-      WriteLn('Failed to load left image !');
-      sucess := False;
-    end;
+    // Zeichne Dreieck
+    glBindVertexArray(VBTriangle.VAO);
+    glDrawArrays(GL_TRIANGLES, 0, Length(Triangle) * 3);
 
-    gKeyPressSurfaces[KEY_PRESS_SURFACE_RIGHT] := loadSurface('right.bmp');
-    if gKeyPressSurfaces[KEY_PRESS_SURFACE_RIGHT] = nil then begin
-      WriteLn('Failed to load right image !');
-      sucess := False;
-    end;
+    // Zeichne Quadrat
+    glBindVertexArray(VBQuad.VAO);
+    glDrawArrays(GL_TRIANGLES, 0, Length(Quad) * 3);
 
-    Result := sucess;
+    SDL_GL_SwapWindow(gWindow);
   end;
 
-  procedure Close;
-  var
-    i: integer;
-    surface: PSDL_Surface;
+  procedure Destroy_SDL_and_OpenGL;
   begin
-    for surface in gKeyPressSurfaces do begin
-      SDL_FreeSurface(surface);
-      //      surface := nil;
-    end;
-    //    for i := 0 to Length(gKeyPressSurfaces) - 1 do begin
-    //      SDL_FreeSurface(gKeyPressSurfaces[TKeyPressesSurface(i)]);
-    //      gKeyPressSurfaces[TKeyPressesSurface(i)] := nil;
-    //    end;
+    glDeleteVertexArrays(1, @VBTriangle.VAO);
+    glDeleteVertexArrays(1, @VBQuad.VAO);
+
+    glDeleteBuffers(1, @VBTriangle.VBO);
+    glDeleteBuffers(1, @VBQuad.VBO);
+
+    MyShader.Free;
+
     SDL_DestroyWindow(gWindow);
-    gWindow := nil;
     SDL_Quit();
   end;
 
-begin
-  if not init then begin
-    WriteLn('Failed to initialize');
-  end else begin
-    if not loadMedia then begin
-      WriteLn('Failed to load media');
-    end else begin
-      gCurrentSurface := gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFAULT];
-      while not quit do begin
-        while SDL_PollEvent(@e) <> 0 do begin
-          case e.type_ of
-            SDL_KEYDOWN: begin
+  procedure RunScene;
+  const
+    step = 0.01;
+    MeshPosStep: TVector2f = (0, 0);
+  begin
+    while not quit do begin
+      while SDL_PollEvent(@e) <> 0 do begin
+        case e.type_ of
+          SDL_KEYDOWN: begin
+            if e.key.repeat_ = 0 then begin
               case e.key.keysym.sym of
                 SDLK_ESCAPE: begin
                   quit := True;
                 end;
                 SDLK_UP: begin
-                  gCurrentSurface := gKeyPressSurfaces[KEY_PRESS_SURFACE_UP];
+                  MeshPosStep.y := MeshPosStep.y + step;
                 end;
                 SDLK_DOWN: begin
-                  gCurrentSurface := gKeyPressSurfaces[KEY_PRESS_SURFACE_DOWN];
+                  MeshPosStep.y := MeshPosStep.y - step;
                 end;
                 SDLK_LEFT: begin
-                  gCurrentSurface := gKeyPressSurfaces[KEY_PRESS_SURFACE_LEFT];
+                  MeshPosStep.x := MeshPosStep.x - step;
                 end;
                 SDLK_RIGHT: begin
-                  gCurrentSurface := gKeyPressSurfaces[KEY_PRESS_SURFACE_RIGHT];
+                  MeshPosStep.x := MeshPosStep.x + step;
                 end;
               end;
             end;
-            SDL_QUITEV: begin
-              quit := True;
+          end;
+          SDL_KEYUP: begin
+            if e.key.repeat_ = 0 then begin
+              case e.key.keysym.sym of
+                SDLK_UP: begin
+                  MeshPosStep.y := MeshPosStep.y - step;
+                end;
+                SDLK_DOWN: begin
+                  MeshPosStep.y := MeshPosStep.y + step;
+                end;
+                SDLK_LEFT: begin
+                  MeshPosStep.x := MeshPosStep.x + step;
+                end;
+                SDLK_RIGHT: begin
+                  MeshPosStep.x := MeshPosStep.x - step;
+                end;
+              end;
             end;
           end;
+          SDL_QUITEV: begin
+            quit := True;
+          end;
         end;
-        //        SDL_BlitSurface(gCurrentSurface, nil, gscreenSurface, nil);
-        SDL_UpdateWindowSurface(gWindow);
       end;
+      MeshPos := MeshPos + MeshPosStep;
+      DrawScene;
     end;
   end;
-  Close;
+
+begin
+  Init_SDL_and_OpenGL;
+  CreateScene;
+  RunScene;
+  Destroy_SDL_and_OpenGL;
 end.

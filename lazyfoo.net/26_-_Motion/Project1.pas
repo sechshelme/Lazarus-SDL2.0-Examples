@@ -13,7 +13,7 @@ uses     heaptrc,
 const
   Screen_Widht = 640;
   Screen_Height = 480;
-  Screen_FPS = 240;
+  Screen_FPS = 4;
   Screen_Tick_Per_Frame = 1000 div Screen_FPS;
 
 var
