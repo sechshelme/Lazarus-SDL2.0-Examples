@@ -1,7 +1,5 @@
 program Project1;
 
-// https://github.com/PascalGameDevelopment/SDL2-for-Pascal
-
 uses
   dglOpenGL,
   oglVector,
@@ -14,42 +12,24 @@ const
   Screen_Height = 480;
 
 var
+  // SDL
+  glcontext: TSDL_GLContext;
   gWindow: PSDL_Window;
 
   quit: boolean = False;
   e: TSDL_Event;
 
-var
+  // OpenGL
   MyShader: TShader;
 
-  // Seite 53
+  VAO: GLuint;
+  VBO: GLuint;
 
 
 const
-  VAO_IDs_Trinagles = 0;
-  VAO_IDs_NUMVAOs = 1;
-
-  Buffer_IDs_ArrayBuffer = 0;
-  Buffer_IDs_NumBuffers = 1;
-
-  Attrib_IDs_vPosition = 0;
-
-var
-  VAOs: array[0..VAO_IDs_NUMVAOs - 1] of GLuint;
-  Buffers: array[0..Buffer_IDs_NumBuffers - 1] of GLuint;
-const
-  NumVertices = 6;
-
-
-const
-  vertices: array [0..NumVertices - 1]of TVector2f = (
-    (-0.90, -0.90), // Triangle 1
-    (0.85, -0.90),
-    (-0.90, 0.85),
-    (0.90, -0.85), // Triangle 2
-    (0.90, 0.90),
-    (-0.85, 0.90));
-
+  vertices: array of TVector2f = (
+    (-0.90, -0.90), (0.85, -0.90), (-0.90, 0.85),
+    (0.90, -0.85), (0.90, 0.90), (-0.85, 0.90));
 
 
   procedure Init_SDL_and_OpenGL;
@@ -69,12 +49,13 @@ const
     end;
 
     // --- Context für OpenGL erzeugen
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
     gWindow := SDL_CreateWindow('SDL Tuorial', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Screen_Widht, Screen_Height, SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN);
-    if SDL_GL_CreateContext(gWindow) = nil then begin
+    glcontext := SDL_GL_CreateContext(gWindow);
+    if glcontext = nil then begin
       Writeln('OpenGL context could not be created! SDL Error: ', SDL_GetError);
       Halt(1);
     end;
@@ -86,43 +67,43 @@ const
 
   procedure CreateScene;
   begin
-    glCreateBuffers(Buffer_IDs_NumBuffers, Buffers);
-    glNamedBufferStorage(Buffers[Buffer_IDs_ArrayBuffer], SizeOf(vertices), @vertices, 0);
+    glCreateBuffers(1, @VBO);
+    glNamedBufferStorage(VBO, Length(vertices) * SizeOf(TVector3f), PVector3f(vertices), 0);
 
     MyShader := TShader.Create([FileToStr('Vertexshader.glsl'), FileToStr('Fragmentshader.glsl')]);
+    //MyShader := TShader.Create([
+    //  GL_VERTEX_SHADER, FileToStr('Vertexshader.glsl'),
+    //  GL_FRAGMENT_SHADER, FileToStr('Fragmentshader.glsl')]);
     MyShader.UseProgram;
 
-    glGenVertexArrays(VAO_IDs_NUMVAOs, VAOs);
-    glBindVertexArray(VAOs[VAO_IDs_Trinagles]);
-    glBindBuffer(GL_ARRAY_BUFFER, Buffers[Buffer_IDs_ArrayBuffer]);
-    glVertexAttribPointer(Attrib_IDs_vPosition, 2, GL_FLOAT, GL_FALSE, 0, nil);
-    glEnableVertexAttribArray(Attrib_IDs_vPosition);
+    glGenVertexArrays(1, @VAO);
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nil);
+    glEnableVertexAttribArray(0);
   end;
 
 
   procedure DrawScene;
   const
-    black: TVector4f = (0, 0, 0, 0);
+    black: TVector4f = (0.3, 0.0, 0.2, 1.0);
   begin
     glClearBufferfv(GL_COLOR, 0, black);
 
-    glBindVertexArray(VAOs[VAO_IDs_Trinagles]);
-    glDrawArrays(GL_TRIANGLES, 0, NumVertices);
-
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, Length(vertices));
 
     SDL_GL_SwapWindow(gWindow);
   end;
 
   procedure Destroy_SDL_and_OpenGL;
   begin
-    //glDeleteVertexArrays(1, @VBTriangle.VAO);
-    //glDeleteVertexArrays(1, @VBQuad.VAO);
-    //
-    //glDeleteBuffers(1, @VBTriangle.VBO);
-    //glDeleteBuffers(1, @VBQuad.VBO);
+    glDeleteVertexArrays(1, @VAO);
+    glDeleteBuffers(1, @VBO);
 
     MyShader.Free;
 
+    SDL_GL_DeleteContext(glcontext);
     SDL_DestroyWindow(gWindow);
     SDL_Quit();
   end;
@@ -146,7 +127,7 @@ const
           end;
         end;
       end;
-//      MeshPos := MeshPos + MeshPosStep;
+      //      MeshPos := MeshPos + MeshPosStep;
       DrawScene;
     end;
   end;
