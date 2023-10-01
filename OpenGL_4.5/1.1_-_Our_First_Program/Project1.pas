@@ -2,9 +2,10 @@ program Project1;
 
 uses
   dglOpenGL,
+  oglContext,
   oglVector,
   oglMatrix,
-  Shader,
+  oglShader,
   SDL2;
 
 const
@@ -41,6 +42,7 @@ const
     end;
     ReadExtensions;
     ReadImplementationProperties;
+    InitOpenGLDebug;
 
     // --- SDL inizialisieren
     if SDL_Init(SDL_INIT_VIDEO) < 0 then begin
@@ -70,10 +72,9 @@ const
     glCreateBuffers(1, @VBO);
     glNamedBufferStorage(VBO, Length(vertices) * SizeOf(TVector3f), PVector3f(vertices), 0);
 
-    MyShader := TShader.Create([FileToStr('Vertexshader.glsl'), FileToStr('Fragmentshader.glsl')]);
-    //MyShader := TShader.Create([
-    //  GL_VERTEX_SHADER, FileToStr('Vertexshader.glsl'),
-    //  GL_FRAGMENT_SHADER, FileToStr('Fragmentshader.glsl')]);
+    MyShader := TShader.Create([
+      GL_VERTEX_SHADER, FileToStr('Vertexshader.glsl'),
+      GL_FRAGMENT_SHADER, FileToStr('Fragmentshader.glsl')]);
     MyShader.UseProgram;
 
     glGenVertexArrays(1, @VAO);
