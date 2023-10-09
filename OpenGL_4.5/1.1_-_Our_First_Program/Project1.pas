@@ -6,6 +6,7 @@ uses
   oglVector,
   oglMatrix,
   oglShader,
+  oglDebug,
   SDL2;
 
 const
@@ -72,9 +73,10 @@ const
     glCreateBuffers(1, @VBO);
     glNamedBufferStorage(VBO, Length(vertices) * SizeOf(TVector3f), PVector3f(vertices), 0);
 
-    MyShader := TShader.Create([
-      GL_VERTEX_SHADER, FileToStr('Vertexshader.glsl'),
-      GL_FRAGMENT_SHADER, FileToStr('Fragmentshader.glsl')]);
+    MyShader := TShader.Create;
+    MyShader.LoadShaderObjectFromFile(GL_VERTEX_SHADER, 'Vertexshader.glsl');
+    MyShader.LoadShaderObjectFromFile(GL_FRAGMENT_SHADER, 'Fragmentshader.glsl');
+    MyShader.LinkProgramm;
     MyShader.UseProgram;
 
     glGenVertexArrays(1, @VAO);
