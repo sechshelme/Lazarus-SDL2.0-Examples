@@ -8,8 +8,7 @@ uses
   xutil,
   keysym,
   x,
-  v4l2,
-  sdl2;
+  v4l2;
 
 var
   dis: PDisplay;
