@@ -10,29 +10,8 @@ uses
 
   // https://github.com/chendotjs/Webcam-SDL2
 
-  function ioctl(fd: cint; request: int32): cint; cdecl; varargs; external;
-
 const
   device = '/dev/video0';
-
-const
-  //VIDIOC_QUERYCAP = 2154321408;
-  //VIDIOC_ENUM_FMT = 3225441794;
-  //VIDIOC_S_FMT = 3234878981;
-  //VIDIOC_G_FMT = 3234878980;
-  //VIDIOC_S_PARM = 3234616854;
-  //VIDIOC_REQBUFS = 3222558216;
-  //VIDIOC_QUERYBUF = 3227014665;
-  //
-  //VIDIOC_DQBUF = 3227014673;
-  //VIDIOC_QBUF = 3227014671;
-  //V4L2_PIX_FMT_YUYV = 1448695129;
-
-  VIDIOC_S_FMT2 = 3234878981;
-  VIDIOC_G_FMT2 = 3234878980;
-
-
-
 
 var
   video_fildes: longint;
@@ -49,65 +28,9 @@ var
   tv: TTimeVal = (tv_sec: 1; tv_usec: 0);
   buf: Tv4l2_buffer;
 
-  function SetFormat(fHandle: cint; pfmt: uint32): cint;
-  var
-    fmt: Tv4l2_format;
-  begin
-    WriteLn(SizeOf(fmt));
-    WriteLn(SizeOf(fmt.fmt.pix));
-    //  FillChar(fmt, SizeOf(fmt), $00);
-    //  FillChar(fmt.fmt.pix, SizeOf(fmt.fmt.pix), $00);
-
-    fmt._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    fmt.fmt.pix.pixelformat := pfmt;
-    fmt.fmt.pix.Height := IMAGE_HEIGHT;
-    fmt.fmt.pix.Width := IMAGE_WIDTH;
-    fmt.fmt.pix.field := V4L2_FIELD_INTERLACED;
-
-    if IOCtl(fHandle, VIDIOC_S_FMT, @fmt) = -1 then begin
-      Result := -1;
-      WriteLn('Fehler: SetFormat()');
-      Exit;
-    end;
-
-    Result := 0;
-  end;
-
-  function GetFormat(fHandle: cint): cint;
-  var
-    fmt: Tv4l2_format;
-  begin
-    FillChar(fmt, SizeOf(fmt), $00);
-    fmt._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    fmt.fmt.pix.Height := 122;
-    if IOCtl(fHandle, VIDIOC_G_FMT, @fmt) = -1 then begin
-      Result := -1;
-      WriteLn('Fehler: GetFormat()');
-      //  Exit;
-    end;
-    WriteLn(#27'[33mpix.pixelformatth: ',
-      char(fmt.fmt.pix.pixelformat and $FF),
-      char(fmt.fmt.pix.pixelformat shr 8 and $FF),
-      char(fmt.fmt.pix.pixelformat shr 16 and $FF),
-      char(fmt.fmt.pix.pixelformat shr 24 and $FF), #27'[0m');
-
-    WriteLn('pix.width:    ', fmt.fmt.pix.Width);
-    WriteLn('pix.height:   ', fmt.fmt.pix.Height);
-    WriteLn('pix.field:    ', fmt.fmt.pix.field);
-
-    Result := 0;
-  end;
-
-
 begin
   video_fildes := v4l2_open(device);
   v4l2_querycap(video_fildes, device);
-
-  SetFormat(video_fildes, V4L2_PIX_FMT_YUYV);
-
-  WriteLn(#10#27'[0m--- C ---');
-  WriteLn(#10#27'[0m--- Pascal ---');
-  GetFormat(video_fildes);
 
   v4l2_sfps(video_fildes, 30);
   v4l2_mmap(video_fildes);
@@ -171,8 +94,6 @@ begin
   v4l2_close(video_fildes);
 
   SDL_Quit();
-
-  //    My_v4l2.Free;
 
   WriteLn('ende.');
 end.

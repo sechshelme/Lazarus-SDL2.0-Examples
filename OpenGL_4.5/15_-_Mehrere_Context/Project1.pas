@@ -10,12 +10,12 @@ uses
   SDL2;
 
 const
-  Screen_Widht = 640;
-  Screen_Height = 480;
+  Screen_Widht = 320;
+  Screen_Height = 240;
 
 var
   // SDL
-  gWindow0, gWindow1: PSDL_Window;
+  gWindow: array[0..5] of PSDL_Window;
   glcontext: TSDL_GLContext;
 
   quit: boolean = False;
@@ -36,6 +36,8 @@ const
 
 
   procedure Init_SDL_and_OpenGL;
+  var
+    i: integer;
   begin
     // --- OpenGL inizialisieren
     if not InitOpenGL then begin
@@ -57,21 +59,18 @@ const
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-    gWindow0 := SDL_CreateWindow('SDL Tuorial (0)', 100, 50, Screen_Widht, Screen_Height, SDL_WINDOW_RESIZABLE or SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN);
-    gWindow1 := SDL_CreateWindow('SDL Tuorial (1)', 100+Screen_Widht, 50, Screen_Widht, Screen_Height, SDL_WINDOW_RESIZABLE or SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN);
-
-    glcontext := SDL_GL_CreateContext(gWindow1);
-    //    glcontext1 := SDL_GL_CreateContext(gWindow1);
+    for i := 0 to Length(gWindow) - 1 do begin
+      gWindow[i] := SDL_CreateWindow(PChar('SDL Tuorial (' + char(i + 48) + ')'),
+        100 + (Screen_Widht + 20) * (i mod 3),
+        50 + (Screen_Height + 40) * (i div 3), Screen_Widht, Screen_Height,
+        SDL_WINDOW_RESIZABLE or SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN);
+    end;
+    glcontext := SDL_GL_CreateContext(gWindow[0]);
 
     if glcontext = nil then begin
       Writeln('OpenGL context could not be created! SDL Error (0): ', SDL_GetError);
       Halt(1);
     end;
-
-    //if glcontext1 = nil then begin
-    //  Writeln('OpenGL context could not be created! SDL Error (1): ', SDL_GetError);
-    //  Halt(1);
-    //end;
 
     if SDL_GL_SetSwapInterval(1) < 0 then begin
       WriteLn('Warning: Unable to set VSync! SDL Error: ', SDL_GetError);
@@ -101,37 +100,34 @@ const
 
   procedure DrawScene;
   const
-    BkRed: TVector4f = (1.0, 0.5, 0.5, 1.0);
+    BKBlue: TVector4f = (0.5, 0.5, 1.0, 1.0);
     BKGreen: TVector4f = (0.5, 1.0, 0.5, 1.0);
-    ColRed: TVector3f = (1, 0, 0);
-    ColGreen: TVector3f = (0, 1, 0);
+    BKCyan: TVector4f = (0.5, 1.0, 1.0, 1.0);
+    BKRed: TVector4f = (1.0, 0.5, 0.5, 1.0);
+    BKMagenta: TVector4f = (1.0, 0.5, 1.0, 1.0);
+    BKYellow: TVector4f = (1.9, 1.0, 0.5, 1.0);
+    BKColor: array of PVector3f = (@BKBlue, @BKGreen, @BKCyan, @BkRed, @BKMagenta, @BKYellow);
+    MeshColor: array of PVector3f = (@vec3blue, @vec3green, @vec3cyan, @vec3red, @vec3magenta, @vec3yellow);
+  var
+    i: integer;
   begin
-    // Window 0
-    SDL_GL_MakeCurrent(gWindow0, glcontext);
-    glClearBufferfv(GL_COLOR, 0, BkRed);
+    for i := 0 to Length(gWindow) - 1 do begin
+      SDL_GL_MakeCurrent(gWindow[i], glcontext);
+      glClearBufferfv(GL_COLOR, 0, BKColor[i mod Length(gWindow)]^);
 
-    MyShader.UseProgram;
-    ColRed.Uniform(Color_ID);
+      MyShader.UseProgram;
+      MeshColor[i mod Length(gWindow)]^.Uniform(Color_ID);
 
-    glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, Length(vertices));
+      glBindVertexArray(VAO);
+      glDrawArrays(GL_TRIANGLES, 0, Length(vertices));
 
-    SDL_GL_SwapWindow(gWindow0);
-
-    // Window 1
-    SDL_GL_MakeCurrent(gWindow1, glcontext);
-    glClearBufferfv(GL_COLOR, 0, BKGreen);
-
-    MyShader.UseProgram;
-    ColGreen.Uniform(Color_ID);
-
-    glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, Length(vertices));
-
-    SDL_GL_SwapWindow(gWindow1);
+      SDL_GL_SwapWindow(gWindow[i]);
+    end;
   end;
 
   procedure Destroy_SDL_and_OpenGL;
+  var
+    i: integer;
   begin
     glDeleteVertexArrays(1, @VAO);
     glDeleteBuffers(1, @VBO);
@@ -139,8 +135,9 @@ const
     MyShader.Free;
 
     SDL_GL_DeleteContext(glcontext);
-    SDL_DestroyWindow(gWindow0);
-    SDL_DestroyWindow(gWindow1);
+    for i := 0 to Length(gWindow) - 1 do begin
+      SDL_DestroyWindow(gWindow[i]);
+    end;
     SDL_Quit();
   end;
 
@@ -163,7 +160,6 @@ const
           end;
         end;
       end;
-      //      MeshPos := MeshPos + MeshPosStep;
       DrawScene;
     end;
   end;

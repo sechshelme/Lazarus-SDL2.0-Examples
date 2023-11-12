@@ -2915,9 +2915,9 @@ end;
 { argument types are unknown }
 { return type might be wrong }
 function V4L2_MAP_YCBCR_ENC_DEFAULT(colsp: longint): longint;
-var
-  if_local1, if_local2, if_local3: longint;
-  (* result types are not known *)
+//var
+//  if_local1, if_local2, if_local3: longint;
+//  (* result types are not known *)
 begin
   //if V4L2_COLORSPACE_SMPTE240M then
   //  if_local1:=V4L2_YCBCR_ENC_SMPTE240M
