@@ -1,9 +1,9 @@
-unit SDL_rect;
+unit SDL3_rect;
 
 interface
 
 uses
-  SDL_stdinc;
+  SDL3_stdinc;
 
 {$IFDEF FPC}
 {$PACKRECORDS C}

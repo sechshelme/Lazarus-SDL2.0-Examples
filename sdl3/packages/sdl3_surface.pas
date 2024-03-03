@@ -1,9 +1,9 @@
-unit SDL_surface;
+unit SDL3_surface;
 
 interface
 
 uses
-  SDL_pixels, SDL_stdinc, SDL_rect, SDL_properties, SDL_rwops, SDL_blendmode;
+  SDL3_pixels, SDL3_stdinc, SDL3_rect, SDL3_properties, SDL3_rwops, SDL3_blendmode;
 
 {$IFDEF FPC}
 {$PACKRECORDS C}

@@ -1,9 +1,9 @@
-unit SDL_Video;
+unit SDL3_video;
 
 interface
 
 uses
-  SDL_stdinc, SDL_rect, SDL_surface;
+  SDL3_stdinc, SDL3_rect, SDL3_surface;
 
 {$IFDEF FPC}
 {$PACKRECORDS C}

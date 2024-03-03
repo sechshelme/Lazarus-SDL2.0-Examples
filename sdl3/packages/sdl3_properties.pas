@@ -1,9 +1,9 @@
-unit SDL_properties;
+unit SDL3_properties;
 
 interface
 
 uses
-  SDL_stdinc;
+  SDL3_stdinc;
 
 {$IFDEF FPC}
 {$PACKRECORDS C}

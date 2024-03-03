@@ -11,32 +11,40 @@
     </CompilerOptions>
     <Files>
       <Item>
-        <Filename Value="sdl_video.pas"/>
-        <UnitName Value="SDL_Video"/>
+        <Filename Value="sdl3_video.pas"/>
+        <UnitName Value="sdl3_video"/>
       </Item>
       <Item>
-        <Filename Value="sdl_stdinc.pas"/>
-        <UnitName Value="SDL_stdinc"/>
+        <Filename Value="sdl3_stdinc.pas"/>
+        <UnitName Value="sdl3_stdinc"/>
       </Item>
       <Item>
-        <Filename Value="sdl_rect.pas"/>
-        <UnitName Value="SDL_rect"/>
+        <Filename Value="sdl3_rect.pas"/>
+        <UnitName Value="sdl3_rect"/>
       </Item>
       <Item>
-        <Filename Value="sdl_surface.pas"/>
-        <UnitName Value="SDL_surface"/>
+        <Filename Value="sdl3_surface.pas"/>
+        <UnitName Value="sdl3_surface"/>
       </Item>
       <Item>
-        <Filename Value="sdl_properties.pas"/>
-        <UnitName Value="SDL_properties"/>
+        <Filename Value="sdl3_properties.pas"/>
+        <UnitName Value="sdl3_properties"/>
       </Item>
       <Item>
-        <Filename Value="sdl_rwops.pas"/>
-        <UnitName Value="SDL_rwops"/>
+        <Filename Value="sdl3_rwops.pas"/>
+        <UnitName Value="sdl3_rwops"/>
       </Item>
       <Item>
-        <Filename Value="sdl_blendmode.pas"/>
-        <UnitName Value="SDL_blendmode"/>
+        <Filename Value="sdl3_blendmode.pas"/>
+        <UnitName Value="sdl3_blendmode"/>
+      </Item>
+      <Item>
+        <Filename Value="sdl3_init.pas"/>
+        <UnitName Value="sdl3_init"/>
+      </Item>
+      <Item>
+        <Filename Value="sdl3_timer.pas"/>
+        <UnitName Value="sdl3_timer"/>
       </Item>
     </Files>
     <RequiredPkgs>

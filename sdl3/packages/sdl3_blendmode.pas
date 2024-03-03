@@ -1,4 +1,4 @@
-unit SDL_blendmode;
+unit SDL3_blendmode;
 
 interface
 

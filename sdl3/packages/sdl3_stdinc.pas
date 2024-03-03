@@ -1,8 +1,13 @@
-unit SDL_stdinc;
+unit SDL3_stdinc;
+
+//{$LinkLib 'libSDL3.so.0'}
+{$LinkLib 'SDL3'}
+//{$LinkLib 'c'}
 
 interface
+
 uses
-ctypes;
+  ctypes;
 
 type
   Tsize_t=SizeInt;

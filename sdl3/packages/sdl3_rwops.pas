@@ -1,9 +1,9 @@
-unit SDL_rwops;
+unit SDL3_rwops;
 
 interface
 
 uses
-  SDL_stdinc;
+  SDL3_stdinc;
 
 {$IFDEF FPC}
 {$PACKRECORDS C}
