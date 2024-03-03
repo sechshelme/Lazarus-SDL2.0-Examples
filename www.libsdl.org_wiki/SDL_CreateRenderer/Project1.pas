@@ -23,6 +23,7 @@ const
 
   procedure main;
   begin
+    i:=SDL_PIXELFORMAT_ABGR1555;
 
     if SDL_Init(SDL_INIT_VIDEO) < 0 then begin
       Halt;

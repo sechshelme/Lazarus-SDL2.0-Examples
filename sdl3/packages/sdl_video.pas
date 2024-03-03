@@ -3,7 +3,7 @@ unit SDL_Video;
 interface
 
 uses
-  SDL_stdinc;
+  SDL_stdinc, SDL_rect, SDL_surface;
 
 {$IFDEF FPC}
 {$PACKRECORDS C}
@@ -98,6 +98,7 @@ type
 {*< refresh rate (or zero for unspecified)  }
 {*< driver-specific data, initialize to 0  }
 type
+  PPSDL_DisplayMode = ^PSDL_DisplayMode;
   PSDL_DisplayMode = ^TSDL_DisplayMode;
   TSDL_DisplayMode = record
       displayID : TSDL_DisplayID;
@@ -158,7 +159,10 @@ type
  *  \sa SDL_ShowWindow
  *  \sa SDL_ShowWindowSystemMenu
   }
-//type
+type
+  TSDL_Window = Pointer;
+  PSDL_Window = ^TSDL_Window;
+
 {*
  *  The flags on a window
  *
@@ -584,7 +588,7 @@ function SDL_GetDisplayContentScale(displayID:TSDL_DisplayID):single;cdecl;exter
  * \sa SDL_GetDisplays
   }
 (* Const before type ignored *)
-function SDL_GetFullscreenDisplayModes(displayID:TSDL_DisplayID; count:Plongint):^PSDL_DisplayMode;cdecl;external;
+function SDL_GetFullscreenDisplayModes(displayID:TSDL_DisplayID; count:Plongint):PPSDL_DisplayMode;cdecl;external;
 {*
  * Get the closest match to the requested display mode.
  *
@@ -2111,7 +2115,7 @@ type
     SDL_HITTEST_RESIZE_BOTTOM = 7;
     SDL_HITTEST_RESIZE_BOTTOMLEFT = 8;
     SDL_HITTEST_RESIZE_LEFT = 9;
-;
+
 {*
  * Callback used for hit-testing.
  *
@@ -2616,8 +2620,8 @@ function SDL_GL_DeleteContext(context:TSDL_GLContext):longint;cdecl;external;
 { @  }{ OpenGL support functions  }
 { Ends C function definitions when using C++  }
 { C++ end of extern C conditionnal removed }
-{$include <SDL3/SDL_close_code.h>}
-{$endif}
+{//$include <SDL3/SDL_close_code.h>}
+//{$endif}
 { SDL_video_h_  }
 
 implementation
@@ -2641,7 +2645,7 @@ function SDL_WINDOWPOS_UNDEFINED : longint; { return type might be wrong }
 { return type might be wrong }   
 function SDL_WINDOWPOS_ISUNDEFINED(X : longint) : longint;
 begin
-  SDL_WINDOWPOS_ISUNDEFINED:=(TX(@($FFFF0000)))=SDL_WINDOWPOS_UNDEFINED_MASK;
+//  SDL_WINDOWPOS_ISUNDEFINED:=(TX(@($FFFF0000)))=SDL_WINDOWPOS_UNDEFINED_MASK;
 end;
 
 { was #define dname(params) para_def_expr }
@@ -2663,7 +2667,7 @@ function SDL_WINDOWPOS_CENTERED : longint; { return type might be wrong }
 { return type might be wrong }   
 function SDL_WINDOWPOS_ISCENTERED(X : longint) : longint;
 begin
-  SDL_WINDOWPOS_ISCENTERED:=(TX(@($FFFF0000)))=SDL_WINDOWPOS_CENTERED_MASK;
+//  SDL_WINDOWPOS_ISCENTERED:=(TX(@($FFFF0000)))=SDL_WINDOWPOS_CENTERED_MASK;
 end;
 
 

@@ -518,7 +518,7 @@ extern  size_t  SDL_RWwrite(SDL_RWops *context, const void *ptr, size_t size);
  * \sa SDL_RWseek
  * \sa SDL_RWwrite
  */
-extern  size_t  SDL_RWprintf(SDL_RWops *context, SDL_PRINTF_FORMAT_STRING const char *fmt, ...)  SDL_PRINTF_VARARG_FUNC(2);
+extern  size_t  SDL_RWprintf(SDL_RWops *context,  const char *fmt, ...);
 
 /**
  * Print to an SDL_RWops data stream.
@@ -541,7 +541,7 @@ extern  size_t  SDL_RWprintf(SDL_RWops *context, SDL_PRINTF_FORMAT_STRING const 
  * \sa SDL_RWseek
  * \sa SDL_RWwrite
  */
-extern  size_t  SDL_RWvprintf(SDL_RWops *context, SDL_PRINTF_FORMAT_STRING const char *fmt, va_list ap) SDL_PRINTF_VARARG_FUNCV(2);
+extern  size_t  SDL_RWvprintf(SDL_RWops *context, const char *fmt, va_list ap) ;
 
 /**
  * Close and free an allocated SDL_RWops structure.

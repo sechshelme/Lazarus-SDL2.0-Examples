@@ -19,10 +19,10 @@ const
 type
   PSDL_Version = ^TSDL_Version;
 
-  TSDL_Window=record
-  end;
-
-  PSDL_Window=^TSDL_Window;
+  //TSDL_Window=record
+  //end;
+  //
+  //PSDL_Window=^TSDL_Window;
 
   TSDL_Version = record
     major,           {**< major version *}
@@ -37,7 +37,7 @@ const
   procedure SDL_GetVersion(ver: PSDL_Version); cdecl; external SDL_LibName;
 
   function SDL_Init(flags: cuint32): cint; cdecl; external SDL_LibName;
-  function SDL_CreateWindow(title: PChar; w, h: cint; flags: cuint32): PSDL_Window; cdecl; external SDL_LibName;
+//  function SDL_CreateWindow(title: PChar; w, h: cint; flags: cuint32): PSDL_Window; cdecl; external SDL_LibName;
   function SDL_DestroyWindow(window:PSDL_Window): Pointer; cdecl; external SDL_LibName;
   procedure SDL_Delay(ms: cuint32); cdecl; external SDL_LibName;
 

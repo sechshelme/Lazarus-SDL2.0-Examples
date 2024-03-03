@@ -8,7 +8,8 @@ unit SDL3;
 interface
 
 uses
-  SDL_Video, SDL_stdinc, LazarusPackageIntf;
+  SDL_Video, SDL_stdinc, SDL_rect, SDL_surface, SDL_properties, SDL_rwops, 
+  SDL_blendmode, LazarusPackageIntf;
 
 implementation
 

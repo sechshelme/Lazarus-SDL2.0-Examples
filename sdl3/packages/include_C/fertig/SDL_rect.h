@@ -107,28 +107,28 @@ typedef struct SDL_FRect
 /**
  * Returns true if point resides inside a rectangle.
  */
-SDL_FORCE_INLINE SDL_bool SDL_PointInRect(const SDL_Point *p, const SDL_Rect *r)
-{
-    return ( (p->x >= r->x) && (p->x < (r->x + r->w)) &&
-             (p->y >= r->y) && (p->y < (r->y + r->h)) ) ? SDL_TRUE : SDL_FALSE;
-}
+//SDL_FORCE_INLINE SDL_bool SDL_PointInRect(const SDL_Point *p, const SDL_Rect *r)
+//{
+//    return ( (p->x >= r->x) && (p->x < (r->x + r->w)) &&
+//             (p->y >= r->y) && (p->y < (r->y + r->h)) ) ? SDL_TRUE : SDL_FALSE;
+//}
 
 /**
  * Returns true if the rectangle has no area.
  */
-SDL_FORCE_INLINE SDL_bool SDL_RectEmpty(const SDL_Rect *r)
-{
-    return ((!r) || (r->w <= 0) || (r->h <= 0)) ? SDL_TRUE : SDL_FALSE;
-}
+//SDL_FORCE_INLINE SDL_bool SDL_RectEmpty(const SDL_Rect *r)
+//{
+//    return ((!r) || (r->w <= 0) || (r->h <= 0)) ? SDL_TRUE : SDL_FALSE;
+//}
 
 /**
  * Returns true if the two rectangles are equal.
  */
-SDL_FORCE_INLINE SDL_bool SDL_RectsEqual(const SDL_Rect *a, const SDL_Rect *b)
-{
-    return (a && b && (a->x == b->x) && (a->y == b->y) &&
-            (a->w == b->w) && (a->h == b->h)) ? SDL_TRUE : SDL_FALSE;
-}
+//SDL_FORCE_INLINE SDL_bool SDL_RectsEqual(const SDL_Rect *a, const SDL_Rect *b)
+//{
+//    return (a && b && (a->x == b->x) && (a->y == b->y) &&
+//            (a->w == b->w) && (a->h == b->h)) ? SDL_TRUE : SDL_FALSE;
+//}
 
 /**
  * Determine whether two rectangles intersect.
@@ -232,46 +232,46 @@ extern  SDL_bool  SDL_GetRectAndLineIntersection(const SDL_Rect *
 /**
  * Returns true if point resides inside a rectangle.
  */
-SDL_FORCE_INLINE SDL_bool SDL_PointInRectFloat(const SDL_FPoint *p, const SDL_FRect *r)
-{
-    return ( (p->x >= r->x) && (p->x < (r->x + r->w)) &&
-             (p->y >= r->y) && (p->y < (r->y + r->h)) ) ? SDL_TRUE : SDL_FALSE;
-}
+//SDL_FORCE_INLINE SDL_bool SDL_PointInRectFloat(const SDL_FPoint *p, const SDL_FRect *r)
+//{
+//    return ( (p->x >= r->x) && (p->x < (r->x + r->w)) &&
+//             (p->y >= r->y) && (p->y < (r->y + r->h)) ) ? SDL_TRUE : SDL_FALSE;
+//}
 
 /**
  * Returns true if the rectangle has no area.
  *
  * \since This function is available since SDL 3.0.0.
  */
-SDL_FORCE_INLINE SDL_bool SDL_RectEmptyFloat(const SDL_FRect *r)
-{
-    return ((!r) || (r->w <= 0.0f) || (r->h <= 0.0f)) ? SDL_TRUE : SDL_FALSE;
-}
+//SDL_FORCE_INLINE SDL_bool SDL_RectEmptyFloat(const SDL_FRect *r)
+//{
+//    return ((!r) || (r->w <= 0.0f) || (r->h <= 0.0f)) ? SDL_TRUE : SDL_FALSE;
+//}
 
 /**
  * Returns true if the two rectangles are equal, within some given epsilon.
  *
  * \since This function is available since SDL 3.0.0.
  */
-SDL_FORCE_INLINE SDL_bool SDL_RectsEqualEpsilon(const SDL_FRect *a, const SDL_FRect *b, const float epsilon)
-{
-    return (a && b && ((a == b) ||
-            ((SDL_fabsf(a->x - b->x) <= epsilon) &&
-            (SDL_fabsf(a->y - b->y) <= epsilon) &&
-            (SDL_fabsf(a->w - b->w) <= epsilon) &&
-            (SDL_fabsf(a->h - b->h) <= epsilon))))
-            ? SDL_TRUE : SDL_FALSE;
-}
+//SDL_FORCE_INLINE SDL_bool SDL_RectsEqualEpsilon(const SDL_FRect *a, const SDL_FRect *b, const float epsilon)
+//{
+//    return (a && b && ((a == b) ||
+//            ((SDL_fabsf(a->x - b->x) <= epsilon) &&
+//            (SDL_fabsf(a->y - b->y) <= epsilon) &&
+//            (SDL_fabsf(a->w - b->w) <= epsilon) &&
+//            (SDL_fabsf(a->h - b->h) <= epsilon))))
+//            ? SDL_TRUE : SDL_FALSE;
+//}
 
 /**
  * Returns true if the two rectangles are equal, using a default epsilon.
  *
  * \since This function is available since SDL 3.0.0.
  */
-SDL_FORCE_INLINE SDL_bool SDL_RectsEqualFloat(const SDL_FRect *a, const SDL_FRect *b)
-{
-    return SDL_RectsEqualEpsilon(a, b, SDL_FLT_EPSILON);
-}
+//SDL_FORCE_INLINE SDL_bool SDL_RectsEqualFloat(const SDL_FRect *a, const SDL_FRect *b)
+//{
+//    return SDL_RectsEqualEpsilon(a, b, SDL_FLT_EPSILON);
+//}
 
 /**
  * Determine whether two rectangles intersect with float precision.

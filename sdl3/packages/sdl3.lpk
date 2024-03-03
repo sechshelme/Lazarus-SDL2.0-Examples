@@ -6,7 +6,7 @@
     <CompilerOptions>
       <Version Value="11"/>
       <SearchPaths>
-        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)/"/>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
     <Files>
@@ -15,8 +15,28 @@
         <UnitName Value="SDL_Video"/>
       </Item>
       <Item>
-        <Filename Value="SDL_stdinc.pp"/>
+        <Filename Value="sdl_stdinc.pas"/>
         <UnitName Value="SDL_stdinc"/>
+      </Item>
+      <Item>
+        <Filename Value="sdl_rect.pas"/>
+        <UnitName Value="SDL_rect"/>
+      </Item>
+      <Item>
+        <Filename Value="sdl_surface.pas"/>
+        <UnitName Value="SDL_surface"/>
+      </Item>
+      <Item>
+        <Filename Value="sdl_properties.pas"/>
+        <UnitName Value="SDL_properties"/>
+      </Item>
+      <Item>
+        <Filename Value="sdl_rwops.pas"/>
+        <UnitName Value="SDL_rwops"/>
+      </Item>
+      <Item>
+        <Filename Value="sdl_blendmode.pas"/>
+        <UnitName Value="SDL_blendmode"/>
       </Item>
     </Files>
     <RequiredPkgs>
