@@ -1,7 +1,7 @@
 program Project1;
 
 uses
-  gl,
+  gtk2,
   ctypes,
   SDL3_messagebox,
   SDL3_version,
@@ -19,24 +19,31 @@ var
   const
     // https://wiki.libsdl.org/SDL3/SDL_ShowMessageBox
 
-    Buttons: array of TSDL_MessageBoxButtonData = (
+    Buttons: array [0..2] of TSDL_MessageBoxButtonData = (
       (flags: 0; buttonID: 0; Text: 'no'),
       (flags: SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT; buttonID: 1; Text: 'yes'),
       (flags: SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT; buttonID: 2; Text: 'cancel'));
 
-  //  colorSchema:array of TSDL_MessageBoxColorScheme=(
-    //colors:(
-    //(r:255;g:0;b:0),
-    //(r:0,255,0),
-    //(r:255,255,0),
-    //(r:0,0,255),
-    //(r:255,0,255)));
+    colorSchema: TSDL_MessageBoxColorScheme = (colors: (
+      (r: 255; g: 0; b: 0),
+      (r: 0; g: 255; b: 0),
+      (r: 255; g: 255; b: 0),
+      (r: 0; g: 0; b: 255),
+      (r: 255; g: 0; b: 255)));
 
-
+    messageboxdata: TSDL_MessageBoxData = (
+      flags: SDL_MESSAGEBOX_INFORMATION;
+      window: nil;
+      title: 'example message box';
+      message: 'select a button';
+      numbuttons: length(Buttons);
+      Buttons: @Buttons;
+      colorScheme: @colorSchema);
+  var
+    buttonid: longint;
   begin
-//     SDL_ShowMessageBox();
-
-    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,                             'Missing file',                             'File is missing. Please reinstall the program.',                             nil);
+    SDL_ShowMessageBox(@messageboxdata, @buttonid);
+    //            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, 'Missing file', 'File is missing. Please reinstall the program.', nil);
   end;
 
 begin

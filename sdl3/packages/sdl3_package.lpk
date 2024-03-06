@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="5">
+    <Name Value="SDL3_package"/>
+    <Type Value="RunAndDesignTime"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <SearchPaths>
+        <OtherUnitFiles Value="pas_units"/>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Files>
+      <Item>
+        <Filename Value="sdl3.pas"/>
+        <UnitName Value="sdl3"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_blendmode.pas"/>
+        <UnitName Value="SDL3_blendmode"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_init.pas"/>
+        <UnitName Value="SDL3_init"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_messagebox.pas"/>
+        <UnitName Value="SDL3_messagebox"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_pixels.pas"/>
+        <UnitName Value="SDL3_pixels"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_properties.pas"/>
+        <UnitName Value="SDL3_properties"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_rect.pas"/>
+        <UnitName Value="SDL3_rect"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_rwops.pas"/>
+        <UnitName Value="SDL3_rwops"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_stdinc.pas"/>
+        <UnitName Value="SDL3_stdinc"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_surface.pas"/>
+        <UnitName Value="SDL3_surface"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_timer.pas"/>
+        <UnitName Value="SDL3_timer"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_version.pas"/>
+        <UnitName Value="SDL3_version"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_video.pas"/>
+        <UnitName Value="SDL3_video"/>
+      </Item>
+    </Files>
+    <RequiredPkgs>
+      <Item>
+        <PackageName Value="FCL"/>
+      </Item>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+      <UseFileFilters Value="True"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>
