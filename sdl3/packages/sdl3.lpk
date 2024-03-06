@@ -48,7 +48,11 @@
       </Item>
       <Item>
         <Filename Value="sdl3_version.pas"/>
-        <UnitName Value="sdl3_version"/>
+        <UnitName Value="SDL3_version"/>
+      </Item>
+      <Item>
+        <Filename Value="sdl3_messagebox.pas"/>
+        <UnitName Value="sdl3_messagebox"/>
       </Item>
     </Files>
     <RequiredPkgs>

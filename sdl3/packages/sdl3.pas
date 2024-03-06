@@ -10,7 +10,7 @@ interface
 uses
   SDL3_video, SDL3_stdinc, SDL3_rect, SDL3_surface, SDL3_properties, 
   SDL3_rwops, SDL3_blendmode, SDL3_init, SDL3_timer, SDL3_version, 
-  LazarusPackageIntf;
+  SDL3_messagebox, LazarusPackageIntf;
 
 implementation
 
