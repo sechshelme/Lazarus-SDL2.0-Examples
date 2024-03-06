@@ -1,14 +1,4 @@
-unit SDL3_rect;
-
-interface
-
-uses
-  ctypes,
-  SDL3_stdinc;
-
-  {$IFDEF FPC}
-  {$PACKRECORDS C}
-  {$ENDIF}
+{$DEFINE read_interface}
 
 type
   PSDL_Point = ^TSDL_Point;
@@ -66,7 +56,10 @@ function SDL_GetRectUnionFloat(A: PSDL_FRect; B: PSDL_FRect; Result: PSDL_FRect)
 function SDL_GetRectEnclosingPointsFloat(points: PSDL_FPoint; Count: longint; clip: PSDL_FRect; Result: PSDL_FRect): TSDL_bool; cdecl; external;
 function SDL_GetRectAndLineIntersectionFloat(rect: PSDL_FRect; X1: Psingle; Y1: Psingle; X2: Psingle; Y2: Psingle): TSDL_bool; cdecl; external;
 
-implementation
+{$UNDEF read_interface}
+
+
+{$DEFINE read_implementation}
 
 function SDL_PointInRect(p: PSDL_Point; r: PSDL_Rect): TSDL_bool;
 begin
@@ -153,4 +146,4 @@ begin
   {    return SDL_RectsEqualEpsilon(a, b, SDL_FLT_EPSILON); }
 end;
 
-end.
+{$UNDEF read_implementation}

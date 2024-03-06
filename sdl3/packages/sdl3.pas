@@ -4,8 +4,9 @@ unit SDL3;
 
 interface
 
-uses
-  Classes, SysUtils;
+{$IFDEF FPC}
+{$PACKRECORDS C}
+{$ENDIF}
 
 {$DEFINE read_interface}
 //{$include SDL3_includes.inc}

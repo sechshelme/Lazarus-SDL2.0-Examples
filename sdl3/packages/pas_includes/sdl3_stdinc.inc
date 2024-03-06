@@ -1,30 +1,4 @@
-unit SDL3_stdinc;
-
-//{$LinkLib 'libSDL3.so.0'}
-{$LinkLib 'SDL3'}
-//{$LinkLib 'c'}
-
-interface
-
-uses
-  ctypes;
-
-type
-  Tsize_t=SizeInt;
-  Psize_t=^Tsize_t;
-
-  Twchar_t=word;
-  Pwchar_t=^Twchar_t;
-  PPwchar_t=^Pwchar_t;
-
-  PSDL_iconv_data_t=Pointer;
-  Tintptr_t=Pointer;
-
-  TSDL_PropertiesID=UInt32;
-
-{$IFDEF FPC}
-{$PACKRECORDS C}
-{$ENDIF}
+{$DEFINE read_interface}
 
 {
   Simple DirectMedia Layer
@@ -1163,7 +1137,10 @@ type
 //{$endif}
 { SDL_stdinc_h_  }
 
-implementation
+{$UNDEF read_interface}
+
+
+{$DEFINE read_implementation}
 
 { was #define dname def_expr }
 function SDL_SIZE_MAX : Tsize_t;
@@ -1527,4 +1504,4 @@ function SDL_ICONV_EINVAL : Tsize_t;
 //end;
 //
 
-end.
+{$UNDEF read_implementation}

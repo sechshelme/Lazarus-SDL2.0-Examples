@@ -1,13 +1,4 @@
-unit SDL3_properties;
-
-interface
-
-uses
-  SDL3_stdinc;
-
-  {$IFDEF FPC}
-  {$PACKRECORDS C}
-  {$ENDIF}
+{$DEFINE read_interface}
 
 type
   PSDL_PropertiesID = ^TSDL_PropertiesID;
@@ -54,6 +45,9 @@ type
 function SDL_EnumerateProperties(props: TSDL_PropertiesID; callback: TSDL_EnumeratePropertiesCallback; userdata: pointer): longint; cdecl; external;
 procedure SDL_DestroyProperties(props: TSDL_PropertiesID); cdecl; external;
 
-implementation
+{$UNDEF read_interface}
 
-end.
+
+{$DEFINE read_implementation}
+
+{$UNDEF read_implementation}

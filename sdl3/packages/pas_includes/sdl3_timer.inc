@@ -1,13 +1,4 @@
-unit SDL3_timer;
-
-interface
-
-uses
-  SDL3_stdinc;
-
-  {$IFDEF FPC}
-  {$PACKRECORDS C}
-  {$ENDIF}
+{$DEFINE read_interface}
 
 const
   SDL_MS_PER_SECOND = 1000;
@@ -37,7 +28,10 @@ type
 function SDL_AddTimer(interval: uint32; callback: TSDL_TimerCallback; param: pointer): TSDL_TimerID; cdecl; external;
 function SDL_RemoveTimer(id: TSDL_TimerID): TSDL_bool; cdecl; external;
 
-implementation
+{$UNDEF read_interface}
+
+
+{$DEFINE read_implementation}
 
 function SDL_MS_TO_NS(MS: longint): int64;
 begin
@@ -59,4 +53,4 @@ begin
   SDL_NS_TO_US := NS div SDL_NS_PER_US;
 end;
 
-end.
+{$UNDEF read_implementation}

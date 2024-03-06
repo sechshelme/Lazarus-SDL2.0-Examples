@@ -1,13 +1,4 @@
-unit SDL3_video;
-
-interface
-
-uses
-  ctypes, SDL3_stdinc, SDL3_rect, SDL3_surface;
-
-  {$IFDEF FPC}
-  {$PACKRECORDS C}
-  {$ENDIF}
+{$DEFINE read_interface}
 
 type
   PSDL_DisplayID = ^TSDL_DisplayID;
@@ -393,7 +384,10 @@ function SDL_GL_GetSwapInterval(interval: Plongint): longint; cdecl; external;
 function SDL_GL_SwapWindow(window: PSDL_Window): longint; cdecl; external;
 function SDL_GL_DeleteContext(context: TSDL_GLContext): longint; cdecl; external;
 
-implementation
+{$UNDEF read_interface}
+
+
+{$DEFINE read_implementation}
 
 function SDL_WINDOWPOS_UNDEFINED_DISPLAY(X: cuint32): cuint32;
 begin
@@ -427,4 +421,4 @@ begin
   //  #define SDL_WINDOWPOS_ISCENTERED(X) (((X)&0xFFFF0000) == SDL_WINDOWPOS_CENTERED_MASK)
 end;
 
-end.
+{$UNDEF read_implementation}

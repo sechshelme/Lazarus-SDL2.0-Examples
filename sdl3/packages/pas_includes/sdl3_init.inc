@@ -1,10 +1,4 @@
-unit SDL3_init;
-
-interface
-
-{$IFDEF FPC}
-{$PACKRECORDS C}
-{$ENDIF}
+{$DEFINE read_interface}
 
 type
   PSDL_InitFlags = ^TSDL_InitFlags;
@@ -26,6 +20,9 @@ procedure SDL_QuitSubSystem(flags:Uint32);cdecl;external;
 function SDL_WasInit(flags:Uint32):Uint32;cdecl;external;
 procedure SDL_Quit;cdecl;external;
 
-implementation
+{$UNDEF read_interface}
 
-end.
+
+{$DEFINE read_implementation}
+
+{$UNDEF read_implementation}

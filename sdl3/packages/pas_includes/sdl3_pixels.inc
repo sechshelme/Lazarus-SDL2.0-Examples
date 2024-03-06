@@ -1,13 +1,4 @@
-unit SDL3_pixels;
-
-interface
-
-uses
-  SDL3_stdinc;
-
-{$IFDEF FPC}
-{$PACKRECORDS C}
-{$ENDIF}
+{$DEFINE read_interface}
 
 {
   Simple DirectMedia Layer
@@ -887,7 +878,10 @@ procedure SDL_GetRGBA(pixel:TUint32; format:PSDL_PixelFormat; r:PUint8; g:PUint8
 //{$endif}
 { SDL_pixels_h_  }
 
-implementation
+{$UNDEF read_interface}
+
+
+{$DEFINE read_implementation}
 
 { was #define dname(params) para_def_expr }
 { argument types are unknown }
@@ -1102,4 +1096,4 @@ begin
 end;
 
 
-end.
+{$UNDEF read_implementation}

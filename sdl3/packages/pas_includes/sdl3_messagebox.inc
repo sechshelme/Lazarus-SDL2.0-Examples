@@ -1,13 +1,4 @@
-unit SDL3_messagebox;
-
-interface
-
-uses
-   SDL3_video;
-
-{$IFDEF FPC}
-{$PACKRECORDS C}
-{$ENDIF}
+{$DEFINE read_interface}
 
 type
   PSDL_MessageBoxFlags = ^TSDL_MessageBoxFlags;
@@ -70,6 +61,9 @@ type
 function SDL_ShowMessageBox(messageboxdata:PSDL_MessageBoxData; buttonid:Plongint):longint;cdecl;external;
 function SDL_ShowSimpleMessageBox(flags:Uint32; title:Pchar; message:Pchar; window:PSDL_Window):longint;cdecl;external;
 
-implementation
+{$UNDEF read_interface}
 
-end.
+
+{$DEFINE read_implementation}
+
+{$UNDEF read_implementation}

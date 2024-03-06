@@ -1,13 +1,4 @@
-unit SDL3_version;
-
-interface
-
-uses
-  SDL3_stdinc;
-
-  {$IFDEF FPC}
-  {$PACKRECORDS C}
-  {$ENDIF}
+{$DEFINE read_interface}
 
 type
   PSDL_Version = ^TSDL_Version;
@@ -31,7 +22,10 @@ function SDL_VERSION_ATLEAST(X, Y, Z: longint): TSDL_bool;
 function SDL_GetVersion(ver: PSDL_Version): longint; cdecl; external;
 function SDL_GetRevision: PChar; cdecl; external;
 
-implementation
+{$UNDEF read_interface}
+
+
+{$DEFINE read_implementation}
 
 procedure SDL_VERSION(x: PSDL_Version);
 begin
@@ -55,4 +49,4 @@ begin
   SDL_VERSION_ATLEAST := TSDL_bool(SDL_COMPILEDVERSION >= (SDL_VERSIONNUM(X, Y, Z)));
 end;
 
-end.
+{$UNDEF read_implementation}

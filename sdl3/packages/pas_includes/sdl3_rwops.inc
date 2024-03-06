@@ -1,13 +1,4 @@
-unit SDL3_rwops;
-
-interface
-
-uses
-  SDL3_stdinc;
-
-{$IFDEF FPC}
-{$PACKRECORDS C}
-{$ENDIF}
+{$DEFINE read_interface}
 
 const
   SDL_RWOPS_UNKNOWN = 0;  
@@ -100,6 +91,9 @@ function SDL_WriteS64LE(dst:PSDL_RWops; value:TSint64):TSDL_bool;cdecl;external;
 function SDL_WriteU64BE(dst:PSDL_RWops; value:TUint64):TSDL_bool;cdecl;external;
 function SDL_WriteS64BE(dst:PSDL_RWops; value:TSint64):TSDL_bool;cdecl;external;
 
-implementation
+{$UNDEF read_interface}
 
-end.
+
+{$DEFINE read_implementation}
+
+{$UNDEF read_implementation}

@@ -1,10 +1,4 @@
-unit SDL3_blendmode;
-
-interface
-
-{$IFDEF FPC}
-{$PACKRECORDS C}
-{$ENDIF}
+{$DEFINE read_interface}
 
 type
   PSDL_BlendMode = ^TSDL_BlendMode;
@@ -48,6 +42,9 @@ const
 function SDL_ComposeCustomBlendMode(srcColorFactor: TSDL_BlendFactor; dstColorFactor: TSDL_BlendFactor; colorOperation: TSDL_BlendOperation; srcAlphaFactor: TSDL_BlendFactor; dstAlphaFactor: TSDL_BlendFactor;
   alphaOperation: TSDL_BlendOperation): TSDL_BlendMode; cdecl; external;
 
-implementation
+{$UNDEF read_interface}
 
-end.
+
+{$DEFINE read_implementation}
+
+{$UNDEF read_implementation}
