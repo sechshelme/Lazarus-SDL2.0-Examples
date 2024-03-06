@@ -76,12 +76,12 @@ typedef struct SDL_Version
  * \sa SDL_Version
  * \sa SDL_GetVersion
  */
-#define SDL_VERSION(x)                          \
-{                                   \
-    (x)->major = SDL_MAJOR_VERSION;                 \
-    (x)->minor = SDL_MINOR_VERSION;                 \
-    (x)->patch = SDL_PATCHLEVEL;                    \
-}
+//#define SDL_VERSION(x)                          \
+//{                                   \
+//    (x)->major = SDL_MAJOR_VERSION;                 \
+//    (x)->minor = SDL_MINOR_VERSION;                 \
+//    (x)->patch = SDL_PATCHLEVEL;                    \
+//}
 
 /**
  *  This macro turns the version numbers into a numeric value:
