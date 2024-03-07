@@ -3,6 +3,8 @@ program Project1;
 uses
   gtk2,
   ctypes,
+//  SDL_quit ,
+  SDL3_events,
   SDL3_messagebox,
   SDL3_version,
   SDL3_stdinc,

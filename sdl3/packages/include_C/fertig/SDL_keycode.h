@@ -62,7 +62,7 @@ typedef enum
     SDLK_PERCENT = '%',
     SDLK_DOLLAR = '$',
     SDLK_AMPERSAND = '&',
-    SDLK_QUOTE = '\'',
+///////    SDLK_QUOTE = '\'',
     SDLK_LEFTPAREN = '(',
     SDLK_RIGHTPAREN = ')',
     SDLK_ASTERISK = '*',
@@ -354,3 +354,4 @@ typedef enum
 } SDL_Keymod;
 
 #endif /* SDL_keycode_h_ */
+

@@ -13,7 +13,7 @@
     <Files>
       <Item>
         <Filename Value="sdl3.pas"/>
-        <UnitName Value="sdl3"/>
+        <UnitName Value="SDL3"/>
       </Item>
       <Item>
         <Filename Value="pas_units/sdl3_blendmode.pas"/>
@@ -62,6 +62,25 @@
       <Item>
         <Filename Value="pas_units/sdl3_video.pas"/>
         <UnitName Value="SDL3_video"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/SDL_quit.pp"/>
+        <UnitName Value="SDL_quit"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_events.pas"/>
+        <UnitName Value="SDL3_events"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/SDL_keyboard.pp"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/SDL_scancode.pp"/>
+        <AddToUsesPkgSection Value="False"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/SDL_keycode.pp"/>
+        <UnitName Value="SDL_keycode"/>
       </Item>
     </Files>
     <RequiredPkgs>
