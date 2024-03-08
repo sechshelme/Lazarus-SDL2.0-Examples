@@ -128,14 +128,14 @@ typedef enum
  *
  * \since This function is available since SDL 3.0.0.
  */
-extern  void  SDL_LockJoysticks(void) SDL_ACQUIRE(SDL_joystick_lock);
+extern  void  SDL_LockJoysticks(void) ;//SDL_ACQUIRE(SDL_joystick_lock);
 
 /**
  * Unlocking for atomic access to the joystick API
  *
  * \since This function is available since SDL 3.0.0.
  */
-extern  void  SDL_UnlockJoysticks(void) SDL_RELEASE(SDL_joystick_lock);
+extern  void  SDL_UnlockJoysticks(void); /// SDL_RELEASE(SDL_joystick_lock);
 
 /**
  * Get a list of currently connected joysticks.

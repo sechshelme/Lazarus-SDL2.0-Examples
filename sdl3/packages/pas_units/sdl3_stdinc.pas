@@ -22,6 +22,8 @@ type
 
   TSDL_PropertiesID=UInt32;
 
+  PPUint8=^PUint8;
+
 {$IFDEF FPC}
 {$PACKRECORDS C}
 {$ENDIF}

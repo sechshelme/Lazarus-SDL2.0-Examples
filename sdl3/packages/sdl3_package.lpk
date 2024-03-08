@@ -73,14 +73,45 @@
       </Item>
       <Item>
         <Filename Value="pas_units/SDL_keyboard.pp"/>
+        <UnitName Value="SDL_keyboard"/>
       </Item>
       <Item>
         <Filename Value="pas_units/SDL_scancode.pp"/>
         <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="SDL_scancode"/>
       </Item>
       <Item>
         <Filename Value="pas_units/SDL_keycode.pp"/>
         <UnitName Value="SDL_keycode"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/SDL_mouse.pp"/>
+        <UnitName Value="SDL_mouse"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/SDL_joystick.pp"/>
+        <UnitName Value="SDL_joystick"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/SDL_guid.pp"/>
+        <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="SDL_guid"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/SDL_audio.pp"/>
+        <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="SDL_audio"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/SDL_camera.pp"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/SDL_touch.pp"/>
+        <AddToUsesPkgSection Value="False"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/SDL_pen.pp"/>
+        <AddToUsesPkgSection Value="False"/>
       </Item>
     </Files>
     <RequiredPkgs>

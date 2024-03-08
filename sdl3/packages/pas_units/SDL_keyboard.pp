@@ -3,7 +3,7 @@ unit SDL_keyboard;
 interface
 
 uses
-  SDL_scancode, SDL_keycode;
+SDL3_stdinc,SDL3_rect,  SDL_scancode, SDL_keycode, SDL3_video;
 
 {$IFDEF FPC}
 {$PACKRECORDS C}
@@ -31,8 +31,8 @@ type
   TSDL_Keysym = record
       scancode : TSDL_Scancode;
       sym : TSDL_Keycode;
-      mod : TUint16;
-      unused : TUint32;
+      mod_ : Uint16;
+      unused : Uint32;
     end;
 { Function prototypes  }
 {*
@@ -324,8 +324,8 @@ function SDL_HasScreenKeyboardSupport:TSDL_bool;cdecl;external;
 function SDL_ScreenKeyboardShown(window:PSDL_Window):TSDL_bool;cdecl;external;
 { Ends C function definitions when using C++  }
 { C++ end of extern C conditionnal removed }
-{$include <SDL3/SDL_close_code.h>}
-{$endif}
+{//$include <SDL3/SDL_close_code.h>}
+//{$endif}
 { SDL_keyboard_h_  }
 
 implementation

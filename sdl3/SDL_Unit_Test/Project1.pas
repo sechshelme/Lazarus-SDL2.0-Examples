@@ -3,7 +3,9 @@ program Project1;
 uses
   gtk2,
   ctypes,
-//  SDL_quit ,
+  //  SDL_quit ,
+  SDL_scancode,
+  SDL_keycode,
   SDL3_events,
   SDL3_messagebox,
   SDL3_version,
@@ -16,6 +18,8 @@ uses
 var
   ver: TSDL_Version;
   window: PSDL_Window;
+  e: TSDL_Event;
+  quit: boolean = False;
 
   procedure ShowMessageBox;
   const
@@ -53,9 +57,38 @@ begin
 
   window := SDL_CreateWindow('SDL3 Window', 320, 200, 0);
 
-  ShowMessageBox;
+//  ShowMessageBox;
 
-  SDL_Delay(3000);
+  while not quit do begin
+    while SDL_PollEvent(@e) <> 0 do begin
+      case e.type_ of
+        //        SDL_KEYDOWN: begin
+        SDL_EVENT_KEY_DOWN: begin
+          case e.key.keysym.sym of
+
+            27: begin
+              //            SDLK_ESCAPE: begin
+              WriteLn('down');
+              quit := True;
+            end;
+            byte('m') :begin
+              ShowMessageBox;
+            end;
+          end;
+        end;
+        SDL_EVENT_QUIT: begin
+          WriteLn('quit');
+          //          SDL_QUITEV: begin
+          quit := True;
+        end;
+      end;
+    end;
+    //    SDL_BlitSurface(gXOut, nil, gscreenSurface, nil);
+    //    SDL_UpdateWindowSurface(gWindow);
+  end;
+
+
+  //  SDL_Delay(3000);
   SDL_DestroyWindow(window);
 
   SDL_VERSION(@ver);

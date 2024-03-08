@@ -3,7 +3,7 @@ unit SDL3_events;
 interface
 
 uses
-  SDL3_video, SDL_keyboard;
+ SDL3_stdinc, SDL3_video, SDL_keyboard, SDL_mouse, SDL_joystick, SDL_audio, SDL_camera, SDL_touch, SDL_pen, SDL_sensor;
 
 {$IFDEF FPC}
 {$PACKRECORDS C}
@@ -366,13 +366,13 @@ const
 type
   PSDL_TextEditingEvent = ^TSDL_TextEditingEvent;
   TSDL_TextEditingEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       windowID : TSDL_WindowID;
       text : Pchar;
-      start : TSint32;
-      length : TSint32;
+      start : int32;
+      length : int32;
     end;
 
 const
@@ -390,9 +390,9 @@ const
 type
   PSDL_TextInputEvent = ^TSDL_TextInputEvent;
   TSDL_TextInputEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       windowID : TSDL_WindowID;
       text : Pchar;
     end;
@@ -411,12 +411,12 @@ type
 
   PSDL_MouseMotionEvent = ^TSDL_MouseMotionEvent;
   TSDL_MouseMotionEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       windowID : TSDL_WindowID;
       which : TSDL_MouseID;
-      state : TUint32;
+      state : Uint32;
       x : single;
       y : single;
       xrel : single;
@@ -437,15 +437,15 @@ type
 
   PSDL_MouseButtonEvent = ^TSDL_MouseButtonEvent;
   TSDL_MouseButtonEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       windowID : TSDL_WindowID;
       which : TSDL_MouseID;
-      button : TUint8;
-      state : TUint8;
-      clicks : TUint8;
-      padding : TUint8;
+      button : Uint8;
+      state : Uint8;
+      clicks : Uint8;
+      padding : Uint8;
       x : single;
       y : single;
     end;
@@ -464,14 +464,14 @@ type
 
   PSDL_MouseWheelEvent = ^TSDL_MouseWheelEvent;
   TSDL_MouseWheelEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       windowID : TSDL_WindowID;
       which : TSDL_MouseID;
       x : single;
       y : single;
-      direction : TUint32;
+      direction : Uint32;
       mouse_x : single;
       mouse_y : single;
     end;
@@ -486,16 +486,16 @@ type
 
   PSDL_JoyAxisEvent = ^TSDL_JoyAxisEvent;
   TSDL_JoyAxisEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       which : TSDL_JoystickID;
-      axis : TUint8;
-      padding1 : TUint8;
-      padding2 : TUint8;
-      padding3 : TUint8;
-      value : TSint16;
-      padding4 : TUint16;
+      axis : Uint8;
+      padding1 : Uint8;
+      padding2 : Uint8;
+      padding3 : Uint8;
+      value : int16;
+      padding4 : Uint16;
     end;
 {*
  *  Joystick hat position change event structure (event.jhat.*)
@@ -514,14 +514,14 @@ type
 
   PSDL_JoyHatEvent = ^TSDL_JoyHatEvent;
   TSDL_JoyHatEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       which : TSDL_JoystickID;
-      hat : TUint8;
-      value : TUint8;
-      padding1 : TUint8;
-      padding2 : TUint8;
+      hat : Uint8;
+      value : Uint8;
+      padding1 : Uint8;
+      padding2 : Uint8;
     end;
 {*
  *  Joystick button event structure (event.jbutton.*)
@@ -534,14 +534,14 @@ type
 
   PSDL_JoyButtonEvent = ^TSDL_JoyButtonEvent;
   TSDL_JoyButtonEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       which : TSDL_JoystickID;
-      button : TUint8;
-      state : TUint8;
-      padding1 : TUint8;
-      padding2 : TUint8;
+      button : Uint8;
+      state : Uint8;
+      padding1 : Uint8;
+      padding2 : Uint8;
     end;
 {*
  *  Joystick device event structure (event.jdevice.*)
@@ -552,9 +552,9 @@ type
 
   PSDL_JoyDeviceEvent = ^TSDL_JoyDeviceEvent;
   TSDL_JoyDeviceEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       which : TSDL_JoystickID;
     end;
 {*
@@ -567,9 +567,9 @@ type
 
   PSDL_JoyBatteryEvent = ^TSDL_JoyBatteryEvent;
   TSDL_JoyBatteryEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       which : TSDL_JoystickID;
       level : TSDL_JoystickPowerLevel;
     end;
@@ -584,16 +584,16 @@ type
 
   PSDL_GamepadAxisEvent = ^TSDL_GamepadAxisEvent;
   TSDL_GamepadAxisEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       which : TSDL_JoystickID;
-      axis : TUint8;
-      padding1 : TUint8;
-      padding2 : TUint8;
-      padding3 : TUint8;
-      value : TSint16;
-      padding4 : TUint16;
+      axis : Uint8;
+      padding1 : Uint8;
+      padding2 : Uint8;
+      padding3 : Uint8;
+      value : int16;
+      padding4 : Uint16;
     end;
 {*
  *  Gamepad button event structure (event.gbutton.*)
@@ -606,14 +606,14 @@ type
 
   PSDL_GamepadButtonEvent = ^TSDL_GamepadButtonEvent;
   TSDL_GamepadButtonEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       which : TSDL_JoystickID;
-      button : TUint8;
-      state : TUint8;
-      padding1 : TUint8;
-      padding2 : TUint8;
+      button : Uint8;
+      state : Uint8;
+      padding1 : Uint8;
+      padding2 : Uint8;
     end;
 {*
  *  Gamepad device event structure (event.gdevice.*)
@@ -624,9 +624,9 @@ type
 
   PSDL_GamepadDeviceEvent = ^TSDL_GamepadDeviceEvent;
   TSDL_GamepadDeviceEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       which : TSDL_JoystickID;
     end;
 {*
@@ -643,12 +643,12 @@ type
 
   PSDL_GamepadTouchpadEvent = ^TSDL_GamepadTouchpadEvent;
   TSDL_GamepadTouchpadEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       which : TSDL_JoystickID;
-      touchpad : TSint32;
-      finger : TSint32;
+      touchpad : int32;
+      finger : int32;
       x : single;
       y : single;
       pressure : single;
@@ -665,13 +665,13 @@ type
 
   PSDL_GamepadSensorEvent = ^TSDL_GamepadSensorEvent;
   TSDL_GamepadSensorEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       which : TSDL_JoystickID;
-      sensor : TSint32;
+      sensor : int32;
       data : array[0..2] of single;
-      sensor_timestamp : TUint64;
+      sensor_timestamp : Uint64;
     end;
 {*
  *  Audio device event structure (event.adevice.*)
@@ -683,14 +683,14 @@ type
 
   PSDL_AudioDeviceEvent = ^TSDL_AudioDeviceEvent;
   TSDL_AudioDeviceEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       which : TSDL_AudioDeviceID;
-      iscapture : TUint8;
-      padding1 : TUint8;
-      padding2 : TUint8;
-      padding3 : TUint8;
+      iscapture : Uint8;
+      padding1 : Uint8;
+      padding2 : Uint8;
+      padding3 : Uint8;
     end;
 {*
  *  Camera device event structure (event.cdevice.*)
@@ -701,12 +701,12 @@ type
 
   PSDL_CameraDeviceEvent = ^TSDL_CameraDeviceEvent;
   TSDL_CameraDeviceEvent = record
-      _type : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      timestamp : Uint64;
       which : TSDL_CameraDeviceID;
-      padding1 : TUint8;
-      padding2 : TUint8;
-      padding3 : TUint8;
+      padding1 : Uint8;
+      padding2 : Uint8;
+      padding3 : Uint8;
     end;
 {*
  *  Touch finger event structure (event.tfinger.*)
@@ -723,9 +723,9 @@ type
 
   PSDL_TouchFingerEvent = ^TSDL_TouchFingerEvent;
   TSDL_TouchFingerEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       touchID : TSDL_TouchID;
       fingerID : TSDL_FingerID;
       x : single;
@@ -756,14 +756,14 @@ const
 type
   PSDL_PenTipEvent = ^TSDL_PenTipEvent;
   TSDL_PenTipEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
-      windowID : TUint32;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
+      windowID : Uint32;
       which : TSDL_PenID;
-      tip : TUint8;
-      state : TUint8;
-      pen_state : TUint16;
+      tip : Uint8;
+      state : Uint8;
+      pen_state : Uint16;
       x : single;
       y : single;
       axes : array[0..(SDL_PEN_NUM_AXES)-1] of single;
@@ -784,14 +784,14 @@ type
 
   PSDL_PenMotionEvent = ^TSDL_PenMotionEvent;
   TSDL_PenMotionEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
-      windowID : TUint32;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
+      windowID : Uint32;
       which : TSDL_PenID;
-      padding1 : TUint8;
-      padding2 : TUint8;
-      pen_state : TUint16;
+      padding1 : Uint8;
+      padding2 : Uint8;
+      pen_state : Uint16;
       x : single;
       y : single;
       axes : array[0..(SDL_PEN_NUM_AXES)-1] of single;
@@ -814,14 +814,14 @@ type
 
   PSDL_PenButtonEvent = ^TSDL_PenButtonEvent;
   TSDL_PenButtonEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
-      windowID : TUint32;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
+      windowID : Uint32;
       which : TSDL_PenID;
-      button : TUint8;
-      state : TUint8;
-      pen_state : TUint16;
+      button : Uint8;
+      state : Uint8;
+      pen_state : Uint16;
       x : single;
       y : single;
       axes : array[0..(SDL_PEN_NUM_AXES)-1] of single;
@@ -842,9 +842,9 @@ type
 
   PSDL_DropEvent = ^TSDL_DropEvent;
   TSDL_DropEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       windowID : TSDL_WindowID;
       x : single;
       y : single;
@@ -859,9 +859,9 @@ type
 
   PSDL_ClipboardEvent = ^TSDL_ClipboardEvent;
   TSDL_ClipboardEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
     end;
 {*
  *  Sensor event structure (event.sensor.*)
@@ -874,12 +874,12 @@ type
 
   PSDL_SensorEvent = ^TSDL_SensorEvent;
   TSDL_SensorEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       which : TSDL_SensorID;
       data : array[0..5] of single;
-      sensor_timestamp : TUint64;
+      sensor_timestamp : Uint64;
     end;
 {*
  *  The "quit requested" event
@@ -889,9 +889,9 @@ type
 
   PSDL_QuitEvent = ^TSDL_QuitEvent;
   TSDL_QuitEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
     end;
 {*
  *  A user-defined event type (event.user.*)
@@ -905,11 +905,11 @@ type
 
   PSDL_UserEvent = ^TSDL_UserEvent;
   TSDL_UserEvent = record
-      _type : TUint32;
-      reserved : TUint32;
-      timestamp : TUint64;
+      _type : Uint32;
+      reserved : Uint32;
+      timestamp : Uint64;
       windowID : TSDL_WindowID;
-      code : TSint32;
+      code : int32;
       data1 : pointer;
       data2 : pointer;
     end;
@@ -964,7 +964,7 @@ type
   PSDL_Event = ^TSDL_Event;
   TSDL_Event = record
       case longint of
-        0 : ( _type : TUint32 );
+        0 : ( type_ : Uint32 );
         1 : ( common : TSDL_CommonEvent );
         2 : ( display : TSDL_DisplayEvent );
         3 : ( window : TSDL_WindowEvent );
@@ -995,7 +995,7 @@ type
         28 : ( pbutton : TSDL_PenButtonEvent );
         29 : ( drop : TSDL_DropEvent );
         30 : ( clipboard : TSDL_ClipboardEvent );
-        31 : ( padding : array[0..127] of TUint8 );
+        31 : ( padding : array[0..127] of Uint8 );
       end;
 { Make sure we haven't broken binary compatibility  }
 {///SDL_COMPILE_TIME_ASSERT(SDL_Event, sizeof(SDL_Event) == sizeof(((SDL_Event *)NULL)->padding)); }
@@ -1032,7 +1032,7 @@ type
     SDL_ADDEVENT = 0;
     SDL_PEEKEVENT = 1;
     SDL_GETEVENT = 2;
-;
+
 {*
  * Check the event queue for messages and optionally return them.
  *
@@ -1072,7 +1072,7 @@ type
  * \sa SDL_PushEvent
   }
 
-function SDL_PeepEvents(events:PSDL_Event; numevents:longint; action:TSDL_eventaction; minType:TUint32; maxType:TUint32):longint;cdecl;external;
+function SDL_PeepEvents(events:PSDL_Event; numevents:longint; action:TSDL_eventaction; minType:Uint32; maxType:Uint32):longint;cdecl;external;
 { @  }
 {*
  * Check for the existence of a certain event type in the event queue.
@@ -1088,7 +1088,7 @@ function SDL_PeepEvents(events:PSDL_Event; numevents:longint; action:TSDL_eventa
  *
  * \sa SDL_HasEvents
   }
-function SDL_HasEvent(_type:TUint32):TSDL_bool;cdecl;external;
+function SDL_HasEvent(_type:Uint32):TSDL_bool;cdecl;external;
 {*
  * Check for the existence of certain event types in the event queue.
  *
@@ -1293,7 +1293,7 @@ function SDL_PushEvent(event:PSDL_Event):longint;cdecl;external;
  * \sa SDL_AddEventWatch
   }
 type
-
+  PSDL_EventFilter=^TSDL_EventFilter;
   TSDL_EventFilter = function (userdata:pointer; event:PSDL_Event):longint;cdecl;
 {*
  * Set up a filter to process all events before they change internal state and
@@ -1471,11 +1471,10 @@ function SDL_RegisterEvents(numevents:longint):TUint32;cdecl;external;
 function SDL_AllocateEventMemory(size:Tsize_t):pointer;cdecl;external;
 { Ends C function definitions when using C++  }
 { C++ end of extern C conditionnal removed }
-{$include <SDL3/SDL_close_code.h>}
-{$endif}
+{//$include <SDL3/SDL_close_code.h>}
+//{$endif}
 { SDL_events_h_  }
 
 implementation
-
 
 end.
