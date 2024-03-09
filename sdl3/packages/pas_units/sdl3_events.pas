@@ -3,7 +3,7 @@ unit SDL3_events;
 interface
 
 uses
- SDL3_stdinc, SDL3_video, SDL_keyboard, SDL_mouse, SDL_joystick, SDL_audio, SDL_camera, SDL_touch, SDL_pen, SDL_sensor;
+ SDL3_stdinc, SDL3_video, SDL3_keyboard, SDL_mouse, SDL3_joystick, SDL3_audio, SDL3_camera, SDL3_touch, SDL3_pen, SDL3_sensor;
 
 {$IFDEF FPC}
 {$PACKRECORDS C}

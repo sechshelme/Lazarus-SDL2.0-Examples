@@ -39,12 +39,12 @@
  *      export CC=clang
  *      export CFLAGS="-DSDL_THREAD_SAFETY_ANALYSIS -Wthread-safety"
  */
-#if defined(SDL_THREAD_SAFETY_ANALYSIS) && \
-    defined(__clang__) && (!defined(SWIG))
-#define SDL_THREAD_ANNOTATION_ATTRIBUTE__(x)   __attribute__((x))
-#else
-#define SDL_THREAD_ANNOTATION_ATTRIBUTE__(x)   /* no-op */
-#endif
+//#if defined(SDL_THREAD_SAFETY_ANALYSIS) && \
+//    defined(__clang__) && (!defined(SWIG))
+//#define SDL_THREAD_ANNOTATION_ATTRIBUTE__(x)   __attribute__((x))
+//#else
+//#define SDL_THREAD_ANNOTATION_ATTRIBUTE__(x)   /* no-op */
+//#endif
 
 #define SDL_CAPABILITY(x) \
   SDL_THREAD_ANNOTATION_ATTRIBUTE__(capability(x))
@@ -172,7 +172,7 @@ extern  SDL_Mutex * SDL_CreateMutex(void);
  *
  * \since This function is available since SDL 3.0.0.
  */
-extern  void  SDL_LockMutex(SDL_Mutex *mutex) SDL_ACQUIRE(mutex);
+extern  void  SDL_LockMutex(SDL_Mutex *mutex);
 
 /**
  * Try to lock a mutex without blocking.
@@ -198,7 +198,7 @@ extern  void  SDL_LockMutex(SDL_Mutex *mutex) SDL_ACQUIRE(mutex);
  * \sa SDL_LockMutex
  * \sa SDL_UnlockMutex
  */
-extern  int  SDL_TryLockMutex(SDL_Mutex *mutex) SDL_TRY_ACQUIRE(0, mutex);
+extern  int  SDL_TryLockMutex(SDL_Mutex *mutex) ;
 
 /**
  * Unlock the mutex.
@@ -214,7 +214,7 @@ extern  int  SDL_TryLockMutex(SDL_Mutex *mutex) SDL_TRY_ACQUIRE(0, mutex);
  *
  * \since This function is available since SDL 3.0.0.
  */
-extern  void  SDL_UnlockMutex(SDL_Mutex *mutex) SDL_RELEASE(mutex);
+extern  void  SDL_UnlockMutex(SDL_Mutex *mutex);
 
 /**
  * Destroy a mutex created with SDL_CreateMutex().
@@ -330,7 +330,7 @@ extern  SDL_RWLock * SDL_CreateRWLock(void);
  *
  * \sa SDL_UnlockRWLock
  */
-extern  void  SDL_LockRWLockForReading(SDL_RWLock *rwlock) SDL_ACQUIRE_SHARED(rwlock);
+extern  void  SDL_LockRWLockForReading(SDL_RWLock *rwlock);
 
 /**
  * Lock the read/write lock for _write_ operations.
@@ -359,7 +359,7 @@ extern  void  SDL_LockRWLockForReading(SDL_RWLock *rwlock) SDL_ACQUIRE_SHARED(rw
  *
  * \sa SDL_UnlockRWLock
  */
-extern  void  SDL_LockRWLockForWriting(SDL_RWLock *rwlock) SDL_ACQUIRE(rwlock);
+extern  void  SDL_LockRWLockForWriting(SDL_RWLock *rwlock) ;
 
 /**
  * Try to lock a read/write lock _for reading_ without blocking.
@@ -388,7 +388,7 @@ extern  void  SDL_LockRWLockForWriting(SDL_RWLock *rwlock) SDL_ACQUIRE(rwlock);
  * \sa SDL_TryLockRWLockForReading
  * \sa SDL_UnlockRWLock
  */
-extern  int  SDL_TryLockRWLockForReading(SDL_RWLock *rwlock) SDL_TRY_ACQUIRE_SHARED(0, rwlock);
+extern  int  SDL_TryLockRWLockForReading(SDL_RWLock *rwlock) ;
 
 /**
  * Try to lock a read/write lock _for writing_ without blocking.
@@ -422,7 +422,7 @@ extern  int  SDL_TryLockRWLockForReading(SDL_RWLock *rwlock) SDL_TRY_ACQUIRE_SHA
  * \sa SDL_TryLockRWLockForWriting
  * \sa SDL_UnlockRWLock
  */
-extern  int  SDL_TryLockRWLockForWriting(SDL_RWLock *rwlock) SDL_TRY_ACQUIRE(0, rwlock);
+extern  int  SDL_TryLockRWLockForWriting(SDL_RWLock *rwlock);
 
 /**
  * Unlock the read/write lock.
@@ -442,7 +442,7 @@ extern  int  SDL_TryLockRWLockForWriting(SDL_RWLock *rwlock) SDL_TRY_ACQUIRE(0, 
  *
  * \since This function is available since SDL 3.0.0.
  */
-extern  void  SDL_UnlockRWLock(SDL_RWLock *rwlock) SDL_RELEASE_GENERIC(rwlock);
+extern  void  SDL_UnlockRWLock(SDL_RWLock *rwlock) ;
 
 /**
  * Destroy a read/write lock created with SDL_CreateRWLock().

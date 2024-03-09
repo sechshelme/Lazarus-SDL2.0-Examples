@@ -64,54 +64,60 @@
         <UnitName Value="SDL3_video"/>
       </Item>
       <Item>
-        <Filename Value="pas_units/SDL_quit.pp"/>
-        <UnitName Value="SDL_quit"/>
+        <Filename Value="pas_units/sdl3_quit.pas"/>
+        <UnitName Value="SDL3_quit"/>
       </Item>
       <Item>
         <Filename Value="pas_units/sdl3_events.pas"/>
         <UnitName Value="SDL3_events"/>
       </Item>
       <Item>
-        <Filename Value="pas_units/SDL_keyboard.pp"/>
-        <UnitName Value="SDL_keyboard"/>
+        <Filename Value="pas_units/sdl3_keyboard.pas"/>
+        <UnitName Value="SDL3_keyboard"/>
       </Item>
       <Item>
-        <Filename Value="pas_units/SDL_scancode.pp"/>
+        <Filename Value="pas_units/sdl3_scancode.pas"/>
         <AddToUsesPkgSection Value="False"/>
-        <UnitName Value="SDL_scancode"/>
+        <UnitName Value="sdl3_scancode"/>
       </Item>
       <Item>
-        <Filename Value="pas_units/SDL_keycode.pp"/>
-        <UnitName Value="SDL_keycode"/>
+        <Filename Value="pas_units/sdl3_keycode.pas"/>
+        <UnitName Value="SDL3_keycode"/>
       </Item>
       <Item>
         <Filename Value="pas_units/SDL_mouse.pp"/>
         <UnitName Value="SDL_mouse"/>
       </Item>
       <Item>
-        <Filename Value="pas_units/SDL_joystick.pp"/>
-        <UnitName Value="SDL_joystick"/>
+        <Filename Value="pas_units/sdl3_joystick.pas"/>
+        <UnitName Value="SDL3_joystick"/>
       </Item>
       <Item>
-        <Filename Value="pas_units/SDL_guid.pp"/>
+        <Filename Value="pas_units/sdl3_guid.pas"/>
         <AddToUsesPkgSection Value="False"/>
-        <UnitName Value="SDL_guid"/>
+        <UnitName Value="sdl3_guid"/>
       </Item>
       <Item>
-        <Filename Value="pas_units/SDL_audio.pp"/>
+        <Filename Value="pas_units/sdl3_audio.pas"/>
         <AddToUsesPkgSection Value="False"/>
-        <UnitName Value="SDL_audio"/>
+        <UnitName Value="sdl3_audio"/>
       </Item>
       <Item>
-        <Filename Value="pas_units/SDL_camera.pp"/>
+        <Filename Value="pas_units/sdl3_camera.pas"/>
+        <UnitName Value="SDL3_camera"/>
       </Item>
       <Item>
-        <Filename Value="pas_units/SDL_touch.pp"/>
+        <Filename Value="pas_units/sdl3_touch.pas"/>
         <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="sdl3_touch"/>
       </Item>
       <Item>
-        <Filename Value="pas_units/SDL_pen.pp"/>
+        <Filename Value="pas_units/sdl3_pen.pas"/>
         <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="sdl3_pen"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/SDL_mutex.pp"/>
       </Item>
     </Files>
     <RequiredPkgs>
