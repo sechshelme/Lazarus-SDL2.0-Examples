@@ -46,7 +46,7 @@ unit SDL3_audio;       SDL3_stdinc, SDL3_rwops;
 
 unit SDL3_surface;     SDL3_pixels, SDL3_stdinc, SDL3_rect, SDL3_properties, SDL3_rwops, SDL3_blendmode;
 unit SDL3_video;       SDL3_stdinc, SDL3_rect, SDL3_surface;
-unit SDL3_camera;      SDL3_properties, SDL3_surface;
+unit SDL3_camera;      SDL3_properties, SDL3_surface, SDL3_pixels;
 unit SDL3_messagebox;  SDL3_video;
 
 unit SDL3_keycode;     SDL_scancode;

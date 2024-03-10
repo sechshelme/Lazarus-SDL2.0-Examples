@@ -60,6 +60,7 @@ type
   TSDL_PenSubtype = longint;
 
 const
+  SDL_PEN_TYPE_UNKNOWN = 0;
   SDL_PEN_TYPE_ERASER = 1;
   SDL_PEN_TYPE_PEN = 2;
   SDL_PEN_TYPE_PENCIL = 3;
