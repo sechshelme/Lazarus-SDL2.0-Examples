@@ -43,7 +43,7 @@ function SDL_HasProperty(props: TSDL_PropertiesID; Name: PChar): TSDL_bool; cdec
 function SDL_GetPropertyType(props: TSDL_PropertiesID; Name: PChar): TSDL_PropertyType; cdecl; external;
 function SDL_GetProperty(props: TSDL_PropertiesID; Name: PChar; default_value: pointer): pointer; cdecl; external;
 function SDL_GetStringProperty(props: TSDL_PropertiesID; Name: PChar; default_value: PChar): PChar; cdecl; external;
-function SDL_GetNumberProperty(props: TSDL_PropertiesID; Name: PChar; default_value: TSint64): TSint64; cdecl; external;
+function SDL_GetNumberProperty(props: TSDL_PropertiesID; Name: PChar; default_value: int64): int64; cdecl; external;
 function SDL_GetFloatProperty(props: TSDL_PropertiesID; Name: PChar; default_value: single): single; cdecl; external;
 function SDL_GetBooleanProperty(props: TSDL_PropertiesID; Name: PChar; default_value: TSDL_bool): TSDL_bool; cdecl; external;
 function SDL_ClearProperty(props: TSDL_PropertiesID; Name: PChar): longint; cdecl; external;

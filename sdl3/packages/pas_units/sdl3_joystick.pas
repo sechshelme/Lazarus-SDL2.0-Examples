@@ -100,9 +100,9 @@ const
 function SDL_AttachVirtualJoystickEx(desc: PSDL_VirtualJoystickDesc): TSDL_JoystickID; cdecl; external;
 function SDL_DetachVirtualJoystick(instance_id: TSDL_JoystickID): longint; cdecl; external;
 function SDL_IsJoystickVirtual(instance_id: TSDL_JoystickID): TSDL_bool; cdecl; external;
-function SDL_SetJoystickVirtualAxis(joystick: PSDL_Joystick; axis: longint; Value: TSint16): longint; cdecl; external;
-function SDL_SetJoystickVirtualButton(joystick: PSDL_Joystick; button: longint; Value: TUint8): longint; cdecl; external;
-function SDL_SetJoystickVirtualHat(joystick: PSDL_Joystick; hat: longint; Value: TUint8): longint; cdecl; external;
+function SDL_SetJoystickVirtualAxis(joystick: PSDL_Joystick; axis: longint; Value: int16): longint; cdecl; external;
+function SDL_SetJoystickVirtualButton(joystick: PSDL_Joystick; button: longint; Value: Uint8): longint; cdecl; external;
+function SDL_SetJoystickVirtualHat(joystick: PSDL_Joystick; hat: longint; Value: Uint8): longint; cdecl; external;
 function SDL_GetJoystickProperties(joystick: PSDL_Joystick): TSDL_PropertiesID; cdecl; external;
 
 const
@@ -117,10 +117,10 @@ function SDL_GetJoystickPath(joystick: PSDL_Joystick): PChar; cdecl; external;
 function SDL_GetJoystickPlayerIndex(joystick: PSDL_Joystick): longint; cdecl; external;
 function SDL_SetJoystickPlayerIndex(joystick: PSDL_Joystick; player_index: longint): longint; cdecl; external;
 function SDL_GetJoystickGUID(joystick: PSDL_Joystick): TSDL_JoystickGUID; cdecl; external;
-function SDL_GetJoystickVendor(joystick: PSDL_Joystick): TUint16; cdecl; external;
-function SDL_GetJoystickProduct(joystick: PSDL_Joystick): TUint16; cdecl; external;
-function SDL_GetJoystickProductVersion(joystick: PSDL_Joystick): TUint16; cdecl; external;
-function SDL_GetJoystickFirmwareVersion(joystick: PSDL_Joystick): TUint16; cdecl; external;
+function SDL_GetJoystickVendor(joystick: PSDL_Joystick): Uint16; cdecl; external;
+function SDL_GetJoystickProduct(joystick: PSDL_Joystick): Uint16; cdecl; external;
+function SDL_GetJoystickProductVersion(joystick: PSDL_Joystick): Uint16; cdecl; external;
+function SDL_GetJoystickFirmwareVersion(joystick: PSDL_Joystick): Uint16; cdecl; external;
 function SDL_GetJoystickSerial(joystick: PSDL_Joystick): PChar; cdecl; external;
 function SDL_GetJoystickType(joystick: PSDL_Joystick): TSDL_JoystickType; cdecl; external;
 function SDL_GetJoystickGUIDString(guid: TSDL_JoystickGUID; pszGUID: PChar; cbGUID: longint): longint; cdecl; external;
@@ -134,8 +134,8 @@ function SDL_GetNumJoystickButtons(joystick: PSDL_Joystick): longint; cdecl; ext
 procedure SDL_SetJoystickEventsEnabled(Enabled: TSDL_bool); cdecl; external;
 function SDL_JoystickEventsEnabled: TSDL_bool; cdecl; external;
 procedure SDL_UpdateJoysticks; cdecl; external;
-function SDL_GetJoystickAxis(joystick: PSDL_Joystick; axis: longint): TSint16; cdecl; external;
-function SDL_GetJoystickAxisInitialState(joystick: PSDL_Joystick; axis: longint; state: PSint16): TSDL_bool; cdecl; external;
+function SDL_GetJoystickAxis(joystick: PSDL_Joystick; axis: longint): int16; cdecl; external;
+function SDL_GetJoystickAxisInitialState(joystick: PSDL_Joystick; axis: longint; state: Pint16): TSDL_bool; cdecl; external;
 
 const
   SDL_HAT_CENTERED = $00;
@@ -148,11 +148,11 @@ const
   SDL_HAT_LEFTUP = SDL_HAT_LEFT or SDL_HAT_UP;
   SDL_HAT_LEFTDOWN = SDL_HAT_LEFT or SDL_HAT_DOWN;
 
-function SDL_GetJoystickHat(joystick: PSDL_Joystick; hat: longint): TUint8; cdecl; external;
-function SDL_GetJoystickButton(joystick: PSDL_Joystick; button: longint): TUint8; cdecl; external;
-function SDL_RumbleJoystick(joystick: PSDL_Joystick; low_frequency_rumble: TUint16; high_frequency_rumble: TUint16; duration_ms: TUint32): longint; cdecl; external;
-function SDL_RumbleJoystickTriggers(joystick: PSDL_Joystick; left_rumble: TUint16; right_rumble: TUint16; duration_ms: TUint32): longint; cdecl; external;
-function SDL_SetJoystickLED(joystick: PSDL_Joystick; red: TUint8; green: TUint8; blue: TUint8): longint; cdecl; external;
+function SDL_GetJoystickHat(joystick: PSDL_Joystick; hat: longint): Uint8; cdecl; external;
+function SDL_GetJoystickButton(joystick: PSDL_Joystick; button: longint): Uint8; cdecl; external;
+function SDL_RumbleJoystick(joystick: PSDL_Joystick; low_frequency_rumble: Uint16; high_frequency_rumble: Uint16; duration_ms: Uint32): longint; cdecl; external;
+function SDL_RumbleJoystickTriggers(joystick: PSDL_Joystick; left_rumble: Uint16; right_rumble: Uint16; duration_ms: Uint32): longint; cdecl; external;
+function SDL_SetJoystickLED(joystick: PSDL_Joystick; red: Uint8; green: Uint8; blue: Uint8): longint; cdecl; external;
 function SDL_SendJoystickEffect(joystick: PSDL_Joystick; Data: pointer; size: longint): longint; cdecl; external;
 procedure SDL_CloseJoystick(joystick: PSDL_Joystick); cdecl; external;
 function SDL_GetJoystickPowerLevel(joystick: PSDL_Joystick): TSDL_JoystickPowerLevel; cdecl; external;

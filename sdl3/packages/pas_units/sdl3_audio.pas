@@ -114,7 +114,7 @@ function SDL_LoadWAV_RW(src:PSDL_RWops; freesrc:TSDL_bool; spec:PSDL_AudioSpec; 
 function SDL_LoadWAV(path:Pchar; spec:PSDL_AudioSpec; audio_buf:PPUint8; audio_len:PUint32):longint;cdecl;external;
 const
   SDL_MIX_MAXVOLUME = 128;  
-function SDL_MixAudioFormat(dst:PUint8; src:PUint8; format:TSDL_AudioFormat; len:TUint32; volume:longint):longint;cdecl;external;
+function SDL_MixAudioFormat(dst:PUint8; src:PUint8; format:TSDL_AudioFormat; len:Uint32; volume:longint):longint;cdecl;external;
 function SDL_ConvertAudioSamples(src_spec:PSDL_AudioSpec; src_data:PUint8; src_len:longint; dst_spec:PSDL_AudioSpec; dst_data:PPUint8;           dst_len:Plongint):longint;cdecl;external;
 function SDL_GetSilenceValueForFormat(format:TSDL_AudioFormat):longint;cdecl;external;
 

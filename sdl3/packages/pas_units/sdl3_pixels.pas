@@ -682,7 +682,7 @@ function SDL_GetMasksForPixelFormatEnum(format:Uint32; bpp:Plongint; Rmask:PUint
  *
  * \sa SDL_GetMasksForPixelFormatEnum
   }
-function SDL_GetPixelFormatEnumForMasks(bpp:longint; Rmask:TUint32; Gmask:TUint32; Bmask:TUint32; Amask:TUint32):TUint32;cdecl;external;
+function SDL_GetPixelFormatEnumForMasks(bpp:longint; Rmask:Uint32; Gmask:Uint32; Bmask:Uint32; Amask:Uint32):Uint32;cdecl;external;
 {*
  * Create an SDL_PixelFormat structure corresponding to a pixel format.
  *
@@ -698,7 +698,7 @@ function SDL_GetPixelFormatEnumForMasks(bpp:longint; Rmask:TUint32; Gmask:TUint3
  *
  * \sa SDL_DestroyPixelFormat
   }
-function SDL_CreatePixelFormat(pixel_format:TUint32):PSDL_PixelFormat;cdecl;external;
+function SDL_CreatePixelFormat(pixel_format:Uint32):PSDL_PixelFormat;cdecl;external;
 {*
  * Free an SDL_PixelFormat structure allocated by SDL_CreatePixelFormat().
  *
@@ -796,7 +796,7 @@ procedure SDL_DestroyPalette(palette:PSDL_Palette);cdecl;external;
  * \sa SDL_MapRGBA
   }
 (* Const before type ignored *)
-function SDL_MapRGB(format:PSDL_PixelFormat; r:TUint8; g:TUint8; b:TUint8):TUint32;cdecl;external;
+function SDL_MapRGB(format:PSDL_PixelFormat; r:Uint8; g:Uint8; b:Uint8):Uint32;cdecl;external;
 {*
  * Map an RGBA quadruple to a pixel value for a given pixel format.
  *
@@ -830,7 +830,7 @@ function SDL_MapRGB(format:PSDL_PixelFormat; r:TUint8; g:TUint8; b:TUint8):TUint
  * \sa SDL_MapRGB
   }
 (* Const before type ignored *)
-function SDL_MapRGBA(format:PSDL_PixelFormat; r:TUint8; g:TUint8; b:TUint8; a:TUint8):TUint32;cdecl;external;
+function SDL_MapRGBA(format:PSDL_PixelFormat; r:Uint8; g:Uint8; b:Uint8; a:Uint8):Uint32;cdecl;external;
 {*
  * Get RGB values from a pixel in the specified format.
  *
@@ -853,7 +853,7 @@ function SDL_MapRGBA(format:PSDL_PixelFormat; r:TUint8; g:TUint8; b:TUint8; a:TU
  * \sa SDL_MapRGBA
   }
 (* Const before type ignored *)
-procedure SDL_GetRGB(pixel:TUint32; format:PSDL_PixelFormat; r:PUint8; g:PUint8; b:PUint8);cdecl;external;
+procedure SDL_GetRGB(pixel:Uint32; format:PSDL_PixelFormat; r:PUint8; g:PUint8; b:PUint8);cdecl;external;
 {*
  * Get RGBA values from a pixel in the specified format.
  *
@@ -880,7 +880,7 @@ procedure SDL_GetRGB(pixel:TUint32; format:PSDL_PixelFormat; r:PUint8; g:PUint8;
  * \sa SDL_MapRGBA
   }
 (* Const before type ignored *)
-procedure SDL_GetRGBA(pixel:TUint32; format:PSDL_PixelFormat; r:PUint8; g:PUint8; b:PUint8;    a:PUint8);cdecl;external;
+procedure SDL_GetRGBA(pixel:Uint32; format:PSDL_PixelFormat; r:PUint8; g:PUint8; b:PUint8;    a:PUint8);cdecl;external;
 { Ends C function definitions when using C++  }
 { C++ end of extern C conditionnal removed }
 {//$include <SDL3/SDL_close_code.h>}
@@ -1014,7 +1014,7 @@ end;
 
 { was #define dname(params) para_def_expr }
 { argument types are unknown }
-function SDL_ISPIXELFORMAT_FOURCC(format : longint) : TUint32;
+function SDL_ISPIXELFORMAT_FOURCC(format : longint) : Uint32;
 begin
 //  SDL_ISPIXELFORMAT_FOURCC:=Tformat(@(@((SDL_PIXELFLAG(format))<>1)));
 end;
@@ -1024,7 +1024,7 @@ end;
 { return type might be wrong }   
 function SDL_DEFINE_COLORSPACE(_type,range,primaries,transfer,matrix,chroma : longint) : longint;
 begin
-  SDL_DEFINE_COLORSPACE:=((((((TUint32(_type)) shl 28) or ((TUint32(range)) shl 24)) or ((TUint32(chroma)) shl 20)) or ((TUint32(primaries)) shl 10)) or ((TUint32(transfer)) shl 5)) or ((TUint32(matrix)) shl 0);
+  SDL_DEFINE_COLORSPACE:=((((((Uint32(_type)) shl 28) or ((Uint32(range)) shl 24)) or ((Uint32(chroma)) shl 20)) or ((Uint32(primaries)) shl 10)) or ((Uint32(transfer)) shl 5)) or ((Uint32(matrix)) shl 0);
 end;
 
 { was #define dname(params) para_def_expr }

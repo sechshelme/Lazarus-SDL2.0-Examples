@@ -11,10 +11,10 @@ uses
 
 type
   PSDL_DisplayID = ^TSDL_DisplayID;
-  TSDL_DisplayID = TUint32;
+  TSDL_DisplayID = Uint32;
 
   PSDL_WindowID = ^TSDL_WindowID;
-  TSDL_WindowID = TUint32;
+  TSDL_WindowID = Uint32;
 
 const
   SDL_PROP_GLOBAL_VIDEO_WAYLAND_WL_DISPLAY_POINTER = 'video.wayland.wl_display';
@@ -34,7 +34,7 @@ type
 
   TSDL_DisplayMode = record
     displayID: TSDL_DisplayID;
-    format: TUint32;
+    format: Uint32;
     w: longint;
     h: longint;
     pixel_density: single;
@@ -226,9 +226,9 @@ function SDL_GetWindowDisplayScale(window: PSDL_Window): single; cdecl; external
 function SDL_SetWindowFullscreenMode(window: PSDL_Window; mode: PSDL_DisplayMode): longint; cdecl; external;
 function SDL_GetWindowFullscreenMode(window: PSDL_Window): PSDL_DisplayMode; cdecl; external;
 function SDL_GetWindowICCProfile(window: PSDL_Window; size: Psize_t): pointer; cdecl; external;
-function SDL_GetWindowPixelFormat(window: PSDL_Window): TUint32; cdecl; external;
-function SDL_CreateWindow(title: PChar; w: longint; h: longint; flags: TUint32): PSDL_Window; cdecl; external;
-function SDL_CreatePopupWindow(parent: PSDL_Window; offset_x: longint; offset_y: longint; w: longint; h: longint; flags: TUint32): PSDL_Window; cdecl; external;
+function SDL_GetWindowPixelFormat(window: PSDL_Window): Uint32; cdecl; external;
+function SDL_CreateWindow(title: PChar; w: longint; h: longint; flags: Uint32): PSDL_Window; cdecl; external;
+function SDL_CreatePopupWindow(parent: PSDL_Window; offset_x: longint; offset_y: longint; w: longint; h: longint; flags: Uint32): PSDL_Window; cdecl; external;
 function SDL_CreateWindowWithProperties(props: TSDL_PropertiesID): PSDL_Window; cdecl; external;
 
 const
@@ -300,7 +300,7 @@ const
   SDL_PROP_WINDOW_X11_SCREEN_NUMBER = 'SDL.window.x11.screen';
   SDL_PROP_WINDOW_X11_WINDOW_NUMBER = 'SDL.window.x11.window';
 
-function SDL_GetWindowFlags(window: PSDL_Window): TUint32; cdecl; external;
+function SDL_GetWindowFlags(window: PSDL_Window): Uint32; cdecl; external;
 function SDL_SetWindowTitle(window: PSDL_Window; title: PChar): longint; cdecl; external;
 function SDL_GetWindowTitle(window: PSDL_Window): PChar; cdecl; external;
 function SDL_SetWindowIcon(window: PSDL_Window; icon: PSDL_Surface): longint; cdecl; external;

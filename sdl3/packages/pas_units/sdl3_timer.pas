@@ -41,7 +41,7 @@ implementation
 
 function SDL_MS_TO_NS(MS: longint): int64;
 begin
-  SDL_MS_TO_NS := (TUint64(MS)) * SDL_NS_PER_MS;
+  SDL_MS_TO_NS := (Uint64(MS)) * SDL_NS_PER_MS;
 end;
 
 function SDL_NS_TO_MS(NS: int64): longint;
@@ -51,7 +51,7 @@ end;
 
 function SDL_US_TO_NS(US: longint): int64;
 begin
-  SDL_US_TO_NS := (TUint64(US)) * SDL_NS_PER_US;
+  SDL_US_TO_NS := (Uint64(US)) * SDL_NS_PER_US;
 end;
 
 function SDL_NS_TO_US(NS: int64): longint;

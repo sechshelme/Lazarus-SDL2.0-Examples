@@ -118,6 +118,11 @@
       </Item>
       <Item>
         <Filename Value="pas_units/SDL_mutex.pp"/>
+        <UnitName Value="SDL_mutex"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_stdinc.pas"/>
+        <UnitName Value="sdl3_stdinc"/>
       </Item>
     </Files>
     <RequiredPkgs>

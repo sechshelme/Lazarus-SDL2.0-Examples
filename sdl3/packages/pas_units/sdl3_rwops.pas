@@ -31,8 +31,8 @@ type
       read : function (context:PSDL_RWops; ptr:pointer; size:Tsize_t):Tsize_t;cdecl;
       write : function (context:PSDL_RWops; ptr:pointer; size:Tsize_t):Tsize_t;cdecl;
       close : function (context:PSDL_RWops):longint;cdecl;
-      _type : TUint32;
-      status : TUint32;
+      _type : Uint32;
+      status : Uint32;
       props : TSDL_PropertiesID;
       hidden : record
           case longint of
@@ -62,9 +62,9 @@ const
   SDL_RW_SEEK_CUR = 1;
   SDL_RW_SEEK_END = 2;
 
-function SDL_RWsize(context:PSDL_RWops):TSint64;cdecl;external;
-function SDL_RWseek(context:PSDL_RWops; offset:TSint64; whence:longint):TSint64;cdecl;external;
-function SDL_RWtell(context:PSDL_RWops):TSint64;cdecl;external;
+function SDL_RWsize(context:PSDL_RWops):int64;cdecl;external;
+function SDL_RWseek(context:PSDL_RWops; offset:int64; whence:longint):int64;cdecl;external;
+function SDL_RWtell(context:PSDL_RWops):int64;cdecl;external;
 function SDL_RWread(context:PSDL_RWops; ptr:pointer; size:Tsize_t):Tsize_t;cdecl;external;
 function SDL_RWwrite(context:PSDL_RWops; ptr:pointer; size:Tsize_t):Tsize_t;cdecl;external;
 function SDL_RWprintf(context:PSDL_RWops; fmt:Pchar; args:array of const):Tsize_t;cdecl;external;
@@ -75,30 +75,30 @@ function SDL_LoadFile_RW(src:PSDL_RWops; datasize:Psize_t; freesrc:TSDL_bool):po
 function SDL_LoadFile(file_:Pchar; datasize:Psize_t):pointer;cdecl;external;
 function SDL_ReadU8(src:PSDL_RWops; value:PUint8):TSDL_bool;cdecl;external;
 function SDL_ReadU16LE(src:PSDL_RWops; value:PUint16):TSDL_bool;cdecl;external;
-function SDL_ReadS16LE(src:PSDL_RWops; value:PSint16):TSDL_bool;cdecl;external;
+function SDL_ReadS16LE(src:PSDL_RWops; value:Pint16):TSDL_bool;cdecl;external;
 function SDL_ReadU16BE(src:PSDL_RWops; value:PUint16):TSDL_bool;cdecl;external;
-function SDL_ReadS16BE(src:PSDL_RWops; value:PSint16):TSDL_bool;cdecl;external;
+function SDL_ReadS16BE(src:PSDL_RWops; value:Pint16):TSDL_bool;cdecl;external;
 function SDL_ReadU32LE(src:PSDL_RWops; value:PUint32):TSDL_bool;cdecl;external;
-function SDL_ReadS32LE(src:PSDL_RWops; value:PSint32):TSDL_bool;cdecl;external;
+function SDL_ReadS32LE(src:PSDL_RWops; value:Pint32):TSDL_bool;cdecl;external;
 function SDL_ReadU32BE(src:PSDL_RWops; value:PUint32):TSDL_bool;cdecl;external;
-function SDL_ReadS32BE(src:PSDL_RWops; value:PSint32):TSDL_bool;cdecl;external;
+function SDL_ReadS32BE(src:PSDL_RWops; value:Pint32):TSDL_bool;cdecl;external;
 function SDL_ReadU64LE(src:PSDL_RWops; value:PUint64):TSDL_bool;cdecl;external;
-function SDL_ReadS64LE(src:PSDL_RWops; value:PSint64):TSDL_bool;cdecl;external;
+function SDL_ReadS64LE(src:PSDL_RWops; value:Pint64):TSDL_bool;cdecl;external;
 function SDL_ReadU64BE(src:PSDL_RWops; value:PUint64):TSDL_bool;cdecl;external;
-function SDL_ReadS64BE(src:PSDL_RWops; value:PSint64):TSDL_bool;cdecl;external;
-function SDL_WriteU8(dst:PSDL_RWops; value:TUint8):TSDL_bool;cdecl;external;
-function SDL_WriteU16LE(dst:PSDL_RWops; value:TUint16):TSDL_bool;cdecl;external;
-function SDL_WriteS16LE(dst:PSDL_RWops; value:TSint16):TSDL_bool;cdecl;external;
-function SDL_WriteU16BE(dst:PSDL_RWops; value:TUint16):TSDL_bool;cdecl;external;
-function SDL_WriteS16BE(dst:PSDL_RWops; value:TSint16):TSDL_bool;cdecl;external;
-function SDL_WriteU32LE(dst:PSDL_RWops; value:TUint32):TSDL_bool;cdecl;external;
-function SDL_WriteS32LE(dst:PSDL_RWops; value:TSint32):TSDL_bool;cdecl;external;
-function SDL_WriteU32BE(dst:PSDL_RWops; value:TUint32):TSDL_bool;cdecl;external;
-function SDL_WriteS32BE(dst:PSDL_RWops; value:TSint32):TSDL_bool;cdecl;external;
-function SDL_WriteU64LE(dst:PSDL_RWops; value:TUint64):TSDL_bool;cdecl;external;
-function SDL_WriteS64LE(dst:PSDL_RWops; value:TSint64):TSDL_bool;cdecl;external;
-function SDL_WriteU64BE(dst:PSDL_RWops; value:TUint64):TSDL_bool;cdecl;external;
-function SDL_WriteS64BE(dst:PSDL_RWops; value:TSint64):TSDL_bool;cdecl;external;
+function SDL_ReadS64BE(src:PSDL_RWops; value:Pint64):TSDL_bool;cdecl;external;
+function SDL_WriteU8(dst:PSDL_RWops; value:Uint8):TSDL_bool;cdecl;external;
+function SDL_WriteU16LE(dst:PSDL_RWops; value:Uint16):TSDL_bool;cdecl;external;
+function SDL_WriteS16LE(dst:PSDL_RWops; value:int16):TSDL_bool;cdecl;external;
+function SDL_WriteU16BE(dst:PSDL_RWops; value:Uint16):TSDL_bool;cdecl;external;
+function SDL_WriteS16BE(dst:PSDL_RWops; value:int16):TSDL_bool;cdecl;external;
+function SDL_WriteU32LE(dst:PSDL_RWops; value:Uint32):TSDL_bool;cdecl;external;
+function SDL_WriteS32LE(dst:PSDL_RWops; value:int32):TSDL_bool;cdecl;external;
+function SDL_WriteU32BE(dst:PSDL_RWops; value:Uint32):TSDL_bool;cdecl;external;
+function SDL_WriteS32BE(dst:PSDL_RWops; value:int32):TSDL_bool;cdecl;external;
+function SDL_WriteU64LE(dst:PSDL_RWops; value:Uint64):TSDL_bool;cdecl;external;
+function SDL_WriteS64LE(dst:PSDL_RWops; value:int64):TSDL_bool;cdecl;external;
+function SDL_WriteU64BE(dst:PSDL_RWops; value:Uint64):TSDL_bool;cdecl;external;
+function SDL_WriteS64BE(dst:PSDL_RWops; value:int64):TSDL_bool;cdecl;external;
 
 implementation
 

@@ -68,7 +68,7 @@ const
   SDL_PEN_TYPE_LAST = SDL_PEN_TYPE_AIRBRUSH;
 
 function SDL_GetPens(Count: Plongint): PSDL_PenID; cdecl; external;
-function SDL_GetPenStatus(instance_id: TSDL_PenID; x: Psingle; y: Psingle; axes: Psingle; num_axes: Tsize_t): TUint32; cdecl; external;
+function SDL_GetPenStatus(instance_id: TSDL_PenID; x: Psingle; y: Psingle; axes: Psingle; num_axes: Tsize_t): Uint32; cdecl; external;
 function SDL_GetPenFromGUID(guid: TSDL_GUID): TSDL_PenID; cdecl; external;
 function SDL_GetPenGUID(instance_id: TSDL_PenID): TSDL_GUID; cdecl; external;
 function SDL_PenConnected(instance_id: TSDL_PenID): TSDL_bool; cdecl; external;
@@ -79,11 +79,11 @@ type
 
   TSDL_PenCapabilityInfo = record
     max_tilt: single;
-    wacom_id: TUint32;
-    num_buttons: TSint8;
+    wacom_id: Uint32;
+    num_buttons: int8;
   end;
 
-function SDL_GetPenCapabilities(instance_id: TSDL_PenID; capabilities: PSDL_PenCapabilityInfo): TUint32; cdecl; external;
+function SDL_GetPenCapabilities(instance_id: TSDL_PenID; capabilities: PSDL_PenCapabilityInfo): int32; cdecl; external;
 function SDL_GetPenType(instance_id: TSDL_PenID): TSDL_PenSubtype; cdecl; external;
 
 implementation
