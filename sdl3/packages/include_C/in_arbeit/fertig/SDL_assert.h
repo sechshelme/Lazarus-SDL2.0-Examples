@@ -36,16 +36,16 @@
 extern "C" {
 #endif
 
-#ifndef SDL_ASSERT_LEVEL
-#ifdef SDL_DEFAULT_ASSERT_LEVEL
-#define SDL_ASSERT_LEVEL SDL_DEFAULT_ASSERT_LEVEL
-#elif defined(_DEBUG) || defined(DEBUG) || \
-      (defined(__GNUC__) && !defined(__OPTIMIZE__))
-#define SDL_ASSERT_LEVEL 2
-#else
+//#ifndef SDL_ASSERT_LEVEL
+//#ifdef SDL_DEFAULT_ASSERT_LEVEL
+//#define SDL_ASSERT_LEVEL SDL_DEFAULT_ASSERT_LEVEL
+//#elif defined(_DEBUG) || defined(DEBUG) || \
+//      (defined(__GNUC__) && !defined(__OPTIMIZE__))
+//#define SDL_ASSERT_LEVEL 2
+//#else
 #define SDL_ASSERT_LEVEL 1
-#endif
-#endif /* SDL_ASSERT_LEVEL */
+//#endif
+//#endif /* SDL_ASSERT_LEVEL */
 
 /*
 These are macros and not first class functions so that the debugger breaks
@@ -53,42 +53,7 @@ on the assertion line and not in some random guts of SDL, and so each
 assert can have unique static variables associated with it.
 */
 
-#ifdef _MSC_VER
-/* Don't include intrin.h here because it contains C++ code */
-    extern void __cdecl __debugbreak(void);
-    #define SDL_TriggerBreakpoint() __debugbreak()
-#elif defined(ANDROID)
-    #include <assert.h>
-    #define SDL_TriggerBreakpoint() assert(0)
-#elif SDL_HAS_BUILTIN(__builtin_debugtrap)
-    #define SDL_TriggerBreakpoint() __builtin_debugtrap()
-#elif (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
-    #define SDL_TriggerBreakpoint() __asm__ __volatile__ ( "int $3\n\t" )
-#elif (defined(__GNUC__) || defined(__clang__)) && defined(__riscv)
-    #define SDL_TriggerBreakpoint() __asm__ __volatile__ ( "ebreak\n\t" )
-#elif ( defined(SDL_PLATFORM_APPLE) && (defined(__arm64__) || defined(__aarch64__)) )  /* this might work on other ARM targets, but this is a known quantity... */
-    #define SDL_TriggerBreakpoint() __asm__ __volatile__ ( "brk #22\n\t" )
-#elif defined(SDL_PLATFORM_APPLE) && defined(__arm__)
-    #define SDL_TriggerBreakpoint() __asm__ __volatile__ ( "bkpt #22\n\t" )
-#elif defined(__386__) && defined(__WATCOMC__)
-    #define SDL_TriggerBreakpoint() { _asm { int 0x03 } }
-#elif defined(HAVE_SIGNAL_H) && !defined(__WATCOMC__)
-    #include <signal.h>
-    #define SDL_TriggerBreakpoint() raise(SIGTRAP)
-#else
-    /* How do we trigger breakpoints on this platform? */
-    #define SDL_TriggerBreakpoint()
-#endif
 
-#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L) /* C99 supports __func__ as a standard. */
-#   define SDL_FUNCTION __func__
-#elif ((defined(__GNUC__) && (__GNUC__ >= 2)) || defined(_MSC_VER) || defined (__WATCOMC__))
-#   define SDL_FUNCTION __FUNCTION__
-#else
-#   define SDL_FUNCTION "???"
-#endif
-#define SDL_FILE    __FILE__
-#define SDL_LINE    __LINE__
 
 /*
 sizeof (x) makes the compiler still parse the expression even without
@@ -107,14 +72,6 @@ disable assertions.
 
 /* "while (0,0)" fools Microsoft's compiler's /W4 warning level into thinking
     this condition isn't constant. And looks like an owl's face! */
-#ifdef _MSC_VER  /* stupid /W4 warnings. */
-#define SDL_NULL_WHILE_LOOP_CONDITION (0,0)
-#else
-#define SDL_NULL_WHILE_LOOP_CONDITION (0)
-#endif
-
-#define SDL_disabled_assert(condition) \
-    do { (void) sizeof ((condition)); } while (SDL_NULL_WHILE_LOOP_CONDITION)
 
 typedef enum
 {
@@ -149,84 +106,7 @@ typedef struct SDL_AssertData
  *
  * \since This function is available since SDL 3.0.0.
  */
-extern  SDL_AssertState  SDL_ReportAssertion(SDL_AssertData *data,
-                                                            const char *func,
-                                                            const char *file, int line)
-#ifdef __clang__
-#if __has_feature(attribute_analyzer_noreturn)
-   __attribute__((analyzer_noreturn))
-#endif
-#endif
-;
-/* Previous 'analyzer_noreturn' attribute tells Clang's static analysis that we're a custom assert function,
-   and that the analyzer should assume the condition was always true past this
-   SDL_assert test. */
-
-
-/* Define the trigger breakpoint call used in asserts */
-#ifndef SDL_AssertBreakpoint
-#if defined(ANDROID) && defined(assert)
-/* Define this as empty in case assert() is defined as SDL_assert */
-#define SDL_AssertBreakpoint()
-#else
-#define SDL_AssertBreakpoint() SDL_TriggerBreakpoint()
-#endif
-#endif /* !SDL_AssertBreakpoint */
-
-/* the do {} while(0) avoids dangling else problems:
-    if (x) SDL_assert(y); else blah();
-       ... without the do/while, the "else" could attach to this macro's "if".
-   We try to handle just the minimum we need here in a macro...the loop,
-   the static vars, and break points. The heavy lifting is handled in
-   SDL_ReportAssertion(), in SDL_assert.c.
-*/
-#define SDL_enabled_assert(condition) \
-    do { \
-        while ( !(condition) ) { \
-            static struct SDL_AssertData sdl_assert_data = { 0, 0, #condition, 0, 0, 0, 0 }; \
-            const SDL_AssertState sdl_assert_state = SDL_ReportAssertion(&sdl_assert_data, SDL_FUNCTION, SDL_FILE, SDL_LINE); \
-            if (sdl_assert_state == SDL_ASSERTION_RETRY) { \
-                continue; /* go again. */ \
-            } else if (sdl_assert_state == SDL_ASSERTION_BREAK) { \
-                SDL_AssertBreakpoint(); \
-            } \
-            break; /* not retrying. */ \
-        } \
-    } while (SDL_NULL_WHILE_LOOP_CONDITION)
-
-/* Enable various levels of assertions. */
-#if SDL_ASSERT_LEVEL == 0   /* assertions disabled */
-#   define SDL_assert(condition) SDL_disabled_assert(condition)
-#   define SDL_assert_release(condition) SDL_disabled_assert(condition)
-#   define SDL_assert_paranoid(condition) SDL_disabled_assert(condition)
-#elif SDL_ASSERT_LEVEL == 1  /* release settings. */
-#   define SDL_assert(condition) SDL_disabled_assert(condition)
-#   define SDL_assert_release(condition) SDL_enabled_assert(condition)
-#   define SDL_assert_paranoid(condition) SDL_disabled_assert(condition)
-#elif SDL_ASSERT_LEVEL == 2  /* normal settings. */
-#   define SDL_assert(condition) SDL_enabled_assert(condition)
-#   define SDL_assert_release(condition) SDL_enabled_assert(condition)
-#   define SDL_assert_paranoid(condition) SDL_disabled_assert(condition)
-#elif SDL_ASSERT_LEVEL == 3  /* paranoid settings. */
-#   define SDL_assert(condition) SDL_enabled_assert(condition)
-#   define SDL_assert_release(condition) SDL_enabled_assert(condition)
-#   define SDL_assert_paranoid(condition) SDL_enabled_assert(condition)
-#else
-#   error Unknown assertion level.
-#endif
-
-/* this assertion is never disabled at any level. */
-#define SDL_assert_always(condition) SDL_enabled_assert(condition)
-
-
-/**
- * A callback that fires when an SDL assertion fails.
- *
- * \param data a pointer to the SDL_AssertData structure corresponding to the
- *             current assertion
- * \param userdata what was passed as `userdata` to SDL_SetAssertionHandler()
- * \returns an SDL_AssertState value indicating how to handle the failure.
- */
+extern  SDL_AssertState  SDL_ReportAssertion(SDL_AssertData *data, const char *func, const char *file, int line);
 typedef SDL_AssertState ( *SDL_AssertionHandler)(
                                  const SDL_AssertData* data, void* userdata);
 

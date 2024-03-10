@@ -85,8 +85,8 @@
         <UnitName Value="SDL3_keycode"/>
       </Item>
       <Item>
-        <Filename Value="pas_units/SDL_mouse.pp"/>
-        <UnitName Value="SDL_mouse"/>
+        <Filename Value="pas_units/sdl3_mouse.pas"/>
+        <UnitName Value="SDL3_mouse"/>
       </Item>
       <Item>
         <Filename Value="pas_units/sdl3_joystick.pas"/>
@@ -117,12 +117,20 @@
         <UnitName Value="sdl3_pen"/>
       </Item>
       <Item>
-        <Filename Value="pas_units/SDL_mutex.pp"/>
-        <UnitName Value="SDL_mutex"/>
+        <Filename Value="pas_units/sdl3_mutex.pas"/>
+        <UnitName Value="SDL3_mutex"/>
       </Item>
       <Item>
         <Filename Value="pas_units/sdl3_stdinc.pas"/>
-        <UnitName Value="sdl3_stdinc"/>
+        <UnitName Value="SDL3_stdinc"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_assert.pas"/>
+        <UnitName Value="SDL3_assert"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_error.pas"/>
+        <UnitName Value="sdl3_error"/>
       </Item>
     </Files>
     <RequiredPkgs>

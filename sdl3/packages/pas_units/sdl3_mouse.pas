@@ -1,4 +1,4 @@
-unit SDL_mouse;
+unit SDL3_mouse;
 
 interface
 

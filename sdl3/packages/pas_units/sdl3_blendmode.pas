@@ -45,8 +45,8 @@ const
   SDL_BLENDFACTOR_DST_ALPHA = $9;
   SDL_BLENDFACTOR_ONE_MINUS_DST_ALPHA = $A;
 
-function SDL_ComposeCustomBlendMode(srcColorFactor: TSDL_BlendFactor; dstColorFactor: TSDL_BlendFactor; colorOperation: TSDL_BlendOperation; srcAlphaFactor: TSDL_BlendFactor; dstAlphaFactor: TSDL_BlendFactor;
-  alphaOperation: TSDL_BlendOperation): TSDL_BlendMode; cdecl; external;
+function SDL_ComposeCustomBlendMode(srcColorFactor: TSDL_BlendFactor; dstColorFactor: TSDL_BlendFactor; colorOperation: TSDL_BlendOperation;
+srcAlphaFactor: TSDL_BlendFactor; dstAlphaFactor: TSDL_BlendFactor; alphaOperation: TSDL_BlendOperation): TSDL_BlendMode; cdecl; external;
 
 implementation
 

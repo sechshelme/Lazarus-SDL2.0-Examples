@@ -63,7 +63,7 @@ extern "C" {
  * \sa SDL_ClearError
  * \sa SDL_GetError
  */
-extern  int  SDL_SetError(SDL_PRINTF_FORMAT_STRING const char *fmt, ...) SDL_PRINTF_VARARG_FUNC(1);
+extern  int  SDL_SetError(const char *fmt, ...);
 
 /**
  * Retrieve a message about the last error that occurred on the current

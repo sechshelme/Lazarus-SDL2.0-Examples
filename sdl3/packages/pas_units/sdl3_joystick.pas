@@ -3,7 +3,7 @@ unit SDL3_joystick;
 interface
 
 uses
-  SDL3_guid, SDL3_stdinc, SDL_mutex;
+  SDL3_guid, SDL3_stdinc, SDL3_mutex;
 
   {$IFDEF FPC}
   {$PACKRECORDS C}
