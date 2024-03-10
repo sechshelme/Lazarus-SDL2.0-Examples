@@ -56,5 +56,6 @@ unit SDL3_joystick;    SDL_guid, SDL3_stdinc, SDL_mutex;
 
 unit SDL3_events;      SDL3_stdinc, SDL3_video, SDL3_keyboard, SDL3_mouse, SDL3_joystick, SDL3_audio, SDL3_camera, SDL3_touch, SDL3_pen, SDL3_sensor;
 unit SDL3_quit;        SDL3_stdinc, SDL3_events;
+unit SDL3_main;        SDL3_events;
 
 *)

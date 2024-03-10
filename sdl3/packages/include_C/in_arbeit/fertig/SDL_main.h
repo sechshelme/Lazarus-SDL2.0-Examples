@@ -93,7 +93,7 @@
         #define SDL_MAIN_NEEDED
 
         /* We need to export SDL_main so it can be launched from Java */
-        #define SDLMAIN_    
+//        #define     
 
     #elif defined(SDL_PLATFORM_PSP)
         /* On PSP SDL provides a main function that sets the module info,
@@ -107,9 +107,9 @@
     #elif defined(SDL_PLATFORM_PS2)
         #define SDL_MAIN_AVAILABLE
 
-        #define SDL_PS2_SKIP_IOP_RESET() \
-           void reset_IOP(); \
-           void reset_IOP() {}
+//        #define SDL_PS2_SKIP_IOP_RESET() \
+//           void reset_IOP(); \
+//           void reset_IOP() {}
 
     #elif defined(SDL_PLATFORM_3DS)
         /*
@@ -130,8 +130,8 @@
     #endif
 #endif /* SDL_MAIN_HANDLED */
 
-#ifndef SDLMAIN_
-#define SDLMAIN_
+#ifndef 
+//#define 
 #endif
 
 /**
@@ -222,7 +222,7 @@ typedef void ( *SDL_AppQuit_func)(void);
  * \sa SDL_AppEvent
  * \sa SDL_AppQuit
  */
-extern SDLMAIN_ int  SDL_AppInit(int argc, char *argv[]);
+extern  int  SDL_AppInit(int argc, char *argv[]);
 
 /**
  * App-implemented iteration entry point for SDL_MAIN_USE_CALLBACKS apps.
@@ -265,7 +265,7 @@ extern SDLMAIN_ int  SDL_AppInit(int argc, char *argv[]);
  * \sa SDL_AppEvent
  * \sa SDL_AppQuit
  */
-extern SDLMAIN_ int  SDL_AppIterate(void);
+extern  int  SDL_AppIterate(void);
 
 /**
  * App-implemented event entry point for SDL_MAIN_USE_CALLBACKS apps.
@@ -311,7 +311,7 @@ extern SDLMAIN_ int  SDL_AppIterate(void);
  * \sa SDL_AppIterate
  * \sa SDL_AppQuit
  */
-extern SDLMAIN_ int  SDL_AppEvent(const SDL_Event *event);
+extern  int  SDL_AppEvent(const SDL_Event *event);
 
 /**
  * App-implemented deinit entry point for SDL_MAIN_USE_CALLBACKS apps.
@@ -340,7 +340,7 @@ extern SDLMAIN_ int  SDL_AppEvent(const SDL_Event *event);
  * \sa SDL_AppIterate
  * \sa SDL_AppEvent
  */
-extern SDLMAIN_ void  SDL_AppQuit(void);
+extern  void  SDL_AppQuit(void);
 
 #endif  /* SDL_MAIN_USE_CALLBACKS */
 
@@ -349,7 +349,7 @@ extern SDLMAIN_ void  SDL_AppQuit(void);
  *  The prototype for the application's main() function
  */
 typedef int ( *SDL_main_func)(int argc, char *argv[]);
-extern SDLMAIN_ int  SDL_main(int argc, char *argv[]);
+extern  int  SDL_main(int argc, char *argv[]);
 
 
 /**
@@ -488,9 +488,9 @@ extern  void  SDL_GDKSuspendComplete(void);
 
 #if !defined(SDL_MAIN_HANDLED) && !defined(SDL_MAIN_NOIMPL)
     /* include header-only SDL_main implementations */
-    #if defined(SDL_MAIN_USE_CALLBACKS) \
-        || defined(SDL_PLATFORM_WIN32) || defined(SDL_PLATFORM_GDK) || defined(SDL_PLATFORM_IOS) || defined(SDL_PLATFORM_TVOS) \
-        || defined(SDL_PLATFORM_3DS) || defined(SDL_PLATFORM_NGAGE) || defined(SDL_PLATFORM_PS2) || defined(SDL_PLATFORM_PSP)
+//    #if defined(SDL_MAIN_USE_CALLBACKS) \
+//        | defined(SDL_PLATFORM_WIN32) | defined(SDL_PLATFORM_GDK) | defined(SDL_PLATFORM_IOS) | defined(SDL_PLATFORM_TVOS) \
+//        | defined(SDL_PLATFORM_3DS) | defined(SDL_PLATFORM_NGAGE) | defined(SDL_PLATFORM_PS2) | defined(SDL_PLATFORM_PSP)
 
         /* platforms which main (-equivalent) can be implemented in plain C */
         #include <SDL3/SDL_main_impl.h>

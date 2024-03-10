@@ -4,6 +4,7 @@ uses
   gtk2,
   ctypes,
   //  SDL_quit ,
+  SDL3_main,
   SDL3_mutex,
   SDL3_scancode,
   SDL3_keycode,

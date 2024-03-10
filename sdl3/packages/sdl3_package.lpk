@@ -130,7 +130,11 @@
       </Item>
       <Item>
         <Filename Value="pas_units/sdl3_error.pas"/>
-        <UnitName Value="sdl3_error"/>
+        <UnitName Value="SDL3_error"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_main.pas"/>
+        <UnitName Value="sdl3_main"/>
       </Item>
     </Files>
     <RequiredPkgs>
