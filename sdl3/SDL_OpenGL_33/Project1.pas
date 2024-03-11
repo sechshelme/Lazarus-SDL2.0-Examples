@@ -1,13 +1,27 @@
 program Project1;
 
 uses
-  dglOpenGL,
-  oglContext,
+  gtk2,
+  ctypes,
+  //  SDL_quit ,
+  SDL3_main,
+  SDL3_mutex,
+  SDL3_scancode,
+  SDL3_keycode,
+  SDL3_events,
+  SDL3_messagebox,
+  SDL3_surface,
+  SDL3_version,
+  SDL3_stdinc,
+  SDL3_rect,
+  SDL3_assert,
+  SDL3_error,
+  SDL3_init,
+  SDL3_timer,
+  SDL3_video,
+  SDL_opengl,
   oglVector,
-  oglMatrix,
-  oglShader,
-  oglDebug,
-  SDL2;
+  oglShader;
 
 const
   Screen_Widht = 640;
@@ -24,8 +38,8 @@ var
   // OpenGL
   MyShader: TShader;
 
-  VAO: GLuint;
-  VBO: GLuint;
+  VAO: TGLuint;
+  VBO: TGLuint;
 
 
 const
@@ -37,13 +51,13 @@ const
   procedure Init_SDL_and_OpenGL;
   begin
     // --- OpenGL inizialisieren
-    if not InitOpenGL then begin
-      WriteLn('OpenGL-Fehler');
-      Halt(1);
-    end;
-    ReadExtensions;
-    ReadImplementationProperties;
-    InitOpenGLDebug;
+    //if not InitOpenGL then begin
+    //  WriteLn('OpenGL-Fehler');
+    //  Halt(1);
+    //end;
+    //ReadExtensions;
+    //ReadImplementationProperties;
+    //InitOpenGLDebug;
 
     // --- SDL inizialisieren
     if SDL_Init(SDL_INIT_VIDEO) < 0 then begin
@@ -56,7 +70,7 @@ const
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-    gWindow := SDL_CreateWindow('SDL Tuorial', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Screen_Widht, Screen_Height, SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN);
+    gwindow := SDL_CreateWindow('SDL3 Window', 320, 200, SDL_WINDOW_OPENGL or SDL_WINDOW_RESIZABLE);
     glcontext := SDL_GL_CreateContext(gWindow);
     if glcontext = nil then begin
       Writeln('OpenGL context could not be created! SDL Error: ', SDL_GetError);
