@@ -31,6 +31,7 @@ unit SDL3_touch;
 unit SDL3_blendmode;
 unit SDL3_init;
 unit SDL3_assert;
+unit SDL_locale;
 
 unit SDL3_timer;       SDL3_stdinc;
 unit SDL3_pixels;      SDL3_stdinc;

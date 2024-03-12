@@ -149,20 +149,20 @@ extern  void  SDL_UnlockSpinlock(SDL_SpinLock *lock);
  * The compiler barrier prevents the compiler from reordering
  * reads and writes to globally visible variables across the call.
  */
-#if defined(_MSC_VER) && (_MSC_VER > 1200) && !defined(__clang__)
+//#if defined(_MSC_VER) && (_MSC_VER > 1200) && !defined(__clang__)
 void _ReadWriteBarrier(void);
-#pragma intrinsic(_ReadWriteBarrier)
-#define SDL_CompilerBarrier()   _ReadWriteBarrier()
-#elif (defined(__GNUC__) && !defined(SDL_PLATFORM_EMSCRIPTEN)) || (defined(__SUNPRO_C) && (__SUNPRO_C >= 0x5120))
+//#pragma intrinsic(_ReadWriteBarrier)
+//#define SDL_CompilerBarrier()   _ReadWriteBarrier()
+//#elif (defined(__GNUC__) && !defined(SDL_PLATFORM_EMSCRIPTEN)) || (defined(__SUNPRO_C) && (__SUNPRO_C >= 0x5120))
 /* This is correct for all CPUs when using GCC or Solaris Studio 12.1+. */
-#define SDL_CompilerBarrier()   __asm__ __volatile__ ("" : : : "memory")
-#elif defined(__WATCOMC__)
-extern __inline void SDL_CompilerBarrier(void);
-#pragma aux SDL_CompilerBarrier = "" parm [] modify exact [];
-#else
-#define SDL_CompilerBarrier()   \
-{ SDL_SpinLock _tmp = 0; SDL_LockSpinlock(&_tmp); SDL_UnlockSpinlock(&_tmp); }
-#endif
+//#define SDL_CompilerBarrier()   __asm__ __volatile__ ("" : : : "memory")
+//#elif defined(__WATCOMC__)
+extern  void SDL_CompilerBarrier(void);
+//#pragma aux SDL_CompilerBarrier = "" parm [] modify exact [];
+//#else
+//#define SDL_CompilerBarrier()   \
+//{ SDL_SpinLock _tmp = 0; SDL_LockSpinlock(&_tmp); SDL_UnlockSpinlock(&_tmp); }
+//#endif
 
 /**
  * Memory barriers are designed to prevent reads and writes from being
@@ -192,7 +192,7 @@ extern  void  SDL_MemoryBarrierReleaseFunction(void);
  */
 extern  void  SDL_MemoryBarrierAcquireFunction(void);
 
-#if defined(__GNUC__) && (defined(__powerpc__) || defined(__ppc__))
+/*#if defined(__GNUC__) && (defined(__powerpc__) || defined(__ppc__))
 #define SDL_MemoryBarrierRelease()   __asm__ __volatile__ ("lwsync" : : : "memory")
 #define SDL_MemoryBarrierAcquire()   __asm__ __volatile__ ("lwsync" : : : "memory")
 #elif defined(__GNUC__) && defined(__aarch64__)
@@ -207,7 +207,7 @@ extern  void  SDL_MemoryBarrierAcquireFunction(void);
    hard-coded at address 0xffff0fa0
 */
 typedef void (*SDL_KernelMemoryBarrierFunc)();
-#define SDL_MemoryBarrierRelease()	((SDL_KernelMemoryBarrierFunc)0xffff0fa0)()
+/*#define SDL_MemoryBarrierRelease()	((SDL_KernelMemoryBarrierFunc)0xffff0fa0)()
 #define SDL_MemoryBarrierAcquire()	((SDL_KernelMemoryBarrierFunc)0xffff0fa0)()
 #else
 #if defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_7EM__) || defined(__ARM_ARCH_7R__) || defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_7S__) || defined(__ARM_ARCH_8A__)
@@ -220,12 +220,12 @@ typedef void (*SDL_KernelMemoryBarrierFunc)();
 #define SDL_MemoryBarrierRelease()   SDL_MemoryBarrierReleaseFunction()
 #define SDL_MemoryBarrierAcquire()   SDL_MemoryBarrierAcquireFunction()
 #else
-#define SDL_MemoryBarrierRelease()   __asm__ __volatile__ ("mcr p15, 0, %0, c7, c10, 5" : : "r"(0) : "memory")
-#define SDL_MemoryBarrierAcquire()   __asm__ __volatile__ ("mcr p15, 0, %0, c7, c10, 5" : : "r"(0) : "memory")
+//#define SDL_MemoryBarrierRelease()   __asm__ __volatile__ ("mcr p15, 0, %0, c7, c10, 5" : : "r"(0) : "memory")
+//#define SDL_MemoryBarrierAcquire()   __asm__ __volatile__ ("mcr p15, 0, %0, c7, c10, 5" : : "r"(0) : "memory")
 #endif /* __thumb__ */
 #else
-#define SDL_MemoryBarrierRelease()   __asm__ __volatile__ ("" : : : "memory")
-#define SDL_MemoryBarrierAcquire()   __asm__ __volatile__ ("" : : : "memory")
+//#define SDL_MemoryBarrierRelease()   __asm__ __volatile__ ("" : : : "memory")
+//#define SDL_MemoryBarrierAcquire()   __asm__ __volatile__ ("" : : : "memory")
 #endif /* SDL_PLATFORM_LINUX || SDL_PLATFORM_ANDROID */
 #endif /* __GNUC__ && __arm__ */
 #else
@@ -242,9 +242,9 @@ typedef void (*SDL_KernelMemoryBarrierFunc)();
 #endif
 
 /* "REP NOP" is PAUSE, coded for tools that don't know it by that name. */
-#if (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
+/*#if (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
     #define SDL_CPUPauseInstruction() __asm__ __volatile__("pause\n")  /* Some assemblers can't do REP NOP, so go with PAUSE. */
-#elif (defined(__arm__) && defined(__ARM_ARCH) && __ARM_ARCH >= 7) || defined(__aarch64__)
+/*#elif (defined(__arm__) && defined(__ARM_ARCH) && __ARM_ARCH >= 7) || defined(__aarch64__)
     #define SDL_CPUPauseInstruction() __asm__ __volatile__("yield" ::: "memory")
 #elif (defined(__powerpc__) || defined(__powerpc64__))
     #define SDL_CPUPauseInstruction() __asm__ __volatile__("or 27,27,27");
@@ -252,14 +252,14 @@ typedef void (*SDL_KernelMemoryBarrierFunc)();
     #define SDL_CPUPauseInstruction() __asm__ __volatile__(".insn i 0x0F, 0, x0, x0, 0x010");
 #elif defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_X64))
     #define SDL_CPUPauseInstruction() _mm_pause()  /* this is actually "rep nop" and not a SIMD instruction. No inline asm in MSVC x86-64! */
-#elif defined(_MSC_VER) && (defined(_M_ARM) || defined(_M_ARM64))
+/*#elif defined(_MSC_VER) && (defined(_M_ARM) || defined(_M_ARM64))
     #define SDL_CPUPauseInstruction() __yield()
-#elif defined(__WATCOMC__) && defined(__386__)
-    extern __inline void SDL_CPUPauseInstruction(void);
-    #pragma aux SDL_CPUPauseInstruction = ".686p" ".xmm2" "pause"
-#else
-    #define SDL_CPUPauseInstruction()
-#endif
+#elif defined(__WATCOMC__) && defined(__386__)*/
+    extern void SDL_CPUPauseInstruction(void);
+//    #pragma aux SDL_CPUPauseInstruction = ".686p" ".xmm2" "pause"
+//#else
+//    #define SDL_CPUPauseInstruction()
+//#endif
 
 
 /**

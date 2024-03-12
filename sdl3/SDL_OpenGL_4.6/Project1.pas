@@ -1,20 +1,31 @@
 program Project1;
 
 uses
-  dglOpenGL,
-  oglContext,
+  ctypes,
+  //  SDL_quit ,
+  SDL3_main,
+  SDL3_mutex,
+  SDL3_scancode,
+  SDL3_keycode,
+  SDL3_events,
+  SDL3_messagebox,
+  SDL3_surface,
+  SDL3_version,
+  SDL3_stdinc,
+  SDL3_rect,
+  SDL3_assert,
+  SDL3_error,
+  SDL3_init,
+  SDL3_timer,
+  SDL3_video,
+  SDL3_opengl,
+  SDL3_opengl_glext,
   oglVector,
-  oglMatrix,
-  oglShader,
-  oglDebug,
-  SDL2;
-
-
-function glewInit:TGLenum; cdecl;external 'GLEW';
+  oglShader;
 
 const
-  Screen_Widht = 640;
-  Screen_Height = 480;
+  Screen_Widht = 320;
+  Screen_Height = 240;
 
 var
   // SDL
@@ -27,9 +38,8 @@ var
   // OpenGL
   MyShader: TShader;
 
-  VAO: GLuint;
-  VBO: GLuint;
-
+  VAO: TGLuint;
+  VBO: TGLuint;
 
 const
   vertices: array of TVector2f = (
@@ -38,19 +48,7 @@ const
 
 
   procedure Init_SDL_and_OpenGL;
-  var
-    glew_status: TGLenum;
   begin
-
-    //// --- OpenGL inizialisieren
-    //if not InitOpenGL then begin
-    //  WriteLn('OpenGL-Fehler');
-    //  Halt(1);
-    //end;
-    //ReadExtensions;
-    //ReadImplementationProperties;
-//    InitOpenGLDebug;
-
     // --- SDL inizialisieren
     if SDL_Init(SDL_INIT_VIDEO) < 0 then begin
       WriteLn('SDL could not initialize! SDL_Error: ', SDL_GetError);
@@ -58,21 +56,16 @@ const
     end;
 
     // --- Context für OpenGL erzeugen
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-    gWindow := SDL_CreateWindow('SDL Tuorial', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Screen_Widht, Screen_Height, SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN);
+    gwindow := SDL_CreateWindow('SDL3 Window', Screen_Widht, Screen_Height, SDL_WINDOW_OPENGL or SDL_WINDOW_RESIZABLE);
     glcontext := SDL_GL_CreateContext(gWindow);
     if glcontext = nil then begin
       Writeln('OpenGL context could not be created! SDL Error: ', SDL_GetError);
       Halt(1);
     end;
-
-       glew_status:= glewInit;
-   glViewport(0, 0, Screen_Widht, Screen_Height);
-   WriteLn('glew_status: ', glew_status);
-
 
     if SDL_GL_SetSwapInterval(1) < 0 then begin
       WriteLn('Warning: Unable to set VSync! SDL Error: ', SDL_GetError);
@@ -81,21 +74,14 @@ const
 
   procedure CreateScene;
   begin
+    glCreateBuffers(1, @VBO);
+    glNamedBufferStorage(VBO, Length(vertices) * SizeOf(TVector3f), PVector3f(vertices), 0);
 
     MyShader := TShader.Create;
     MyShader.LoadShaderObjectFromFile(GL_VERTEX_SHADER, 'Vertexshader.glsl');
     MyShader.LoadShaderObjectFromFile(GL_FRAGMENT_SHADER, 'Fragmentshader.glsl');
     MyShader.LinkProgram;
     MyShader.UseProgram;
-
-
-    WriteLn('dfdsaf');
-    glCreateBuffers(1, @VBO);
-    WriteLn('dfdsaf');
-    glNamedBufferStorage(VBO, Length(vertices) * SizeOf(TVector3f), PVector3f(vertices), 0);
-            WriteLn('dfdsaf');
-
-
 
     glGenVertexArrays(1, @VAO);
     glBindVertexArray(VAO);
@@ -134,21 +120,18 @@ const
     while not quit do begin
       while SDL_PollEvent(@e) <> 0 do begin
         case e.type_ of
-          SDL_KEYDOWN: begin
-            if e.key.repeat_ = 0 then begin
-              case e.key.keysym.sym of
-                SDLK_ESCAPE: begin
-                  quit := True;
-                end;
+          SDL_EVENT_KEY_DOWN: begin
+            case e.key.keysym.sym of
+              SDLK_ESCAPE: begin
+                quit := True;
               end;
             end;
           end;
-          SDL_QUITEV: begin
+          SDL_EVENT_QUIT: begin
             quit := True;
           end;
         end;
       end;
-      //      MeshPos := MeshPos + MeshPosStep;
       DrawScene;
     end;
   end;

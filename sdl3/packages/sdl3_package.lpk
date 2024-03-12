@@ -138,11 +138,26 @@
       </Item>
       <Item>
         <Filename Value="pas_units/sdl3_opengl.pas"/>
-        <UnitName Value="sdl3_opengl"/>
+        <UnitName Value="SDL3_opengl"/>
       </Item>
       <Item>
         <Filename Value="pas_units/sdl3_opengl_glext.pas"/>
-        <UnitName Value="sdl3_opengl_glext"/>
+        <UnitName Value="SDL3_opengl_glext"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_locale.pas"/>
+        <UnitName Value="SDL3_locale"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_cpuinfo.pas"/>
+        <UnitName Value="SDL3_cpuinfo"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/SDL_oldnames.pp"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_atomic.pas"/>
+        <UnitName Value="SDL3_atomic"/>
       </Item>
     </Files>
     <RequiredPkgs>

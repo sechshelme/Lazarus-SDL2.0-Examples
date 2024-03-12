@@ -18,6 +18,10 @@ uses
   SDL3_error,
   SDL3_init,
   SDL3_timer,
+  SDL3_locale,
+  SDL3_atomic,
+  SDL_oldnames,
+  SDL3_cpuinfo,
   SDL3_video;
 
 var
@@ -27,6 +31,37 @@ var
   quit: boolean = False;
   image, screen: PSDL_Surface;
   dstrect: TSDL_Rect = (x: 100; y: 100; w: 200; h: 200);
+
+  procedure ShowCpuInfo;
+  begin
+    Writeln(SDL_GetCPUCount);
+    Writeln(SDL_GetCPUCacheLineSize);
+    Writeln(SDL_HasAltiVec);
+    Writeln(SDL_HasMMX);
+    Writeln(SDL_HasSSE);
+    Writeln(SDL_HasSSE2);
+    Writeln(SDL_HasSSE3);
+    Writeln(SDL_HasSSE41);
+    Writeln(SDL_HasSSE42);
+    Writeln(SDL_HasAVX);
+    Writeln(SDL_HasAVX2);
+    Writeln(SDL_HasAVX512F);
+    Writeln(SDL_HasARMSIMD);
+    Writeln(SDL_HasNEON);
+    Writeln(SDL_HasLSX);
+    Writeln(SDL_HasLASX);
+    Writeln(SDL_GetSystemRAM);
+    Writeln(SDL_SIMDGetAlignment);
+  end;
+
+  procedure ShowLocale;
+  var
+    locales: PSDL_Locale;
+  begin
+    locales := SDL_GetPreferredLocales;
+    WriteLn('language: ', locales^.country);
+    WriteLn('country:  ', locales^.language);
+  end;
 
   procedure ShowMessageBox;
   const
@@ -102,6 +137,12 @@ begin
             end;
             SDLK_e: begin
               ShowError;
+            end;
+            SDLK_l: begin
+              ShowLocale;
+            end;
+            SDLK_c: begin
+              ShowCpuInfo;
             end;
           end;
         end;
