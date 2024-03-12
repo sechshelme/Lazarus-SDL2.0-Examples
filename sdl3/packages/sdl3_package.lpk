@@ -140,6 +140,10 @@
         <Filename Value="pas_units/SDL_opengl.pp"/>
         <UnitName Value="SDL_opengl"/>
       </Item>
+      <Item>
+        <Filename Value="pas_units/SDL_opengl_glext.pp"/>
+        <UnitName Value="SDL_opengl_glext"/>
+      </Item>
     </Files>
     <RequiredPkgs>
       <Item>
