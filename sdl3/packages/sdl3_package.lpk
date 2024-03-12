@@ -134,15 +134,15 @@
       </Item>
       <Item>
         <Filename Value="pas_units/sdl3_main.pas"/>
-        <UnitName Value="sdl3_main"/>
+        <UnitName Value="SDL3_main"/>
       </Item>
       <Item>
-        <Filename Value="pas_units/SDL_opengl.pp"/>
-        <UnitName Value="SDL_opengl"/>
+        <Filename Value="pas_units/sdl3_opengl.pas"/>
+        <UnitName Value="sdl3_opengl"/>
       </Item>
       <Item>
-        <Filename Value="pas_units/SDL_opengl_glext.pp"/>
-        <UnitName Value="SDL_opengl_glext"/>
+        <Filename Value="pas_units/sdl3_opengl_glext.pas"/>
+        <UnitName Value="sdl3_opengl_glext"/>
       </Item>
     </Files>
     <RequiredPkgs>

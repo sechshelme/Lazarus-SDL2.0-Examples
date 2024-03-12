@@ -1,7 +1,6 @@
 program Project1;
 
 uses
-  gtk2,
   ctypes,
   //  SDL_quit ,
   SDL3_main,
@@ -19,13 +18,14 @@ uses
   SDL3_init,
   SDL3_timer,
   SDL3_video,
-  SDL_opengl,
+  SDL3_opengl,
+  SDL3_opengl_glext,
   oglVector,
   oglShader;
 
 const
-  Screen_Widht = 640;
-  Screen_Height = 480;
+  Screen_Widht = 320;
+  Screen_Height = 240;
 
 var
   // SDL
@@ -40,7 +40,6 @@ var
 
   VAO: TGLuint;
   VBO: TGLuint;
-
 
 const
   vertices: array of TVector2f = (
@@ -67,10 +66,10 @@ const
 
     // --- Context für OpenGL erzeugen
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-    gwindow := SDL_CreateWindow('SDL3 Window', 320, 200, SDL_WINDOW_OPENGL or SDL_WINDOW_RESIZABLE);
+    gwindow := SDL_CreateWindow('SDL3 Window', Screen_Widht, Screen_Height, SDL_WINDOW_OPENGL or SDL_WINDOW_RESIZABLE);
     glcontext := SDL_GL_CreateContext(gWindow);
     if glcontext = nil then begin
       Writeln('OpenGL context could not be created! SDL Error: ', SDL_GetError);
@@ -80,6 +79,7 @@ const
     if SDL_GL_SetSwapInterval(1) < 0 then begin
       WriteLn('Warning: Unable to set VSync! SDL Error: ', SDL_GetError);
     end;
+
   end;
 
   procedure CreateScene;
@@ -130,16 +130,16 @@ const
     while not quit do begin
       while SDL_PollEvent(@e) <> 0 do begin
         case e.type_ of
-          SDL_KEYDOWN: begin
-            if e.key.repeat_ = 0 then begin
+          SDL_EVENT_KEY_DOWN: begin
+         //   if e.key.repeat_ = 0 then begin
               case e.key.keysym.sym of
                 SDLK_ESCAPE: begin
                   quit := True;
                 end;
-              end;
+//              end;
             end;
           end;
-          SDL_QUITEV: begin
+          SDL_EVENT_QUIT: begin
             quit := True;
           end;
         end;

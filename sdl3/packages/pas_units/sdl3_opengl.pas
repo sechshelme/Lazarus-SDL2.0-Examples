@@ -1,4 +1,4 @@
-unit SDL_opengl;
+unit SDL3_opengl;
 
 interface
 
@@ -119,6 +119,7 @@ type
   PGLenum = ^TGLenum;
   TGLenum = dword;
 
+  PPGLboolean = ^TGLboolean;
   PGLboolean = ^TGLboolean;
   TGLboolean = byte;
 
