@@ -154,10 +154,19 @@
       </Item>
       <Item>
         <Filename Value="pas_units/SDL_oldnames.pp"/>
+        <UnitName Value="SDL_oldnames"/>
       </Item>
       <Item>
         <Filename Value="pas_units/sdl3_atomic.pas"/>
         <UnitName Value="SDL3_atomic"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_clipboard.pas"/>
+        <UnitName Value="SDL3_clipboard"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_egl.pas"/>
+        <UnitName Value="sdl3_egl"/>
       </Item>
     </Files>
     <RequiredPkgs>

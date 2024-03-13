@@ -21,7 +21,9 @@ uses
   SDL3_locale,
   SDL3_atomic,
   SDL_oldnames,
+  SDL3_egl,
   SDL3_cpuinfo,
+  SDL3_clipboard,
   SDL3_video;
 
 var

@@ -13,7 +13,8 @@ uses
   SDL3_timer, SDL3_version, SDL3_video, SDL3_quit, SDL3_events, SDL3_keyboard, 
   SDL3_keycode, SDL3_mouse, SDL3_joystick, SDL3_camera, SDL3_mutex, 
   SDL3_assert, SDL3_error, SDL3_main, SDL3_opengl, SDL3_opengl_glext, 
-  SDL3_locale, SDL3_cpuinfo, SDL_oldnames, SDL3_atomic, LazarusPackageIntf;
+  SDL3_locale, SDL3_cpuinfo, SDL_oldnames, SDL3_atomic, SDL3_clipboard, 
+  SDL3_egl, LazarusPackageIntf;
 
 implementation
 
