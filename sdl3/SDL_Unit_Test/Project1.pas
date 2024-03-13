@@ -22,8 +22,12 @@ uses
   SDL3_atomic,
   SDL_oldnames,
   SDL3_egl,
+  SDL3_thread,
   SDL3_cpuinfo,
   SDL3_clipboard,
+  SDL3_filesystem,
+  SDL3_hints,
+  SDL3_gamepad,
   SDL3_video;
 
 var
@@ -118,6 +122,10 @@ begin
   window := SDL_CreateWindow('SDL3 Window', 320, 200, SDL_WINDOW_RESIZABLE);
   image := SDL_LoadBMP('mauer.bmp');
   screen := SDL_GetWindowSurface(window);
+
+  WriteLn('SDL_GetBasePath: ',SDL_GetBasePath);
+  WriteLn('SDL_HINT_X11_WINDOW_TYPE: ',SDL_GetHint(SDL_HINT_ORIENTATIONS));
+
 
   while not quit do begin
     while SDL_PollEvent(@e) <> 0 do begin

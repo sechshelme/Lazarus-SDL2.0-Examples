@@ -166,7 +166,23 @@
       </Item>
       <Item>
         <Filename Value="pas_units/sdl3_egl.pas"/>
-        <UnitName Value="sdl3_egl"/>
+        <UnitName Value="SDL3_egl"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_thread.pas"/>
+        <UnitName Value="SDL3_thread"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_filesystem.pas"/>
+        <UnitName Value="SDL3_filesystem"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_gamepad.pas"/>
+        <UnitName Value="SDL3_gamepad"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_hints.pas"/>
+        <UnitName Value="sdl3_hints"/>
       </Item>
     </Files>
     <RequiredPkgs>

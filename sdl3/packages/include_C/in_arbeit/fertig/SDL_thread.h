@@ -104,10 +104,10 @@ typedef int ( * SDL_ThreadFunction) (void *data);
  */
 #define SDL_PASSED_BEGINTHREAD_ENDTHREAD
 
-typedef uintptr_t (__cdecl * pfnSDL_CurrentBeginThread)
-                   (void *, unsigned, unsigned (__stdcall *func)(void *),
+typedef uintptr_t (* pfnSDL_CurrentBeginThread)
+                   (void *, unsigned, unsigned ( *func)(void *),
                     void * /*arg*/, unsigned, unsigned * /* threadID */);
-typedef void (__cdecl * pfnSDL_CurrentEndThread) (unsigned code);
+typedef void ( * pfnSDL_CurrentEndThread) (unsigned code);
 
 #ifndef SDL_beginthread
 #define SDL_beginthread _beginthreadex
