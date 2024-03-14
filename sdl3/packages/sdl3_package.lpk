@@ -182,7 +182,19 @@
       </Item>
       <Item>
         <Filename Value="pas_units/sdl3_hints.pas"/>
-        <UnitName Value="sdl3_hints"/>
+        <UnitName Value="SDL3_hints"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_render.pas"/>
+        <UnitName Value="SDL3_render"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_system.pas"/>
+        <UnitName Value="SDL3_system"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_log.pas"/>
+        <UnitName Value="sdl3_log"/>
       </Item>
     </Files>
     <RequiredPkgs>

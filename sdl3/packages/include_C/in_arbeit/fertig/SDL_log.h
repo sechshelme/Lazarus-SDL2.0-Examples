@@ -133,8 +133,7 @@ extern  void  SDL_LogSetAllPriority(SDL_LogPriority priority);
  * \sa SDL_LogGetPriority
  * \sa SDL_LogSetAllPriority
  */
-extern  void  SDL_LogSetPriority(int category,
-                                                SDL_LogPriority priority);
+extern  void  SDL_LogSetPriority(int category,  SDL_LogPriority priority);
 
 /**
  * Get the priority of a particular log category.
@@ -178,7 +177,7 @@ extern  void  SDL_LogResetPriorities(void);
  * \sa SDL_LogVerbose
  * \sa SDL_LogWarn
  */
-extern  void  SDL_Log(SDL_PRINTF_FORMAT_STRING const char *fmt, ...) SDL_PRINTF_VARARG_FUNC(1);
+extern  void  SDL_Log(const char *fmt, ...);
 
 /**
  * Log a message with SDL_LOG_PRIORITY_VERBOSE.
@@ -199,7 +198,7 @@ extern  void  SDL_Log(SDL_PRINTF_FORMAT_STRING const char *fmt, ...) SDL_PRINTF_
  * \sa SDL_LogMessageV
  * \sa SDL_LogWarn
  */
-extern  void  SDL_LogVerbose(int category, SDL_PRINTF_FORMAT_STRING const char *fmt, ...) SDL_PRINTF_VARARG_FUNC(2);
+extern  void  SDL_LogVerbose(int category, const char *fmt, ...);
 
 /**
  * Log a message with SDL_LOG_PRIORITY_DEBUG.
@@ -220,7 +219,7 @@ extern  void  SDL_LogVerbose(int category, SDL_PRINTF_FORMAT_STRING const char *
  * \sa SDL_LogVerbose
  * \sa SDL_LogWarn
  */
-extern  void  SDL_LogDebug(int category, SDL_PRINTF_FORMAT_STRING const char *fmt, ...) SDL_PRINTF_VARARG_FUNC(2);
+extern  void  SDL_LogDebug(int category, const char *fmt, ...) ;
 
 /**
  * Log a message with SDL_LOG_PRIORITY_INFO.
@@ -241,7 +240,7 @@ extern  void  SDL_LogDebug(int category, SDL_PRINTF_FORMAT_STRING const char *fm
  * \sa SDL_LogVerbose
  * \sa SDL_LogWarn
  */
-extern  void  SDL_LogInfo(int category, SDL_PRINTF_FORMAT_STRING const char *fmt, ...) SDL_PRINTF_VARARG_FUNC(2);
+extern  void  SDL_LogInfo(int category, const char *fmt, ...) ;
 
 /**
  * Log a message with SDL_LOG_PRIORITY_WARN.
@@ -262,7 +261,7 @@ extern  void  SDL_LogInfo(int category, SDL_PRINTF_FORMAT_STRING const char *fmt
  * \sa SDL_LogMessageV
  * \sa SDL_LogVerbose
  */
-extern  void  SDL_LogWarn(int category, SDL_PRINTF_FORMAT_STRING const char *fmt, ...) SDL_PRINTF_VARARG_FUNC(2);
+extern  void  SDL_LogWarn(int category, const char *fmt, ...) ;
 
 /**
  * Log a message with SDL_LOG_PRIORITY_ERROR.
@@ -283,7 +282,7 @@ extern  void  SDL_LogWarn(int category, SDL_PRINTF_FORMAT_STRING const char *fmt
  * \sa SDL_LogVerbose
  * \sa SDL_LogWarn
  */
-extern  void  SDL_LogError(int category, SDL_PRINTF_FORMAT_STRING const char *fmt, ...) SDL_PRINTF_VARARG_FUNC(2);
+extern  void  SDL_LogError(int category, const char *fmt, ...) ;
 
 /**
  * Log a message with SDL_LOG_PRIORITY_CRITICAL.
@@ -304,7 +303,7 @@ extern  void  SDL_LogError(int category, SDL_PRINTF_FORMAT_STRING const char *fm
  * \sa SDL_LogVerbose
  * \sa SDL_LogWarn
  */
-extern  void  SDL_LogCritical(int category, SDL_PRINTF_FORMAT_STRING const char *fmt, ...) SDL_PRINTF_VARARG_FUNC(2);
+extern  void  SDL_LogCritical(int category, const char *fmt, ...) ;
 
 /**
  * Log a message with the specified category and priority.
@@ -326,9 +325,7 @@ extern  void  SDL_LogCritical(int category, SDL_PRINTF_FORMAT_STRING const char 
  * \sa SDL_LogVerbose
  * \sa SDL_LogWarn
  */
-extern  void  SDL_LogMessage(int category,
-                                            SDL_LogPriority priority,
-                                            SDL_PRINTF_FORMAT_STRING const char *fmt, ...) SDL_PRINTF_VARARG_FUNC(3);
+extern  void  SDL_LogMessage(int category,                                            SDL_LogPriority priority,                                            const char *fmt, ...) ;
 
 /**
  * Log a message with the specified category and priority.
@@ -351,7 +348,7 @@ extern  void  SDL_LogMessage(int category,
  */
 extern  void  SDL_LogMessageV(int category,
                                              SDL_LogPriority priority,
-                                             SDL_PRINTF_FORMAT_STRING const char *fmt, va_list ap) SDL_PRINTF_VARARG_FUNCV(3);
+                                             const char *fmt, va_list ap) ;
 
 /**
  * The prototype for the log output callback function.

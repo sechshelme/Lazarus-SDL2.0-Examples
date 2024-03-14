@@ -40,6 +40,7 @@ const
   SDL_FLIP_VERTICAL = 2;
 
 type
+  PPSDL_Surface = ^PSDL_Surface;
   PSDL_Surface = ^TSDL_Surface;
 
   TSDL_Surface = record

@@ -28,15 +28,20 @@ uses
   SDL3_filesystem,
   SDL3_hints,
   SDL3_gamepad,
+  SDL3_render,
+  SDL3_log,
+  SDL3_system,
   SDL3_video;
 
 var
   ver: TSDL_Version;
-  window: PSDL_Window;
+  win: PSDL_Window;
   e: TSDL_Event;
   quit: boolean = False;
-  image, screen: PSDL_Surface;
+  bitmapSurface: PSDL_Surface;
   dstrect: TSDL_Rect = (x: 100; y: 100; w: 200; h: 200);
+  renderer: PSDL_Renderer;
+  bitmapTex: PSDL_Texture;
 
   procedure ShowCpuInfo;
   begin
@@ -119,12 +124,16 @@ var
 begin
   SDL_init(SDL_INIT_VIDEO);
 
-  window := SDL_CreateWindow('SDL3 Window', 320, 200, SDL_WINDOW_RESIZABLE);
-  image := SDL_LoadBMP('mauer.bmp');
-  screen := SDL_GetWindowSurface(window);
+  win := SDL_CreateWindow('SDL3 Window', 320, 200, SDL_WINDOW_RESIZABLE);
+  renderer := SDL_CreateRenderer(win, nil, SDL_RENDERER_ACCELERATED);
+  bitmapSurface := SDL_LoadBMP('mauer.bmp');
+  bitmapTex := SDL_CreateTextureFromSurface(renderer, bitmapSurface);
+  SDL_DestroySurface(bitmapSurface);
 
-  WriteLn('SDL_GetBasePath: ',SDL_GetBasePath);
-  WriteLn('SDL_HINT_X11_WINDOW_TYPE: ',SDL_GetHint(SDL_HINT_ORIENTATIONS));
+  WriteLn('SDL_GetBasePath: ', SDL_GetBasePath);
+  WriteLn('SDL_HINT_X11_WINDOW_TYPE: ', SDL_GetHint(SDL_HINT_ORIENTATIONS));
+  SDL_Log('log');
+  SDL_LogCritical(SDL_LOG_CATEGORY_SYSTEM, 'critical');
 
 
   while not quit do begin
@@ -135,8 +144,6 @@ begin
           case e.key.keysym.sym of
 
             SDLK_ESCAPE: begin
-              //            SDLK_ESCAPE: begin
-              WriteLn('down');
               quit := True;
             end;
             SDLK_m: begin
@@ -163,22 +170,17 @@ begin
         end;
       end;
     end;
-    SDL_BlitSurface(image, nil, screen, nil);
-    SDL_BlitSurface(image, nil, screen, @dstrect);
 
-    SDL_BlitSurfaceScaled(image, nil, screen, nil, SDL_SCALEMODE_LINEAR);
-
-    SDL_UpdateWindowSurface(Window);
+    SDL_RenderClear(renderer);
+    SDL_RenderTexture(renderer, bitmapTex, nil, nil);
+    SDL_RenderPresent(renderer);
   end;
 
 
   //  SDL_Delay(3000);
-  SDL_DestroyWindow(window);
-
-  SDL_VERSION(@ver);
-  WriteLn(ver.major, '.', ver.minor, '.', ver.patch);
-  SDL_GetVersion(@ver);
-  WriteLn(ver.major, '.', ver.minor, '.', ver.patch);
+  SDL_DestroyTexture(bitmapTex);
+  SDL_DestroyRenderer(renderer);
+  SDL_DestroyWindow(win);
 
   SDL_Quit;
 end.

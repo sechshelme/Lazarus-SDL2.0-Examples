@@ -55,6 +55,7 @@ const
 type
   TSDL_Window = Pointer;
   PSDL_Window = ^TSDL_Window;
+  PPSDL_Window = ^PSDL_Window;
 
 const
   SDL_WINDOW_FULLSCREEN = $00000001;
