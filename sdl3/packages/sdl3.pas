@@ -36,11 +36,11 @@ unit SDL3_thread;
 unit SDL3_error;
 unit SDL3_filesystem;
 unit SDL3_log;
+unit SDL3_platform;
 
 unit SDL3_opengl;
 unit SDL3_opengl_glext;SDL3_opengl;
 unit SDL3_egl;
-
 
 unit SDL3_timer;       SDL3_stdinc;
 unit SDL3_pixels;      SDL3_stdinc;
@@ -52,9 +52,8 @@ unit SDL3_clipboard;   SDL3_stdinc;
 unit SDL3_atomic;      SDL3_stdinc;
 unit SDL3_cpuinfo;     SDL3_stdinc;
 unit SDL3_hints;       SDL3_stdinc;
-
-
-
+unit SDL3_hidapi;      SDL3_stdinc;
+unit SDL3_loadso;      SDL3_stdinc;
 
 unit SDL3_sensor;      SDL3_properties;
 
@@ -71,6 +70,7 @@ unit SDL3_keyboard;    SDL3_stdinc,SDL3_rect,  SDL_scancode, SDL_keycode, SDL3_v
 unit SDL3_mouse;       SDL3_stdinc, SDL3_video, SDL3_surface;
 unit SDL3_joystick;    SDL_guid, SDL3_stdinc, SDL_mutex;
 unit SDL3_gamepad;     SDL3_stdinc, SDL3_rwops, SDL3_sensor, SDL3_joystick;
+unit SDL3_haptic;      SDL3_stdinc, SDL3_joystick;
 
 unit SDL3_events;      SDL3_stdinc, SDL3_video, SDL3_keyboard, SDL3_mouse, SDL3_joystick, SDL3_audio, SDL3_camera, SDL3_touch, SDL3_pen, SDL3_sensor;
 unit SDL3_quit;        SDL3_stdinc, SDL3_events;

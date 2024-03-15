@@ -30,7 +30,11 @@ uses
   SDL3_gamepad,
   SDL3_render,
   SDL3_log,
+  SDL3_platform,
+  SDL3_loadso,
   SDL3_system,
+  SDL3_haptic,
+  SDL3_hidapi,
   SDL3_video;
 
 var
@@ -134,6 +138,7 @@ begin
   WriteLn('SDL_HINT_X11_WINDOW_TYPE: ', SDL_GetHint(SDL_HINT_ORIENTATIONS));
   SDL_Log('log');
   SDL_LogCritical(SDL_LOG_CATEGORY_SYSTEM, 'critical');
+  WriteLn('Platform: ',SDL_GetPlatform);
 
 
   while not quit do begin

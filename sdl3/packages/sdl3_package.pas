@@ -15,7 +15,8 @@ uses
   SDL3_assert, SDL3_error, SDL3_main, SDL3_opengl, SDL3_opengl_glext, 
   SDL3_locale, SDL3_cpuinfo, SDL_oldnames, SDL3_atomic, SDL3_clipboard, 
   SDL3_egl, SDL3_thread, SDL3_filesystem, SDL3_gamepad, SDL3_hints, 
-  SDL3_render, SDL3_system, SDL3_log, LazarusPackageIntf;
+  SDL3_render, SDL3_system, SDL3_log, SDL3_haptic, SDL3_hidapi, SDL3_platform, 
+  SDL3_loadso, LazarusPackageIntf;
 
 implementation
 

@@ -194,7 +194,23 @@
       </Item>
       <Item>
         <Filename Value="pas_units/sdl3_log.pas"/>
-        <UnitName Value="sdl3_log"/>
+        <UnitName Value="SDL3_log"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_haptic.pas"/>
+        <UnitName Value="SDL3_haptic"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_hidapi.pas"/>
+        <UnitName Value="SDL3_hidapi"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_platform.pas"/>
+        <UnitName Value="SDL3_platform"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_loadso.pas"/>
+        <UnitName Value="sdl3_loadso"/>
       </Item>
     </Files>
     <RequiredPkgs>
