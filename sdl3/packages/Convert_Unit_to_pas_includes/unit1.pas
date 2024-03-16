@@ -64,7 +64,11 @@ begin
       end;
     until p<>0;
 
-    inc_dest.Add('{$DEFINE read_interface}');
+//    {$IFDEF read_forward_definitions}
+//    {$ENDIF read_forward_definitions}
+
+
+    inc_dest.Add('{$IFDEF read_interface}');
 
         // implementation C suchen
 repeat
@@ -80,10 +84,10 @@ repeat
       end;
     until p=1;
 
-    inc_dest.Add('{$UNDEF read_interface}');
+    inc_dest.Add('{$ENDIF read_interface}');
     inc_dest.Add('');
     inc_dest.Add('');
-    inc_dest.Add('{$DEFINE read_implementation}');
+    inc_dest.Add('{$IFDEF read_implementation}');
     inc_dest.Add('');
 
     // end. C suchen
@@ -94,18 +98,19 @@ repeat
       end else   inc_dest.Add(unit_source[j]);
 
       Inc(j);
-      if j >= unit_source.Count then begin
+      if (j >= unit_source.Count) and (p<>1)  then begin
         WriteLn(slFile[i],'    Überlauf  end.');
 //        halt;
       end;
     until p=1;
 
-    inc_dest.Add('{$UNDEF read_implementation}');
+    inc_dest.Add('{$ENDIF read_implementation}');
 
 
     path := ExtractFileName(slFile[i]);
     path := ChangeFileExt(path, '.inc');
-    path := '/n4800/DATEN/Programmierung/mit_GIT/Lazarus/Tutorial/SDL-2/sdl3/packages/pas_includes/' + path;
+//    path := '/n4800/DATEN/Programmierung/mit_GIT/Lazarus/Tutorial/SDL-2/sdl3/packages/pas_includes/' + path;
+    path := '/n4800/DATEN/Programmierung/mit_GIT/Lazarus/Tutorial/SDL-2/sdl3/packages/' + path;
     Memo1.Lines.Add(path);
 
     inc_dest.SaveToFile(path);
@@ -113,19 +118,6 @@ repeat
     inc_dest.Free;
     unit_source.Free;
   end;
-
-  // === SDL3_includes.inc
-
-  SDL3pas_include := TStringList.Create;
-  SDL3pas_include.Add('{%MainUnit sdl3.pas}');
-
-  for i := 0 to slFile.Count - 1 do begin
-    path := ExtractFileName(slFile[i]);
-    SDL3pas_include.Add('{$include ' + path + '.inc}');
-  end;
-
-  SDL3pas_include.SaveToFile('/n4800/DATEN/Programmierung/mit_GIT/Lazarus/Tutorial/SDL-2/sdl3/packages/pas_includes/SDL3_includes.inc');
-  SDL3pas_include.Free;
 
   slFile.Clear;
 end;

@@ -1,44 +1,10 @@
 program Project1;
 
 uses
-  gtk2,
   ctypes,
-  //  SDL_quit ,
-  SDL3_main,
-  SDL3_mutex,
-  SDL3_scancode,
-  SDL3_keycode,
-  SDL3_events,
-  SDL3_messagebox,
-  SDL3_surface,
-  SDL3_version,
-  SDL3_stdinc,
-  SDL3_rect,
-  SDL3_assert,
-  SDL3_error,
-  SDL3_init,
-  SDL3_timer,
-  SDL3_locale,
-  SDL3_atomic,
-  SDL_oldnames,
-  SDL3_egl,
-  SDL3_thread,
-  SDL3_cpuinfo,
-  SDL3_clipboard,
-  SDL3_filesystem,
-  SDL3_hints,
-  SDL3_gamepad,
-  SDL3_render,
-  SDL3_log,
-  SDL3_platform,
-  SDL3_loadso,
-  SDL3_system,
-  SDL3_haptic,
-  SDL3_hidapi,
-  SDL3_video;
+  SDL3;
 
 var
-  ver: TSDL_Version;
   win: PSDL_Window;
   e: TSDL_Event;
   quit: boolean = False;

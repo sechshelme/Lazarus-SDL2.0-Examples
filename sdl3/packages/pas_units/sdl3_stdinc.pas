@@ -24,8 +24,6 @@ type
   PSDL_iconv_data_t=Pointer;
   Tintptr_t=Pointer;
 
-  TSDL_PropertiesID=UInt32;
-
   PPUint8=^PUint8;
 
 const SDL_SIZE_MAX = Tsize_t(-1);
