@@ -3,6 +3,10 @@
 h2pas -p -T -d -c -e xxx.h
 ```
 
+# Muss übewrarbeitet werden:
+sdl_pixels
+
+
 # Gröbere Änderungen
   sdl_dialogs.h neu
 
