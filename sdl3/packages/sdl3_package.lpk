@@ -210,7 +210,27 @@
       </Item>
       <Item>
         <Filename Value="pas_units/sdl3_loadso.pas"/>
-        <UnitName Value="sdl3_loadso"/>
+        <UnitName Value="SDL3_loadso"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_metal.pas"/>
+        <UnitName Value="SDL3_metal"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_misc.pas"/>
+        <UnitName Value="SDL3_misc"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_power.pas"/>
+        <UnitName Value="SDL3_power"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_revision.pas"/>
+        <UnitName Value="SDL3_revision"/>
+      </Item>
+      <Item>
+        <Filename Value="pas_units/sdl3_vulkan.pas"/>
+        <UnitName Value="sdl3_vulkan"/>
       </Item>
     </Files>
     <RequiredPkgs>

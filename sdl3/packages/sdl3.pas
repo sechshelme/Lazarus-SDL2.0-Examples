@@ -37,6 +37,9 @@ unit SDL3_error;
 unit SDL3_filesystem;
 unit SDL3_log;
 unit SDL3_platform;
+unit SDL3_misc;
+unit SDL3_power;
+unit SDL3_revision;
 
 unit SDL3_opengl;
 unit SDL3_opengl_glext;SDL3_opengl;
@@ -64,6 +67,8 @@ unit SDL3_surface;     SDL3_pixels, SDL3_stdinc, SDL3_rect, SDL3_properties, SDL
 unit SDL3_video;       SDL3_stdinc, SDL3_rect, SDL3_surface;
 unit SDL3_camera;      SDL3_properties, SDL3_surface, SDL3_pixels;
 unit SDL3_messagebox;  SDL3_video;
+unit SDL3_metal        SDL3_video;
+unit SDL3_vulkan;      SDL3_stdinc, SDL3_video;
 
 unit SDL3_keycode;     SDL_scancode;
 unit SDL3_keyboard;    SDL3_stdinc,SDL3_rect,  SDL_scancode, SDL_keycode, SDL3_video;

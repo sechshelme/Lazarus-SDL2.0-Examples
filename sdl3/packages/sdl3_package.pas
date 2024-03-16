@@ -16,7 +16,8 @@ uses
   SDL3_locale, SDL3_cpuinfo, SDL_oldnames, SDL3_atomic, SDL3_clipboard, 
   SDL3_egl, SDL3_thread, SDL3_filesystem, SDL3_gamepad, SDL3_hints, 
   SDL3_render, SDL3_system, SDL3_log, SDL3_haptic, SDL3_hidapi, SDL3_platform, 
-  SDL3_loadso, LazarusPackageIntf;
+  SDL3_loadso, SDL3_metal, SDL3_misc, SDL3_power, SDL3_revision, SDL3_vulkan, 
+  LazarusPackageIntf;
 
 implementation
 

@@ -31,7 +31,7 @@
 /* #undef SDL_VENDOR_INFO */
 
 #ifdef SDL_VENDOR_INFO
-#define SDL_REVISION "SDL-prerelease-3.0.0-3786-g68588b232 (" SDL_VENDOR_INFO ")"
+//#define SDL_REVISION "SDL-prerelease-3.0.0-3786-g68588b232 (" SDL_VENDOR_INFO ")"
 #else
 #define SDL_REVISION "SDL-prerelease-3.0.0-3786-g68588b232"
 #endif
