@@ -34,24 +34,24 @@ implementation
 procedure TForm1.Button1Click(Sender: TObject);
 var
   slFile, slHeader: TStringList;
+  s: string;
   i, j: integer;
+  p: SizeInt;
 begin
   Memo1.Clear;
-  slFile := FindAllFiles('/n4800/DATEN/Programmierung/mit_GIT/Lazarus/Tutorial/SDL-2/sdl3/packages/include_C', '*.h');
-  Memo1.Lines := slFile;
-
-  for i := 0 to slFile.Count - 1 do begin
-    slHeader := TStringList.Create;
-    slHeader.LoadFromFile(slFile[i]);
-    for j := 0 to slHeader.Count - 1 do begin
-      slHeader[j] := StringReplace(slHeader[j], 'SDLCALL', '', [rfReplaceAll]);
-      slHeader[j] := StringReplace(slHeader[j], 'DECLSPEC', '', [rfReplaceAll]);
+  slHeader := TStringList.Create;
+  slHeader.LoadFromFile('SDL_pixels.pp');
+  for j := 0 to slHeader.Count - 1 do begin
+    s := slHeader[j];
+    p := pos('SDL_DEFINE_PIXELFORMAT', s);
+    if p > 20 then  begin
+      WriteLn(s);
     end;
-    slHeader.SaveToFile(slFile[i]);
-    slHeader.Free;
+    //      slHeader[j] := StringReplace(slHeader[j], 'SDLCALL', '', [rfReplaceAll]);
+    //      slHeader[j] := StringReplace(slHeader[j], 'DECLSPEC', '', [rfReplaceAll]);
   end;
-
-  slFile.Free;
+  slHeader.SaveToFile('SDL3_pixels.pas');
+  slHeader.Free;
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);

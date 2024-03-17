@@ -119,7 +119,7 @@ repeat
     unit_source.Free;
   end;
 
-  slFile.Clear;
+  slFile.Free;
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);

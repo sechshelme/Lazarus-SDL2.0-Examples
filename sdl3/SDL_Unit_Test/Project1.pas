@@ -2,7 +2,9 @@ program Project1;
 
 uses
   ctypes,
-  SDL3;
+
+  SDL3      ,
+  SDL_pixels;
 
 var
   win: PSDL_Window;
