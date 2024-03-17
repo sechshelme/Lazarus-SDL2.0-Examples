@@ -33,6 +33,25 @@ const
     (-0.90, -0.90), (0.85, -0.90), (-0.90, 0.85),
     (0.90, -0.85), (0.90, 0.90), (-0.85, 0.90));
 
+  vertex_shader_text: string =
+    '#version 450 core' + #10 +
+    '' + #10 +
+    'layout (location = 0) in vec4 vPosition;' + #10 +
+    '' + #10 +
+    'void main()' + #10 +
+    '{' + #10 +
+    '  gl_Position = vPosition;' + #10 +
+    '}';
+
+  fragment_shader_text =
+    '#version 450 core' + #10 +
+    '' + #10 +
+    'layout (location = 0) out vec4 fColor;' + #10 +
+    '' + #10 +
+    'void main()' + #10 +
+    '{' + #10 +
+    '  fColor = vec4(0.5, 0.4, 0.8, 1.0);' + #10 +
+    '}';
 
   procedure Init_SDL_and_OpenGL;
   begin
@@ -71,11 +90,11 @@ const
   procedure CreateScene;
   begin
     glCreateBuffers(1, @VBO);
-    glNamedBufferStorage(VBO, Length(vertices) * SizeOf(TVector3f), PVector3f(vertices), 0);
+    glNamedBufferStorage(VBO, Length(vertices) * SizeOf(TVector2f), PVector2f(vertices), 0);
 
     MyShader := TShader.Create;
-    MyShader.LoadShaderObjectFromFile(GL_VERTEX_SHADER, 'Vertexshader.glsl');
-    MyShader.LoadShaderObjectFromFile(GL_FRAGMENT_SHADER, 'Fragmentshader.glsl');
+    MyShader.LoadShaderObject(GL_VERTEX_SHADER, vertex_shader_text);
+    MyShader.LoadShaderObject(GL_FRAGMENT_SHADER, fragment_shader_text);
     MyShader.LinkProgram;
     MyShader.UseProgram;
 

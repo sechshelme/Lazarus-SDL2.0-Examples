@@ -7,21 +7,13 @@ interface
 uses
   Classes,
   SysUtils,
-  FileUtil,
-//  LResources,
-
-    SDL3_opengl,
-    SDL3_opengl_glext,
-
-//  dglOpenGL,
-  oglDebug;
-
-
+  SDL3_opengl,
+  SDL3_opengl_glext;
 
 type
-  GLenum=TGLenum;
-  GLint=TGLint;
-  GLuint=TGLuint;
+  GLenum = TGLenum;
+  GLint = TGLint;
+  GLuint = TGLuint;
 
   TShader = class(TObject)
   private
@@ -34,9 +26,6 @@ type
     constructor Create;
     destructor Destroy; override;
     procedure LoadShaderObject(shaderType: GLenum; const AShader: ansistring);
-    procedure LoadShaderObjectFromFile(shaderType: GLenum; const ShaderFile: ansistring);
-    procedure LoadSPRIVShaderObject(shaderType: GLenum; const AShader: ansistring);
-    procedure LoadSPRIVShaderObjectFromFile(shaderType: GLenum; const ShaderFile: ansistring);
     procedure LinkProgram;
     procedure UseProgram;
 
@@ -49,37 +38,10 @@ type
 
   // ---- Hilfsfunktionen ----
 
-procedure StrToFile(s: ansistring; Datei: string = 'test_str.txt');
-function FileToStr(Datei: string): ansistring;
 function ResourceToStr(Resource: string): ansistring;
 
 
 implementation
-
-procedure StrToFile(s: ansistring; Datei: string = 'test_str.txt');
-var
-  f: Text;
-begin
-  AssignFile(f, Datei);
-  Rewrite(f);
-  WriteLn(f, s);
-  CloseFile(f);
-end;
-
-function FileToStr(Datei: string): ansistring;
-var
-  SrcHandle: THandle;
-begin
-  if FileExists(Datei) then begin
-    SetLength(Result, FileSize(Datei));
-    SrcHandle := FileOpen(Datei, fmOpenRead or fmShareDenyWrite);
-    FileRead(SrcHandle, Result[1], Length(Result));
-    FileClose(SrcHandle);
-  end else begin
-    LogForm.Add('FEHLER: Kann Datei ' + Datei + ' nicht finden');
-    Result := '';
-  end;
-end;
 
 function ResourceToStr(Resource: string): ansistring;
 var
@@ -145,7 +107,7 @@ end;
 constructor TShader.Create;
 begin
   inherited Create;
-  FProgramObject := glCreateProgram();
+  FProgramObject := glCreateProgram;
 end;
 
 (*
@@ -174,7 +136,7 @@ begin
       sa[1] := AShader[1];
     end;
     else begin
-      LogForm.Add('Ungültige Anzahl Shader-Objecte: ' + IntToStr(Length(AShader)));
+      WriteLn('Ungültige Anzahl Shader-Objecte: ' + IntToStr(Length(AShader)));
     end;
   end;
   if Length(sa) = 2 then begin
@@ -211,47 +173,10 @@ begin
   glGetShaderInfoLog(ShaderObject, InfoLogLength, nil, PChar(pc));
 
   if ErrorStatus = GL_FALSE then begin
-    LogForm.AddAndTitle('FEHLER in ' + ShadercodeToStr(shaderType) + '!', AShader + LineEnding + PChar(pc) + LineEnding);
+    WriteLn('FEHLER in ' + ShadercodeToStr(shaderType) + '!', AShader + LineEnding + PChar(pc) + LineEnding);
   end;
 
   glDeleteShader(ShaderObject);
-end;
-
-procedure TShader.LoadShaderObjectFromFile(shaderType: GLenum; const ShaderFile: ansistring);
-begin
-  LoadShaderObject(shaderType, FileToStr(ShaderFile));
-end;
-
-procedure TShader.LoadSPRIVShaderObject(shaderType: GLenum; const AShader: ansistring);
-var
-  ShaderObject: TGLint;
-  pc: array of char = nil;
-
-  ErrorStatus: TGLboolean;
-  InfoLogLength: TGLsizei;
-begin
-  ShaderObject := glCreateShader(shaderType);
-
-  glShaderBinary(1, @ShaderObject, GL_SHADER_BINARY_FORMAT_SPIR_V, PGLvoid(AShader), Length(AShader));
-  glSpecializeShader(ShaderObject, 'main', 0, nil, nil);
-  glAttachShader(FProgramObject, ShaderObject);
-
-  // Check  Shader
-  glGetShaderiv(ShaderObject, GL_COMPILE_STATUS, @ErrorStatus);
-  glGetShaderiv(ShaderObject, GL_INFO_LOG_LENGTH, @InfoLogLength);
-  SetLength(pc, InfoLogLength + 1);
-  glGetShaderInfoLog(ShaderObject, InfoLogLength, nil, PChar(pc));
-
-  if ErrorStatus = GL_FALSE then begin
-    LogForm.AddAndTitle('FEHLER in ' + ShadercodeToStr(shaderType) + '!', PChar(pc) + LineEnding);
-  end;
-
-  glDeleteShader(ShaderObject);
-end;
-
-procedure TShader.LoadSPRIVShaderObjectFromFile(shaderType: GLenum; const ShaderFile: ansistring);
-begin
-  LoadSPRIVShaderObject(shaderType, FileToStr(ShaderFile));
 end;
 
 procedure TShader.LinkProgram;
@@ -269,7 +194,7 @@ begin
     glGetProgramiv(FProgramObject, GL_INFO_LOG_LENGTH, @InfoLogLength);
     SetLength(pc, InfoLogLength + 1);
     glGetProgramInfoLog(FProgramObject, InfoLogLength, nil, PChar(pc));
-    LogForm.AddAndTitle('SHADER LINK:', PChar(pc));
+    WriteLn('SHADER LINK:', PChar(pc));
   end;
 end;
 
@@ -282,7 +207,7 @@ function TShader.UniformLocation(ch: PGLChar): GLint;
 begin
   Result := glGetUniformLocation(FProgramObject, ch);
   if Result = -1 then begin
-    LogForm.Add('Uniform Fehler: ' + ch + ' code: ' + IntToStr(Result));
+    WriteLn('Uniform Fehler: ' + ch + ' code: ' + IntToStr(Result));
   end;
 end;
 
@@ -290,7 +215,7 @@ function TShader.UniformBlockIndex(ch: PGLChar): GLuint;
 begin
   Result := glGetUniformBlockIndex(FProgramObject, ch);
   if Result = GL_INVALID_INDEX then begin
-    LogForm.Add('UniformBlock Fehler: ' + ch + ' code: ' + IntToStr(Result));
+    WriteLn('UniformBlock Fehler: ' + ch + ' code: ' + IntToStr(Result));
   end;
 end;
 
@@ -298,7 +223,7 @@ function TShader.AttribLocation(ch: PGLChar): GLint;
 begin
   Result := glGetAttribLocation(FProgramObject, ch);
   if Result = -1 then begin
-    LogForm.Add('Attrib Fehler: ' + ch + ' code: ' + IntToStr(Result));
+    WriteLn('Attrib Fehler: ' + ch + ' code: ' + IntToStr(Result));
   end;
 end;
 
@@ -314,7 +239,7 @@ end;
 
 function TShader.ShaderVersion: string;
 begin
-  Result := 'Shader Version: ' + PChar( glGetString(GL_SHADING_LANGUAGE_VERSION));
+  Result := 'Shader Version: ' + PChar(glGetString(GL_SHADING_LANGUAGE_VERSION));
 end;
 
 end.
