@@ -25,6 +25,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="SDL3_package"/>
+      </Item>
+      <Item>
         <PackageName Value="LCL"/>
       </Item>
     </RequiredPackages>
@@ -62,6 +65,11 @@
         </Win32>
       </Options>
     </Linking>
+    <Other>
+      <ConfigFile>
+        <StopAfterErrCount Value="1000"/>
+      </ConfigFile>
+    </Other>
   </CompilerOptions>
   <Debugging>
     <Exceptions>

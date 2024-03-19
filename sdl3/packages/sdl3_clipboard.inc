@@ -1,3 +1,10 @@
+/////////////////////////////////////////////////////////////
+//                                                         //
+//   WARNUNG, dies Datei wird automatisch durch            //
+//   das Program "Convert_Unit_to_pas_includes" erzeugt !  //
+//                                                         //
+/////////////////////////////////////////////////////////////
+
 {$IFDEF read_interface}
 
 function SDL_SetClipboardText(Text: PChar): longint; cdecl; external;

@@ -2,9 +2,8 @@ program Project1;
 
 uses
   ctypes,
-
-  SDL3      ,
-  SDL_pixels;
+//  SDL3_pixels,
+  SDL3;
 
 var
   win: PSDL_Window;
@@ -106,7 +105,7 @@ begin
   WriteLn('SDL_HINT_X11_WINDOW_TYPE: ', SDL_GetHint(SDL_HINT_ORIENTATIONS));
   SDL_Log('log');
   SDL_LogCritical(SDL_LOG_CATEGORY_SYSTEM, 'critical');
-  WriteLn('Platform: ',SDL_GetPlatform);
+  WriteLn('Platform: ', SDL_GetPlatform);
 
 
   while not quit do begin

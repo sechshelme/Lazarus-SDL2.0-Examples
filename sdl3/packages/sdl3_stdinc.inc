@@ -1,3 +1,10 @@
+/////////////////////////////////////////////////////////////
+//                                                         //
+//   WARNUNG, dies Datei wird automatisch durch            //
+//   das Program "Convert_Unit_to_pas_includes" erzeugt !  //
+//                                                         //
+/////////////////////////////////////////////////////////////
+
 {$IFDEF read_interface}
 
 //{$LinkLib 'libSDL3.so.0'}
@@ -15,8 +22,6 @@ type
   PSDL_iconv_data_t=Pointer;
   Tintptr_t=Pointer;
 
-//  TSDL_PropertiesID=UInt32;
-
   PPUint8=^PUint8;
 
 const SDL_SIZE_MAX = Tsize_t(-1);
@@ -24,6 +29,8 @@ const SDL_SIZE_MAX = Tsize_t(-1);
 // Entspricht Lenght()
 //function SDL_arraysize(array : longint) : longint;
 //function SDL_TABLESIZE(table : longint) : longint;
+
+function SDL_FOURCC(A, B, C, D: Byte):longint;
 
 const
   SDL_FALSE = 0;  
@@ -323,6 +330,12 @@ type
 
 
 {$IFDEF read_implementation}
+
+function SDL_FOURCC(A, B, C, D: Byte):longint;
+begin
+  Result := A shl 0 + B shl 8 + C shl 16 + D shl 24;
+end;
+
 
 function SDL_min(x,y : longint) : longint;
 var

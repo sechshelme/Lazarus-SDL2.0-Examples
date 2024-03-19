@@ -32,6 +32,8 @@ const SDL_SIZE_MAX = Tsize_t(-1);
 //function SDL_arraysize(array : longint) : longint;
 //function SDL_TABLESIZE(table : longint) : longint;
 
+function SDL_FOURCC(A, B, C, D: Byte):longint;
+
 const
   SDL_FALSE = 0;  
   SDL_TRUE = 1;  
@@ -327,6 +329,12 @@ type
   TSDL_FunctionPointer = procedure (para1:pointer);cdecl;
 
 implementation
+
+function SDL_FOURCC(A, B, C, D: Byte):longint;
+begin
+  Result := A shl 0 + B shl 8 + C shl 16 + D shl 24;
+end;
+
 
 function SDL_min(x,y : longint) : longint;
 var
