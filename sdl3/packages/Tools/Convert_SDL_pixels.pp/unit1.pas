@@ -89,7 +89,7 @@ begin
       Memo1.Lines.Add(s);
     end;
 
-    // ----     SDL_PIXELFORMAT_YV12 = SDL_DEFINE_PIXELFOURCC('Y','V','1','2');
+    // ---- SDL_DEFINE_PIXELFOURCC;
     p := pos('SDL_DEFINE_PIXELFOURCC', s);
     if p > 20 then  begin
       s := StringReplace(s, 'SDL_DEFINE_PIXELFOURCC', '', []);
@@ -105,7 +105,7 @@ begin
 
     slPixelPAS[i] := s;
   end;
-  slPixelPAS.SaveToFile('/n4800/DATEN/Programmierung/mit_GIT/Lazarus/Tutorial/SDL-2/sdl3/SDL_Unit_Test/sdl3_pixels.pas');
+  slPixelPAS.SaveToFile('/n4800/DATEN/Programmierung/mit_GIT/Lazarus/Tutorial/SDL-2/sdl3/packages/Tools/pas_units/sdl3_pixels.pas');
   slPixelPAS.Free;
 end;
 

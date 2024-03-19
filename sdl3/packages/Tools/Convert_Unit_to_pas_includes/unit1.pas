@@ -40,7 +40,7 @@ var
   p: SizeInt;
 begin
   Memo1.Clear;
-  slFile := FindAllFiles('/n4800/DATEN/Programmierung/mit_GIT/Lazarus/Tutorial/SDL-2/sdl3/packages/pas_units', '*.pas');
+  slFile := FindAllFiles('/n4800/DATEN/Programmierung/mit_GIT/Lazarus/Tutorial/SDL-2/sdl3/packages/Tools/pas_units', '*.pas');
 
   for i := 0 to slFile.Count - 1 do begin
     unit_source := TStringList.Create;
@@ -69,10 +69,6 @@ begin
         halt;
       end;
     until p <> 0;
-
-    //    {$IFDEF read_forward_definitions}
-    //    {$ENDIF read_forward_definitions}
-
 
     inc_dest.Add('{$IFDEF read_interface}');
 
