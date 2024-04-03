@@ -1,7 +1,7 @@
 program Project1;
 
 uses
-  dglOpenGL,
+  oglglad_gl,
   oglContext,
   oglVector,
   oglMatrix,
@@ -39,15 +39,6 @@ const
   var
     i: integer;
   begin
-    // --- OpenGL inizialisieren
-    if not InitOpenGL then begin
-      WriteLn('OpenGL-Fehler');
-      Halt(1);
-    end;
-    ReadExtensions;
-    ReadImplementationProperties;
-    InitOpenGLDebug;
-
     // --- SDL inizialisieren
     if SDL_Init(SDL_INIT_VIDEO) < 0 then begin
       WriteLn('SDL could not initialize! SDL_Error: ', SDL_GetError);
@@ -75,6 +66,10 @@ const
     if SDL_GL_SetSwapInterval(1) < 0 then begin
       WriteLn('Warning: Unable to set VSync! SDL Error: ', SDL_GetError);
     end;
+
+    // --- OpenGL inizialisieren
+    Load_GLADE;
+    InitOpenGLDebug;
   end;
 
   procedure CreateScene;
@@ -85,10 +80,9 @@ const
     MyShader := TShader.Create;
     MyShader.LoadShaderObjectFromFile(GL_VERTEX_SHADER, 'Vertexshader.glsl');
     MyShader.LoadShaderObjectFromFile(GL_FRAGMENT_SHADER, 'Fragmentshader.glsl');
-    MyShader.LinkProgramm;
+    MyShader.LinkProgram;
     MyShader.UseProgram;
     Color_ID := MyShader.UniformLocation('uCol');
-
 
     glGenVertexArrays(1, @VAO);
     glBindVertexArray(VAO);

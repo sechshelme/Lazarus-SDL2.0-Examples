@@ -1,7 +1,7 @@
 program Project1;
 
 uses
-  dglOpenGL,
+  oglglad_gl,
   oglContext,
   oglVector,
   oglMatrix,
@@ -55,15 +55,6 @@ const
 
   procedure Init_SDL_and_OpenGL;
   begin
-    // --- OpenGL inizialisieren
-    if not InitOpenGL then begin
-      WriteLn('OpenGL-Fehler');
-      Halt(1);
-    end;
-    ReadExtensions;
-    ReadImplementationProperties;
-    InitOpenGLDebug;
-
     // --- SDL inizialisieren
     if SDL_Init(SDL_INIT_VIDEO) < 0 then begin
       WriteLn('SDL could not initialize! SDL_Error: ', SDL_GetError);
@@ -85,6 +76,10 @@ const
     if SDL_GL_SetSwapInterval(1) < 0 then begin
       WriteLn('Warning: Unable to set VSync! SDL Error: ', SDL_GetError);
     end;
+
+    // --- OpenGL inizialisieren
+    Load_GLADE;
+    InitOpenGLDebug;
   end;
 
   procedure CreateScene;

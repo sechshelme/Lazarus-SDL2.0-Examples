@@ -12,8 +12,7 @@ interface
 
 uses
   SysUtils, FileUtil, LazFileUtils,
-  //  MyLogForms, MyMessages,
-  dglOpenGL;
+  oglglad_gl;
 
 type
 
@@ -21,11 +20,11 @@ type
 
   TShader = class(TObject)
   private
-    FProgramObject: GLHandle;
+    FProgramObject: TGLint;
     procedure LoadShaderObject(const AShader: ansistring; shaderType: GLenum);
     function Split(AShader: ansistring): TStringArray;
   public
-    property ID: GLHandle read FProgramObject;
+    property ID: TGLint read FProgramObject;
 
     constructor Create(const AShader: array of ansistring; IsTesselation: boolean = False);
     destructor Destroy; override;
@@ -34,7 +33,6 @@ type
     function UniformBlockIndex(ch: PGLChar): GLuint;
     function AttribLocation(ch: PGLChar): GLint;
     procedure UseProgram;
-    function ShaderVersion: string;
   end;
 
 
@@ -42,8 +40,6 @@ type
 
 procedure StrToFile(s: ansistring; Datei: string = 'test_str.txt');
 function FileToStr(Datei: string): ansistring;
-
-procedure InitOpenGLDebug;
 
 procedure checkError(command: string);
 
@@ -112,96 +108,6 @@ begin
   end;
 end;
 
-// --- Debugger ---
-
-{$IFDEF MSWINDOWS}
-procedure GLDebugCallBack(Source: GLEnum; type_: GLEnum; id: GLUInt; severity: GLUInt; length: GLsizei; const message_: PGLCHar; userParam: PGLvoid); stdcall;
-{$ELSE}
-procedure GLDebugCallBack(Source: GLEnum; type_: GLEnum; id: GLUInt; severity: GLUInt; length: GLsizei; const message_: PGLCHar; userParam: PGLvoid); cdecl;
-{$ENDIF}
-
-var
-  MsgSource: string;
-  MsgType: string;
-  MsgSeverity: string;
-  col: Integer;
-begin
-
-  // Source of this message
-  case Source of
-    GL_DEBUG_SOURCE_API: begin
-      MsgSource := 'API';
-    end;
-    GL_DEBUG_SOURCE_WINDOW_SYSTEM: begin
-      MsgSource := 'WINDOW_SYSTEM';
-    end;
-    GL_DEBUG_SOURCE_SHADER_COMPILER: begin
-      MsgSource := 'SHADER_COMPILER';
-    end;
-    GL_DEBUG_SOURCE_THIRD_PARTY: begin
-      MsgSource := 'THIRD_PARTY';
-    end;
-    GL_DEBUG_SOURCE_APPLICATION: begin
-      MsgSource := 'APPLICATION';
-    end;
-    GL_DEBUG_SOURCE_OTHER: begin
-      MsgSource := 'OTHER';
-    end;
-  end;
-
-  // Type of this message
-  case type_ of
-    GL_DEBUG_TYPE_ERROR: begin
-      MsgType := 'ERROR';
-    end;
-    GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: begin
-      MsgType := 'DEPRECATED_BEHAVIOR';
-    end;
-    GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR: begin
-      MsgType := 'UNDEFINED_BEHAVIOR';
-    end;
-    GL_DEBUG_TYPE_PORTABILITY: begin
-      MsgType := 'PORTABILITY';
-    end;
-    GL_DEBUG_TYPE_PERFORMANCE: begin
-      MsgType := 'PERFORMANCE';
-    end;
-    GL_DEBUG_TYPE_OTHER: begin
-      MsgType := 'OTHER';
-    end;
-  end;
-
-  // Severity of this message
-  case severity of
-    GL_DEBUG_SEVERITY_HIGH: begin
-      MsgSeverity := 'HIGH';
-      col := $0000FF;
-    end;
-    GL_DEBUG_SEVERITY_MEDIUM: begin
-      MsgSeverity := 'MEDIUM';
-      col := $0077FF;
-    end;
-    GL_DEBUG_SEVERITY_LOW: begin
-      MsgSeverity := 'LOW';
-      col := $00FFFF;
-    end;
-    else begin
-      col := $888888;
-    end;
-  end;
-
-  Writeln('DEBUG: ' + Format('%s %s [%s] : %s', [MsgSource, MsgType, MsgSeverity, message_]));
-end;
-
-procedure InitOpenGLDebug;
-begin
-  glEnable(GL_DEBUG_OUTPUT);
-  glDebugMessageCallback(@GLDebugCallBack, nil);
-  glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nil, True);
-end;
-
-// --- Debuger Ende ---
-
 procedure checkError(command: string);
 var
   err: integer;
@@ -243,11 +149,11 @@ end;
 
 procedure TShader.LoadShaderObject(const AShader: ansistring; shaderType: GLenum);
 var
-  ShaderObject: GLhandle;
+  ShaderObject: TGLint;
   Str: ansistring;
   l: GLint;
 
-  ErrorStatus: boolean;
+  ErrorStatus: TGLboolean;
   InfoLogLength: GLsizei;
 begin
   ShaderObject := glCreateShader(shaderType);
@@ -276,7 +182,7 @@ var
   sa: TStringArray;
   i: integer;
 
-  ErrorStatus: boolean;
+  ErrorStatus: TGLboolean;
   InfoLogLength: GLsizei;
 
   Str: ansistring;
@@ -386,11 +292,6 @@ begin
     ID_alt := FProgramObject;
     glUseProgram(FProgramObject);
   end;
-end;
-
-function TShader.ShaderVersion: string;
-begin
-  Result := 'Shader Version: ' + glGetString(GL_SHADING_LANGUAGE_VERSION);
 end;
 
 end.

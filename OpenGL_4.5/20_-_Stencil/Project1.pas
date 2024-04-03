@@ -1,7 +1,7 @@
 program Project1;
 
 uses
-  dglOpenGL,
+  oglglad_gl,
   oglContext,
   oglVector,
   oglMatrix,
@@ -129,15 +129,6 @@ const
 
   procedure Init_SDL_and_OpenGL;
   begin
-    // --- OpenGL inizialisieren
-    if not InitOpenGL then begin
-      WriteLn('OpenGL-Fehler');
-      Halt(1);
-    end;
-    ReadExtensions;
-    ReadImplementationProperties;
-    InitOpenGLDebug;
-
     // --- SDL inizialisieren
     if SDL_Init(SDL_INIT_VIDEO) < 0 then begin
       WriteLn('SDL could not initialize! SDL_Error: ', SDL_GetError);
@@ -161,6 +152,10 @@ const
     if SDL_GL_SetSwapInterval(1) < 0 then begin
       WriteLn('Warning: Unable to set VSync! SDL Error: ', SDL_GetError);
     end;
+
+    // --- OpenGL inizialisieren
+    Load_GLADE;
+    InitOpenGLDebug;
   end;
 
   procedure CreateScene;
@@ -168,7 +163,7 @@ const
     Shader := TShader.Create;
     Shader.LoadShaderObject(GL_VERTEX_SHADER, Vertex_Shader);
     Shader.LoadShaderObject(GL_FRAGMENT_SHADER, Fragment_Shader);
-    Shader.LinkProgramm;
+    Shader.LinkProgram;
     Shader.UseProgram;
     with Shader do begin
       ModelMatrix_ID := UniformLocation('model');
@@ -197,13 +192,13 @@ const
     glBufferData(GL_ARRAY_BUFFER, Length(vertices) * sizeof(GLfloat), PGLvoid(vertices), GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, False, 8 * SizeOf(GLfloat), nil);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * SizeOf(GLfloat), nil);
 
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, False, 8 * SizeOf(GLfloat), PGLvoid(3 * SizeOf(GLfloat)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * SizeOf(GLfloat), PGLvoid(3 * SizeOf(GLfloat)));
 
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, False, 8 * SizeOf(GLfloat), PGLvoid(6 * SizeOf(GLfloat)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * SizeOf(GLfloat), PGLvoid(6 * SizeOf(GLfloat)));
 
     ViewMatrix.Uniform(ViewMatrix_ID);
     ProdMatrix.Uniform(ProMatrix_ID);
