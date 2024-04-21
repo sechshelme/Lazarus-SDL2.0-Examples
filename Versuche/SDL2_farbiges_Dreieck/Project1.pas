@@ -7,11 +7,15 @@ program Project1;
 uses
   SDL2;
 
+const
+  vert: array[0..2] of TSDL_Vertex = (
+    (position: (x: 400; y: 150); color: (r: $FF; g: $00; b: $00; a: $FF); tex_coord: (x: 0.5; y: 1.0)),
+    (position: (x: 200; y: 450); color: (r: $00; g: $00; b: $FF; a: $FF); tex_coord: (x: 0.0; y: 0.0)),
+    (position: (x: 600; y: 450); color: (r: $00; g: $FF; b: $00; a: $FF); tex_coord: (x: 1.0; y: 0.0)));
+
 var
   window: PSDL_Window;
   renderer: PSDL_Renderer;
-
-  vert: array[0..2] of TSDL_Vertex = ((position: (x: 400; y: 150); color: (r: $FF; g: $00; b: $00; a: $FF)), (position: (x: 200; y: 450); color: (r: $00; g: $00; b: $FF; a: $FF)), (position: (x: 600; y: 450); color: (r: $00; g: $FF; b: $00; a: $FF)));
 
   quit: boolean = False;
   e: TSDL_Event;

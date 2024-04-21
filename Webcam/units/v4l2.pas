@@ -77,7 +77,8 @@ begin
   v4l2_ubuffers := nil;
 
   fDevice := device;
-  FillChar(st, SizeOf(st), 0);
+  st := default(stat);
+  //  FillChar(st, SizeOf(st), 0);
   if FpStat(device, st) = -1 then begin
     WriteLn('Kann Device nicht öffnen !');
     Halt(1);
@@ -95,8 +96,8 @@ begin
   end;
 
   SetFormat(V4L2_PIX_FMT_YUYV);
-//SetFormat(V4L2_PIX_FMT_MJPEG);
-//SetFormat(V4L2_PIX_FMT_JPEG);
+//  SetFormat(V4L2_PIX_FMT_MJPEG);
+//  SetFormat(V4L2_PIX_FMT_JPEG);
   SetFPS(ffps);
   MemoryMap;
 end;
@@ -147,7 +148,8 @@ function Tv4l2.SetFormat(pfmt: uint32): cint;
 var
   fmt: Tv4l2_format;
 begin
-  FillChar(fmt, SizeOf(fmt), $00);
+  fmt:=Default(Tv4l2_format);
+//  FillChar(fmt, SizeOf(fmt), $00);
   fmt._type := V4L2_BUF_TYPE_VIDEO_CAPTURE;
   fmt.fmt.pix.pixelformat := pfmt;
   fmt.fmt.pix.Height := fheight;
@@ -273,13 +275,13 @@ begin
     buf.index := i;
     if FpIOCtl(fHandle, VIDIOC_QBUF, @buf) = -1 then begin
       Result := -1;
-      WriteLn('Fehler: StreamOn (VIDIOC_QBUF)  ',fDevice);
+      WriteLn('Fehler: StreamOn (VIDIOC_QBUF)  ', fDevice);
     end;
 
     typ := V4L2_BUF_TYPE_VIDEO_CAPTURE;
     if FpIOCtl(fHandle, VIDIOC_STREAMON, @typ) = -1 then begin
       Result := -1;
-      WriteLn('Fehler: StreamOn (VIDIOC_STREAMON)  ',fDevice);
+      WriteLn('Fehler: StreamOn (VIDIOC_STREAMON)  ', fDevice);
     end;
   end;
 
