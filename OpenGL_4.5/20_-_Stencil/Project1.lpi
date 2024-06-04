@@ -25,7 +25,7 @@
     </RunParams>
     <RequiredPackages>
       <Item>
-        <PackageName Value="ogl_Package"/>
+        <PackageName Value="ogl_package_noLCL"/>
       </Item>
       <Item>
         <PackageName Value="SDL2_Package"/>
@@ -51,6 +51,11 @@
       <Debugging>
         <DebugInfoType Value="dsDwarf3"/>
       </Debugging>
+      <Options>
+        <Win32>
+          <GraphicApplication Value="True"/>
+        </Win32>
+      </Options>
     </Linking>
   </CompilerOptions>
   <Debugging>

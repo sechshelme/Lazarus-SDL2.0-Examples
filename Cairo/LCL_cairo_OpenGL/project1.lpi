@@ -11,7 +11,6 @@
       <XPManifest>
         <DpiAware Value="True"/>
       </XPManifest>
-      <Icon Value="0"/>
     </General>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -25,7 +24,7 @@
     </RunParams>
     <RequiredPackages>
       <Item>
-        <PackageName Value="SDL2_Package"/>
+        <PackageName Value="LazOpenGLContext"/>
       </Item>
       <Item>
         <PackageName Value="LCL"/>
@@ -44,11 +43,6 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
       </Unit>
-      <Unit>
-        <Filename Value="drawcairo.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="DrawCairo"/>
-      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -60,6 +54,9 @@
       <IncludeFiles Value="$(ProjOutDir)"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
+    <CodeGeneration>
+      <TargetOS Value="win64"/>
+    </CodeGeneration>
     <Linking>
       <Debugging>
         <DebugInfoType Value="dsDwarf2Set"/>

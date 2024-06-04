@@ -2,7 +2,6 @@ program Project1;
 
 uses
   oglglad_gl,
-  oglContext,
   oglVector,
   oglMatrix,
   oglShader,
@@ -204,7 +203,7 @@ const
     ProdMatrix.Uniform(ProMatrix_ID);
 
     Textur := TTexturBuffer.Create;
-    //    Textur.LoadTextures('mauer.bmp');
+//        Textur.LoadTextures('mauer.bmp');
     Textur.LoadTextures(2, 2, [$FF, $00, $00, $FF, $00, $FF, $00, $FF, $00, $00, $FF, $FF, $FF, $00, $00, $FF]);
     Textur.ActiveAndBind;
   end;

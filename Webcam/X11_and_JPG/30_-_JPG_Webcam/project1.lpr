@@ -25,6 +25,8 @@ var
   gc: TGC;
   Width: DWord = 1920;
   Height: DWord = 1080;
+//  Width: DWord = 640;
+//  Height: DWord = 480;
 
   image: PXImage;
 
