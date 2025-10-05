@@ -22,3 +22,6 @@ ffmpeg -f v4l2 -i /dev/video0 -map 0 -c:v libx264 -f tee "output.mkv|[f=nut]pipe
 
 ```
 
+Kamera testen:
+`v4l2-ctl --list-formats-ext`
+

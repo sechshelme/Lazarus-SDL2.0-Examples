@@ -2,8 +2,6 @@ program Project1;
 
 // https://github.com/PascalGameDevelopment/SDL2-for-Pascal
 
-// {$UNITPATH ../units/units}
-
 uses
   SDL2;
 
